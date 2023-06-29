@@ -1,16 +1,15 @@
 <?php
 
 /**
- * The plugin bootstrap file
+ * The plugin bootstrap file.
  *
  * This file is read by WordPress to generate the plugin information in the plugin
  * admin area. This file also includes all of the dependencies used by the plugin,
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              https://www.linknacional.com
+ * @see              https://www.linknacional.com
  * @since             1.0.0
- * @package           Fee_Recovery_For_Givewp
  *
  * @wordpress-plugin
  * Plugin Name:       Fee recovery for GiveWP
@@ -27,32 +26,35 @@
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
-	die;
+    exit;
 }
 
-/**
+/*
  * Currently plugin version.
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
 define( 'FEE_RECOVERY_FOR_GIVEWP_VERSION', '1.0.0' );
 
+// Plugin text domain for translations
+define( 'FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN', 'fee-recovery-for-givewp' );
+
 /**
  * The code that runs during plugin activation.
- * This action is documented in includes/class-fee-recovery-for-givewp-activator.php
+ * This action is documented in includes/class-fee-recovery-for-givewp-activator.php.
  */
 function activate_fee_recovery_for_givewp() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-fee-recovery-for-givewp-activator.php';
-	Fee_Recovery_For_Givewp_Activator::activate();
+    require_once plugin_dir_path( __FILE__ ) . 'includes/class-fee-recovery-for-givewp-activator.php';
+    Fee_Recovery_For_Givewp_Activator::activate();
 }
 
 /**
  * The code that runs during plugin deactivation.
- * This action is documented in includes/class-fee-recovery-for-givewp-deactivator.php
+ * This action is documented in includes/class-fee-recovery-for-givewp-deactivator.php.
  */
 function deactivate_fee_recovery_for_givewp() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-fee-recovery-for-givewp-deactivator.php';
-	Fee_Recovery_For_Givewp_Deactivator::deactivate();
+    require_once plugin_dir_path( __FILE__ ) . 'includes/class-fee-recovery-for-givewp-deactivator.php';
+    Fee_Recovery_For_Givewp_Deactivator::deactivate();
 }
 
 register_activation_hook( __FILE__, 'activate_fee_recovery_for_givewp' );
@@ -74,9 +76,7 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-fee-recovery-for-givewp.ph
  * @since    1.0.0
  */
 function run_fee_recovery_for_givewp() {
-
-	$plugin = new Fee_Recovery_For_Givewp();
-	$plugin->run();
-
+    $plugin = new Fee_Recovery_For_Givewp();
+    $plugin->run();
 }
 run_fee_recovery_for_givewp();
