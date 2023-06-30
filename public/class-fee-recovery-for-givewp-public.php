@@ -45,6 +45,9 @@ class Fee_Recovery_For_Givewp_Public {
     public function __construct($plugin_name, $version) {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
+
+        // add_action('give_fields_before_donation_levels', array($this, 'load_page'), 10, 2); // Give\Framework\FieldsAPI\Group and form_id
+        add_action('give_after_donation_levels', array($this, 'load_page'), 10, 2); // form_id and array with form args
     }
 
     /**
@@ -64,8 +67,7 @@ class Fee_Recovery_For_Givewp_Public {
          * between the defined hooks and the functions defined in this
          * class.
          */
-
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/fee-recovery-for-givewp-public.css', array(), $this->version, 'all' );
+        wp_register_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/fee-recovery-for-givewp-public.css', array(), $this->version, 'all' );
     }
 
     /**
@@ -86,6 +88,17 @@ class Fee_Recovery_For_Givewp_Public {
          * class.
          */
 
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/fee-recovery-for-givewp-public.js', array('jquery'), $this->version, false );
+        wp_register_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/fee-recovery-for-givewp-public.js', array('jquery'), $this->version, false );
+    }
+
+    public function load_page($form_id, $args) {
+        wp_enqueue_script($this->plugin_name);
+        wp_enqueue_style($this->plugin_name);
+
+        echo load_template(
+            plugin_dir_path(__FILE__) . 'partials/fee-recovery-for-givewp-public-display.php',
+            true,
+            array()
+        );
     }
 }
