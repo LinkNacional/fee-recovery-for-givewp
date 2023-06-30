@@ -73,6 +73,8 @@ class Fee_Recovery_For_Givewp {
         $this->set_locale();
         $this->define_admin_hooks();
         $this->define_public_hooks();
+
+        add_filter( 'give_donation_data_before_gateway', array($this, 'update_amount'), 10, 2 );
     }
 
     /**
@@ -116,6 +118,18 @@ class Fee_Recovery_For_Givewp {
      */
     public function get_version() {
         return $this->version;
+    }
+
+    public function update_amount($donation_data, $valid_data) {
+        // TODO get the configuration values to calculate final price
+        // TODO verify if checkbox parameter is set so it can calculate, maybe try input? is it outside the form?
+        // if (isset($donation_data['post_data']['lkn-fee-recovery-checkbox']) && 'yes' === $donation_data['post_data']['lkn-fee-recovery-checkbox']) {
+        $donation_data['price'] = floatval($donation_data['price']) + 1;
+        // }
+
+        // error_log('donation data: ' . var_export($donation_data, true) . ' valid data ' . var_export($valid_data, true), 3, __DIR__ . '/err-log.txt');
+
+        return $donation_data;
     }
 
     /**
