@@ -123,16 +123,16 @@ class Fee_Recovery_For_Givewp_Admin {
                 'name' => 'Taxa fixa',
                 'id' => 'lkn_fee_recovery_setting_field_fixed',
                 'desc' => 'Taxa fixa a ser adicionada por doação.',
-                'type' => 'text',
-                'default' => '0',
+                'type' => 'number',
+                'default' => 0,
             );
 
             $settings[] = array(
                 'name' => 'Taxa percentual',
                 'id' => 'lkn_fee_recovery_setting_field_percent',
                 'desc' => 'Taxa percentual a ser adicionada por doação.',
-                'type' => 'text',
-                'default' => '0',
+                'type' => 'number',
+                'default' => 0,
             );
 
             $settings[] = array(

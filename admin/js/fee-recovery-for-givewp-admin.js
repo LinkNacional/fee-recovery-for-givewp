@@ -1,32 +1,25 @@
-(function( $ ) {
+(function ($) {
 	'use strict';
 
-	/**
-	 * All of the code for your admin-facing JavaScript source
-	 * should reside in this file.
-	 *
-	 * Note: It has been assumed you will write jQuery code here, so the
-	 * $ function reference has been prepared for usage within the scope
-	 * of this function.
-	 *
-	 * This enables you to define handlers, for when the DOM is ready:
-	 *
-	 * $(function() {
-	 *
-	 * });
-	 *
-	 * When the window is loaded:
-	 *
-	 * $( window ).load(function() {
-	 *
-	 * });
-	 *
-	 * ...and/or other possibilities.
-	 *
-	 * Ideally, it is not considered best practise to attach more than a
-	 * single DOM-ready or window-load handler for a particular page.
-	 * Although scripts in the WordPress core, Plugins and Themes may be
-	 * practising this, we should strive to set a better example in our own work.
-	 */
+	$(window).on('load', () => {
+		const urlParams = new URLSearchParams(window.location.search);
+		const section = urlParams.get('section');
+		const post_type = urlParams.get('post_type');
+		const page = urlParams.get('page');
+		const tab = urlParams.get('tab');
 
-})( jQuery );
+		if (
+			post_type === 'give_forms' &&
+			page === 'give-settings' &&
+			tab === 'general' &&
+			section === 'lkn-fee-recovery'
+		) {
+			let fixedInput = $('#lkn_fee_recovery_setting_field_fixed');
+			let percentInput = $('#lkn_fee_recovery_setting_field_percent');
+
+			fixedInput.attr('min', '0');
+			fixedInput.attr('step', '0.01');
+			percentInput.attr('min', '0');
+		}
+	});
+})(jQuery);
