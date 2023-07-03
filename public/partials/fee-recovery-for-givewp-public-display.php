@@ -16,9 +16,8 @@
     <ul>
         <li style="list-style-type: none;padding: 0px 0px !important;background-color: #ffffff;border: none;">
             <div id="lkn-fee-recovery-wrap">
-                <!-- // TODO verify bug back-end not recognizing checkbox input -->
-                <input class="give-input" type="checkbox" id="lkn-fee-recovery-checkbox" name="lkn-fee-recovery-checkbox" value="yes">
-                <label class="lkn-fee-recovery-label" for="lkn-fee-recovery-checkbox">Desejo cobrir os custos da doação</label>
+                <input class="give-input" type="checkbox" id="lkn-fee-recovery-input" name="lkn-fee-recovery" value="no">
+                <label class="lkn-fee-recovery-label" for="lkn-fee-recovery-input">Desejo cobrir os custos da doação</label>
             </div>
         </li>
     </ul>
