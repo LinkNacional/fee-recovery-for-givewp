@@ -121,13 +121,21 @@ class Fee_Recovery_For_Givewp {
     }
 
     public function update_amount($donation_data, $valid_data) {
-        // TODO get the configuration values to calculate final price
-        // TODO verify if checkbox parameter is set so it can calculate, maybe try input? is it outside the form?
-        // if (isset($donation_data['post_data']['lkn-fee-recovery-checkbox']) && 'yes' === $donation_data['post_data']['lkn-fee-recovery-checkbox']) {
-        $donation_data['price'] = floatval($donation_data['price']) + 1;
-        // }
+        $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
 
-        // error_log('donation data: ' . var_export($donation_data, true) . ' valid data ' . var_export($valid_data, true), 3, __DIR__ . '/err-log.txt');
+        if (
+            isset($donation_data['post_data']['lkn-fee-recovery'])
+            && 'yes' === $donation_data['post_data']['lkn-fee-recovery']
+            && 'enabled' === $enabledFee
+        ) {
+            $price = floatval($donation_data['price']);
+            $feeValue = floatval(give_get_option('lkn_fee_recovery_setting_field_fixed', 0));
+            $feeValuePercent = floatval(give_get_option('lkn_fee_recovery_setting_field_percent', 0)) / 100;
+
+            $feeTotal = ($price * $feeValuePercent) + $feeValue;
+
+            $donation_data['price'] = floatval($price) + $feeTotal;
+        }
 
         return $donation_data;
     }
