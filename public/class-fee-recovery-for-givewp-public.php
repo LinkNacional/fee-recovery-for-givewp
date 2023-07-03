@@ -92,13 +92,17 @@ class Fee_Recovery_For_Givewp_Public {
     }
 
     public function load_page($form_id, $args) {
-        wp_enqueue_script($this->plugin_name);
-        wp_enqueue_style($this->plugin_name);
+        $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
 
-        echo load_template(
-            plugin_dir_path(__FILE__) . 'partials/fee-recovery-for-givewp-public-display.php',
-            true,
-            array()
-        );
+        if ('enabled' === $enabledFee) {
+            wp_enqueue_script($this->plugin_name);
+            wp_enqueue_style($this->plugin_name);
+
+            echo load_template(
+                plugin_dir_path(__FILE__) . 'partials/fee-recovery-for-givewp-public-display.php',
+                true,
+                array()
+            );
+        }
     }
 }
