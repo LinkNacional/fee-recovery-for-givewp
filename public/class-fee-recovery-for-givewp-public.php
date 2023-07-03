@@ -89,6 +89,13 @@ class Fee_Recovery_For_Givewp_Public {
          */
 
         wp_register_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/fee-recovery-for-givewp-public.js', array('jquery'), $this->version, false );
+        wp_localize_script(
+            $this->plugin_name,
+            'lkn_recovery_fee_globals',
+            array(
+                'css_path' => plugin_dir_url( __FILE__ ) . 'css/fee-recovery-for-givewp-public.css',
+            )
+        );
     }
 
     public function load_page($form_id, $args) {
