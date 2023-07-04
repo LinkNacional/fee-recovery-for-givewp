@@ -68,6 +68,12 @@ class Fee_Recovery_For_Givewp_Public {
          * class.
          */
         wp_register_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/fee-recovery-for-givewp-public.css', array(), $this->version, 'all' );
+
+        $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
+
+        if ('enabled' === $enabledFee && is_give_form()) {
+            wp_enqueue_style($this->plugin_name);
+        }
     }
 
     /**
@@ -96,15 +102,18 @@ class Fee_Recovery_For_Givewp_Public {
                 'css_path' => plugin_dir_url( __FILE__ ) . 'css/fee-recovery-for-givewp-public.css',
             )
         );
+
+        $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
+
+        if ('enabled' === $enabledFee && is_give_form()) {
+            wp_enqueue_script($this->plugin_name);
+        }
     }
 
     public function load_page($form_id, $args) {
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
 
         if ('enabled' === $enabledFee) {
-            wp_enqueue_script($this->plugin_name);
-            wp_enqueue_style($this->plugin_name);
-
             echo load_template(
                 plugin_dir_path(__FILE__) . 'partials/fee-recovery-for-givewp-public-display.php',
                 true,
