@@ -14,12 +14,23 @@
 			tab === 'general' &&
 			section === 'lkn-fee-recovery'
 		) {
-			let fixedInput = $('#lkn_fee_recovery_setting_field_fixed');
-			let percentInput = $('#lkn_fee_recovery_setting_field_percent');
+			var fixedInput = $('#lkn_fee_recovery_setting_field_fixed');
+			var percentInput = $('#lkn_fee_recovery_setting_field_percent');
 
 			fixedInput.attr('min', '0');
 			fixedInput.attr('step', '0.01');
 			percentInput.attr('min', '0');
+
+			var feeRecoveryGateways = $('.lkn_fee_recovery_wrap_gateways');
+			feeRecoveryGateways.insertBefore('.give-submit-wrap');
+
+			var allGatewaysOpt = document.getElementsByClassName('lkn_fee_recovery_wrap_gateways');
+
+			if (allGatewaysOpt.length > 1) {
+				for (let index = 1; index < allGatewaysOpt.length; index++) {
+					allGatewaysOpt[index].remove();
+				}
+			}
 		}
 	});
 })(jQuery);

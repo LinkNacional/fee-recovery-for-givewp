@@ -100,6 +100,8 @@ class Fee_Recovery_For_Givewp_Admin {
 
     public function add_settings_into_section($settings) {
         $currentSection = give_get_current_setting_section();
+        $gateways = give_get_ordered_payment_gateways( give_get_payment_gateways() );
+        $htmlOpt = '';
 
         if ('lkn-fee-recovery' === $currentSection) {
             $settings[] = array(
@@ -142,6 +144,42 @@ class Fee_Recovery_For_Givewp_Admin {
                 'type' => 'text',
                 'default' => 'Cobrir a taxa de pagamento?',
             );
+
+            $htmlOpt .= <<<'HTML'
+            <div class="lkn_fee_recovery_wrap_gateways">
+HTML;
+
+            foreach ($gateways as $key => $option) {
+                $label = $option['admin_label'];
+
+                $htmlOpt .= <<<HTML
+                <div class="lkn-recovery-fee-col">    
+                    <div class="lkn-recovery-fee-row">
+                        <div class="lkn-recovery-fee-label-wrap">
+                            <label for="lkn_fee_recovery_setting_field_gateway_{$key}">{$label}</label>
+                        </div>
+
+                        <div class="lkn-recovery-fee-input-wrap">
+                            <div>
+                                <input name="lkn_fee_recovery_fixed_setting_field_gateway_{$key}" id="lkn_fee_recovery_setting_field_gateway_{$key}" type="number" min="0" step="0.01" value="" class="give-input-field">
+                                <div class="give-field-description">Taxa fixa a ser adicionada por doação.</div>
+                            </div>
+
+                            <div>
+                                <input name="lkn_fee_recovery_percent_setting_field_gateway_{$key}" type="number" min="0" value="" class="give-input-field">
+                                <div class="give-field-description">Taxa percentual a ser adicionada por doação.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+HTML;
+            }
+
+            $htmlOpt .= <<<'HTML'
+            </div>
+HTML;
+
+            echo $htmlOpt;
 
             $settings[] = array(
                 'id' => 'lkn_fee_recovery',
