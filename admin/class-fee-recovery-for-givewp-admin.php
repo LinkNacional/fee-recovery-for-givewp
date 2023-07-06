@@ -104,6 +104,8 @@ class Fee_Recovery_For_Givewp_Admin {
         $htmlOpt = '';
 
         if ('lkn-fee-recovery' === $currentSection) {
+            $pluginEnabled = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
+
             $settings[] = array(
                 'type' => 'title',
                 'id' => 'lkn_fee_recovery',
@@ -116,26 +118,29 @@ class Fee_Recovery_For_Givewp_Admin {
                 'type' => 'radio',
                 'default' => 'disabled',
                 'options' => array(
-                    'enabled' => 'Habilitar',
+                    'global' => 'Global',
+                    'gateway' => 'Por método de pagamento',
                     'disabled' => 'Desabilitar',
                 ),
             );
 
-            $settings[] = array(
-                'name' => 'Taxa fixa',
-                'id' => 'lkn_fee_recovery_setting_field_fixed',
-                'desc' => 'Taxa fixa a ser adicionada por doação.',
-                'type' => 'number',
-                'default' => 0,
-            );
+            if ('global' === $pluginEnabled) {
+                $settings[] = array(
+                    'name' => 'Taxa fixa',
+                    'id' => 'lkn_fee_recovery_setting_field_fixed',
+                    'desc' => 'Taxa fixa a ser adicionada por doação.',
+                    'type' => 'number',
+                    'default' => 0,
+                );
 
-            $settings[] = array(
-                'name' => 'Taxa percentual',
-                'id' => 'lkn_fee_recovery_setting_field_percent',
-                'desc' => 'Taxa percentual a ser adicionada por doação.',
-                'type' => 'number',
-                'default' => 0,
-            );
+                $settings[] = array(
+                    'name' => 'Taxa percentual',
+                    'id' => 'lkn_fee_recovery_setting_field_percent',
+                    'desc' => 'Taxa percentual a ser adicionada por doação.',
+                    'type' => 'number',
+                    'default' => 0,
+                );
+            }
 
             $settings[] = array(
                 'name' => 'Descrição de campo de taxa',
@@ -145,14 +150,27 @@ class Fee_Recovery_For_Givewp_Admin {
                 'default' => 'Cobrir a taxa de pagamento?',
             );
 
-            $htmlOpt .= <<<'HTML'
+            if ('gateway' === $pluginEnabled) {
+                foreach ($gateways as $key => $option) {
+                    if (isset($_POST['lkn_fee_recovery_fixed_setting_field_gateway_' . $key])) {
+                        give_update_option('lkn_fee_recovery_fixed_setting_field_gateway_' . $key, sanitize_text_field($_POST['lkn_fee_recovery_fixed_setting_field_gateway_' . $key]));
+                    }
+
+                    if (isset($_POST['lkn_fee_recovery_percent_setting_field_gateway_' . $key])) {
+                        give_update_option('lkn_fee_recovery_percent_setting_field_gateway_' . $key, sanitize_text_field($_POST['lkn_fee_recovery_percent_setting_field_gateway_' . $key]));
+                    }
+                }
+
+                $htmlOpt .= <<<'HTML'
             <div class="lkn_fee_recovery_wrap_gateways">
 HTML;
 
-            foreach ($gateways as $key => $option) {
-                $label = $option['admin_label'];
+                foreach ($gateways as $key => $option) {
+                    $label = $option['admin_label'];
+                    $fixedValue = give_get_option('lkn_fee_recovery_fixed_setting_field_gateway_' . $key, 0);
+                    $percentValue = give_get_option('lkn_fee_recovery_percent_setting_field_gateway_' . $key, 0);
 
-                $htmlOpt .= <<<HTML
+                    $htmlOpt .= <<<HTML
                 <div class="lkn-recovery-fee-col">    
                     <div class="lkn-recovery-fee-row">
                         <div class="lkn-recovery-fee-label-wrap">
@@ -161,25 +179,26 @@ HTML;
 
                         <div class="lkn-recovery-fee-input-wrap">
                             <div>
-                                <input name="lkn_fee_recovery_fixed_setting_field_gateway_{$key}" id="lkn_fee_recovery_setting_field_gateway_{$key}" type="number" min="0" step="0.01" value="" class="give-input-field">
+                                <input name="lkn_fee_recovery_fixed_setting_field_gateway_{$key}" id="lkn_fee_recovery_setting_field_gateway_{$key}" type="number" min="0" step="0.01" value="{$fixedValue}" class="give-input-field">
                                 <div class="give-field-description">Taxa fixa a ser adicionada por doação.</div>
                             </div>
 
                             <div>
-                                <input name="lkn_fee_recovery_percent_setting_field_gateway_{$key}" type="number" min="0" value="" class="give-input-field">
+                                <input name="lkn_fee_recovery_percent_setting_field_gateway_{$key}" type="number" min="0" value="{$percentValue}" class="give-input-field">
                                 <div class="give-field-description">Taxa percentual a ser adicionada por doação.</div>
                             </div>
                         </div>
                     </div>
                 </div>
 HTML;
-            }
+                }
 
-            $htmlOpt .= <<<'HTML'
+                $htmlOpt .= <<<'HTML'
             </div>
 HTML;
 
-            echo $htmlOpt;
+                echo $htmlOpt;
+            }
 
             $settings[] = array(
                 'id' => 'lkn_fee_recovery',

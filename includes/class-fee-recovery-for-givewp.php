@@ -126,15 +126,18 @@ class Fee_Recovery_For_Givewp {
         if (
             isset($donation_data['post_data']['lkn-fee-recovery'])
             && 'yes' === $donation_data['post_data']['lkn-fee-recovery']
-            && 'enabled' === $enabledFee
         ) {
-            $price = floatval($donation_data['price']);
-            $feeValue = floatval(give_get_option('lkn_fee_recovery_setting_field_fixed', 0));
-            $feeValuePercent = floatval(give_get_option('lkn_fee_recovery_setting_field_percent', 0)) / 100;
+            if ('global' === $enabledFee) {
+                $price = floatval($donation_data['price']);
+                $feeValue = floatval(give_get_option('lkn_fee_recovery_setting_field_fixed', 0));
+                $feeValuePercent = floatval(give_get_option('lkn_fee_recovery_setting_field_percent', 0)) / 100;
 
-            $feeTotal = ($price * $feeValuePercent) + $feeValue;
+                $feeTotal = ($price * $feeValuePercent) + $feeValue;
 
-            $donation_data['price'] = floatval($price) + $feeTotal;
+                $donation_data['price'] = floatval($price) + $feeTotal;
+            } elseif ('gateway' === $enabledFee) {
+                // TODO calculate price per payment gateway
+            }
         }
 
         return $donation_data;

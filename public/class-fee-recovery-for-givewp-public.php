@@ -71,7 +71,7 @@ class Fee_Recovery_For_Givewp_Public {
 
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
 
-        if ('enabled' === $enabledFee && is_give_form()) {
+        if ('global' === $enabledFee || 'gateway' === $enabledFee) {
             wp_enqueue_style($this->plugin_name);
         }
     }
@@ -105,7 +105,7 @@ class Fee_Recovery_For_Givewp_Public {
 
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
 
-        if ('enabled' === $enabledFee && is_give_form()) {
+        if ('global' === $enabledFee || 'gateway' === $enabledFee) {
             wp_enqueue_script($this->plugin_name);
         }
     }
@@ -113,7 +113,7 @@ class Fee_Recovery_For_Givewp_Public {
     public function load_page($form_id, $args) {
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
 
-        if ('enabled' === $enabledFee) {
+        if ('global' === $enabledFee || 'gateway' === $enabledFee) {
             echo load_template(
                 plugin_dir_path(__FILE__) . 'partials/fee-recovery-for-givewp-public-display.php',
                 true,
