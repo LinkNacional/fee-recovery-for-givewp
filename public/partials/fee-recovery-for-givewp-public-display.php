@@ -27,26 +27,3 @@
         </li>
     </ul>
 </div>
-
-<!-- // TODO add a method to load styles inside the iframe form -->
-<style>
-    /* #lkn-fee-recovery-checkbox {
-        cursor: pointer;
-        width: 15px;
-        height: 15px;
-    }
-
-    #lkn-fee-recovery-wrap {
-        padding: 2% 1% 2% 1%;
-        position: relative;
-        display: block;
-        line-height: 1em;
-        box-sizing: border-box;
-        clear: both;
-    }
-
-    .lkn-fee-recovery-label {
-        cursor: pointer;
-        font-size: 1rem;
-    } */
-</style>
