@@ -144,8 +144,8 @@ class Fee_Recovery_For_Givewp_Admin {
 
             $settings[] = array(
                 'name' => 'Descrição de campo de taxa',
-                'id' => 'lkn_fee_recovery_setting_field_',
-                'desc' => 'Essa descição aparece no formulário de doação.',
+                'id' => 'lkn_fee_recovery_description_setting_field',
+                'desc' => 'Essa descição aparece no formulário de doação, use "##" para adicionar o valor da taxa.',
                 'type' => 'text',
                 'default' => 'Cobrir a taxa de pagamento?',
             );

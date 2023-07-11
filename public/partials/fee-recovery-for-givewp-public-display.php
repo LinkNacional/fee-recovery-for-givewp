@@ -13,11 +13,16 @@
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
 
 <div id="lkn-fee-recovery-checkbox-wrapper">
+    <input type="hidden" id="lkn-fee-recovery-value" value="<?php echo $args['feeValue']; ?>" />
+    <input type="hidden" id="lkn-fee-recovery-percent" value="<?php echo $args['feeValuePercent']; ?>" />
+
     <ul>
         <li style="list-style-type: none;padding: 0px 0px !important;background-color: #ffffff;border: none;">
             <div id="lkn-fee-recovery-wrap">
-                <input class="give-input" type="checkbox" id="lkn-fee-recovery-input" name="lkn-fee-recovery" value="no">
-                <label class="lkn-fee-recovery-label" for="lkn-fee-recovery-input">Desejo cobrir os custos da doação</label>
+                <input class="give-input" type="checkbox" id="lkn-fee-recovery-input" name="lkn-fee-recovery"
+                    value="no">
+                <label class="lkn-fee-recovery-label"
+                    for="lkn-fee-recovery-input"><?php esc_html_e($args['description']); ?></label>
             </div>
         </li>
     </ul>

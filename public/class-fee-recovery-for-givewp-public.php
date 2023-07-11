@@ -114,10 +114,18 @@ class Fee_Recovery_For_Givewp_Public {
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
 
         if ('global' === $enabledFee || 'gateway' === $enabledFee) {
-            echo load_template(
+            $description = give_get_option('lkn_fee_recovery_description_setting_field');
+            $feeValue = floatval(give_get_option('lkn_fee_recovery_setting_field_fixed', 0));
+            $feeValuePercent = floatval(give_get_option('lkn_fee_recovery_setting_field_percent', 0)) / 100;
+
+            load_template(
                 plugin_dir_path(__FILE__) . 'partials/fee-recovery-for-givewp-public-display.php',
                 true,
-                array()
+                array(
+                    'description' => $description,
+                    'feeValue' => $feeValue,
+                    'feeValuePercent' => $feeValuePercent,
+                )
             );
         }
     }
