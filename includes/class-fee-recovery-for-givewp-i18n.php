@@ -28,7 +28,7 @@ class Fee_Recovery_For_Givewp_i18n {
      */
     public function load_plugin_textdomain() {
         load_plugin_textdomain(
-            'fee-recovery-for-givewp',
+            FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN,
             false,
             dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
         );

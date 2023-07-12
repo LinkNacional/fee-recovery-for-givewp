@@ -1,0 +1,42 @@
+# Fee recovery for GiveWP
+msgid "Fee recovery for GiveWP"
+msgstr "Recuperação de taxa para GiveWP"
+
+msgid "Fee recovery"
+msgstr "Recuperação de taxa"
+
+msgid "Add donor option to cover payment expenses"
+msgstr "Adicionar opção de doador para cobrir despesas de pagamento"
+
+msgid "Enable or disable the option to add the payment fee amount for the donor."
+msgstr "Habilita ou desabilita a opção de adicionar o valor da taxa de pagamento para o doador."
+
+msgid "Global"
+msgstr "Global"
+
+msgid "By payment method"
+msgstr "Por método de pagamento"
+
+msgid "Disable"
+msgstr "Desabilitar"
+
+msgid "Fixed fee"
+msgstr "Taxa fixa"
+
+msgid "Fixed fee to be added per donation."
+msgstr "Taxa fixa a ser adicionada por doação."
+
+msgid "Percentage fee"
+msgstr "Taxa percentual"
+
+msgid "Percentage fee to be added per donation."
+msgstr "Taxa percentual a ser adicionada por doação."
+
+msgid "Rate field description"
+msgstr "Descrição do campo de taxa"
+
+msgid "This description appears on the donation form, use \"##\" to add the fee amount."
+msgstr "Essa descrição aparece no formulário de doação, use \"##\" para adicionar o valor da taxa."
+
+msgid "Cover the payment fee?"
+msgstr "Cobrir a taxa de pagamento?"

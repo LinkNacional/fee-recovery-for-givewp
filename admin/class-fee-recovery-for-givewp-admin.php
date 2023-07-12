@@ -112,42 +112,42 @@ class Fee_Recovery_For_Givewp_Admin {
             );
 
             $settings[] = array(
-                'name' => 'Recuperação de taxa',
+                'name' => __('Fee recovery', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
                 'id' => 'lkn_fee_recovery_setting_field',
-                'desc' => 'Habilita ou desabilita a opção de adicionar o valor da taxa de pagamento para o doador.',
+                'desc' => __('Enable or disable the option to add the payment fee amount for the donor.', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
                 'type' => 'radio',
                 'default' => 'disabled',
                 'options' => array(
-                    'global' => 'Global',
-                    'gateway' => 'Por método de pagamento',
-                    'disabled' => 'Desabilitar',
+                    'global' => __('Global', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
+                    'gateway' => __('By payment method', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
+                    'disabled' => __('Disable', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
                 ),
             );
 
             if ('global' === $pluginEnabled) {
                 $settings[] = array(
-                    'name' => 'Taxa fixa',
+                    'name' => __('Fixed fee', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
                     'id' => 'lkn_fee_recovery_setting_field_fixed',
-                    'desc' => 'Taxa fixa a ser adicionada por doação.',
+                    'desc' => __('Fixed fee to be added per donation.', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
                     'type' => 'number',
                     'default' => 0,
                 );
 
                 $settings[] = array(
-                    'name' => 'Taxa percentual',
+                    'name' => __('Percentage fee', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
                     'id' => 'lkn_fee_recovery_setting_field_percent',
-                    'desc' => 'Taxa percentual a ser adicionada por doação.',
+                    'desc' => __('Percentage fee to be added per donation.', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
                     'type' => 'number',
                     'default' => 0,
                 );
             }
 
             $settings[] = array(
-                'name' => 'Descrição de campo de taxa',
+                'name' => __('Rate field description', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
                 'id' => 'lkn_fee_recovery_description_setting_field',
-                'desc' => 'Essa descição aparece no formulário de doação, use "##" para adicionar o valor da taxa.',
+                'desc' => __('This description appears on the donation form, use "##" to add the fee amount.', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
                 'type' => 'text',
-                'default' => 'Cobrir a taxa de pagamento?',
+                'default' => __('Cover the payment fee?', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
             );
 
             if ('gateway' === $pluginEnabled) {
@@ -169,6 +169,8 @@ HTML;
                     $label = $option['admin_label'];
                     $fixedValue = give_get_option('lkn_fee_recovery_fixed_setting_field_gateway_' . $key, 0);
                     $percentValue = give_get_option('lkn_fee_recovery_percent_setting_field_gateway_' . $key, 0);
+                    $labelFixed = __('Fixed fee to be added per donation.', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN);
+                    $labelPercent = __('Percentage fee to be added per donation.', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN);
 
                     $htmlOpt .= <<<HTML
                 <div class="lkn-recovery-fee-col">    
@@ -180,12 +182,12 @@ HTML;
                         <div class="lkn-recovery-fee-input-wrap">
                             <div>
                                 <input name="lkn_fee_recovery_fixed_setting_field_gateway_{$key}" id="lkn_fee_recovery_setting_field_gateway_{$key}" type="number" min="0" step="0.01" value="{$fixedValue}" class="give-input-field">
-                                <div class="give-field-description">Taxa fixa a ser adicionada por doação.</div>
+                                <div class="give-field-description">{$labelFixed}</div>
                             </div>
 
                             <div>
                                 <input name="lkn_fee_recovery_percent_setting_field_gateway_{$key}" type="number" min="0" value="{$percentValue}" class="give-input-field">
-                                <div class="give-field-description">Taxa percentual a ser adicionada por doação.</div>
+                                <div class="give-field-description">{$labelPercent}</div>
                             </div>
                         </div>
                     </div>
