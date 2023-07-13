@@ -2,61 +2,62 @@
 	'use strict';
 
 	$(window).on('load', () => {
-		var inputVal = $('#lkn-fee-recovery-input');
 		var iframe = document.getElementsByName('give-embed-form')[0];
-
-		var inputAmount = $('#give-amount');
-		inputAmount.on('change', (event) => {
-			var amount = parseFloat($(event.target).val());
-
-			update_fee(amount);
-		});
-
-		var donationLevelWrap = $('#give-donation-level-button-wrap');
-		donationLevelWrap.on('click', (event) => {
-			console.log('button change value');
-			setTimeout(() => {
-				var amount = parseFloat($('#give-amount').val());
-
-				update_fee(amount);
-			}, 500);
-		});
-
-		if (inputVal.length) {
-			inputVal.on('click', (event) => {
-				var inputElement = $(event.target);
-				if (inputElement.val() === 'yes') {
-					inputElement.attr('value', 'no');
-				} else {
-					inputElement.attr('value', 'yes');
-				}
-			});
-		} else {
-			if (iframe) {
-				var styleLink = document.createElement('link');
-
-				styleLink.setAttribute('href', lkn_recovery_fee_globals.css_path);
-				styleLink.setAttribute('rel', 'stylesheet');
-				styleLink.setAttribute('type', 'text/css');
-				var bodyIframe = iframe.contentDocument.getElementsByClassName('give-form')[0];
-				bodyIframe.appendChild(styleLink);
-			}
-		}
 
 		if (iframe) {
 			var amount = parseFloat(iframe.contentDocument.getElementById('give-amount').value);
-
 			update_fee(amount);
+
+			// Compatibility to load css in iframe forms
+			var styleLink = document.createElement('link');
+
+			styleLink.setAttribute('href', lkn_recovery_fee_globals.css_path);
+			styleLink.setAttribute('rel', 'stylesheet');
+			styleLink.setAttribute('type', 'text/css');
+			var bodyIframe = iframe.contentDocument.getElementsByClassName('give-form')[0];
+			bodyIframe.appendChild(styleLink);
+
+			// Compatibility to add events for iframe forms
+			var inputVal = iframe.contentDocument.getElementById('lkn-fee-recovery-input');
+			inputVal.addEventListener('click', (event) => {
+				change_checkbox_opt($(event.target));
+			});
 		} else {
 			var amount = parseFloat($('#give-amount').val());
-
 			update_fee(amount);
+
+			var inputAmount = $('#give-amount');
+			inputAmount.on('change', (event) => {
+				var amount = parseFloat($(event.target).val());
+				update_fee(amount);
+			});
+
+			var donationLevelWrap = $('#give-donation-level-button-wrap');
+			donationLevelWrap.on('click', (event) => {
+				setTimeout(() => {
+					var amount = parseFloat($('#give-amount').val());
+					update_fee(amount);
+				}, 500);
+			});
+
+			var inputVal = $('#lkn-fee-recovery-input');
+			if (inputVal.length) {
+				inputVal.on('click', (event) => {
+					change_checkbox_opt($(event.target));
+				});
+			}
 		}
 	});
 
-	function update_fee(amount) {
-		console.log('chamou update fee');
+	function change_checkbox_opt(inputCheckbox) {
+		if (inputCheckbox.val() === 'yes') {
+			inputCheckbox.attr('value', 'no');
+		} else {
+			inputCheckbox.attr('value', 'yes');
+		}
+	}
 
+	function update_fee(amount) {
 		var iframe = document.getElementsByName('give-embed-form')[0];
 
 		if (iframe) {
@@ -66,7 +67,7 @@
 			var feePercent = parseFloat(iframe.contentDocument.getElementById('lkn-fee-recovery-percent').value);
 			var feeTotal = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format((amount * feePercent) + feeValue);
 
-			checkboxLabel.innerHTML = checkboxLabel.innerHTML.replace('##', feeTotal);
+			checkboxLabel.innerHTML = checkboxLabel.innerHTML.replaceAll('##', feeTotal);
 		} else {
 			var checkboxLabel = $('.lkn-fee-recovery-label');
 
@@ -74,7 +75,7 @@
 			var feePercent = parseFloat($('#lkn-fee-recovery-percent').val());
 			var feeTotal = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format((amount * feePercent) + feeValue);
 
-			checkboxLabel.html(checkboxLabel.html().replace('##', feeTotal));
+			checkboxLabel.html(checkboxLabel.html().replaceAll('##', feeTotal));
 		}
 	}
 })(jQuery);
