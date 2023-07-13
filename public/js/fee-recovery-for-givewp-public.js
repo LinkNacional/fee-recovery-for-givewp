@@ -2,6 +2,10 @@
 	'use strict';
 
 	$(window).on('load', () => {
+		/* 		var feeGateways = Object.entries(JSON.parse($('#lkn-fee-recovery-fee-gateway').val()));
+				var giveGateways = document.getElementsByClassName('give-gateway')[1].getAttribute('checked');
+				console.log('recovery fee gateway: ' + JSON.stringify(feeGateways) + ' give gateway: ' + giveGateways);
+		 */
 		var iframe = document.getElementsByName('give-embed-form')[0];
 
 		if (iframe) {
@@ -57,8 +61,32 @@
 		}
 	}
 
+	function get_selected_gateway(iframe) {
+		if (iframe) {
+			var giveGateways = iframe.contentDocument.getElementsByClassName('give-gateway');
+
+			giveGateways.forEach(gateway => {
+				var isChecked = gateway.getAttribute('checked');
+				if (isChecked) {
+					return gateway
+				}
+			});
+		} else {
+			var giveGateways = document.getElementsByClassName('give-gateway');
+
+			giveGateways.forEach(gateway => {
+				var isChecked = gateway.getAttribute('checked');
+				if (isChecked) {
+					return gateway
+				}
+			});
+		}
+
+	}
+
 	function update_fee(amount) {
 		var iframe = document.getElementsByName('give-embed-form')[0];
+		var gatewaySelected = get_selected_gateway(iframe, feeGateways);
 
 		if (iframe) {
 			var checkboxLabel = iframe.contentDocument.getElementsByClassName('lkn-fee-recovery-label')[0];
@@ -69,6 +97,10 @@
 
 			checkboxLabel.innerHTML = checkboxLabel.innerHTML.replaceAll('##', feeTotal);
 		} else {
+			// TODO on gateway select recalculate fees
+			//var feeGateways = JSON.parse($('#lkn-fee-recovery-fee-gateway').val());
+			//console.log('recovery fee gateway: ' + JSON.stringify(feeGateways.manual.fee_fixed));
+
 			var checkboxLabel = $('.lkn-fee-recovery-label');
 
 			var feeValue = parseFloat($('#lkn-fee-recovery-value').val());

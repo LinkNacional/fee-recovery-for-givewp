@@ -117,6 +117,30 @@ class Fee_Recovery_For_Givewp_Public {
             $description = give_get_option('lkn_fee_recovery_description_setting_field');
             $feeValue = floatval(give_get_option('lkn_fee_recovery_setting_field_fixed', 0));
             $feeValuePercent = floatval(give_get_option('lkn_fee_recovery_setting_field_percent', 0)) / 100;
+            $feeGatewayValue = array();
+
+            switch ($enabledFee) {
+                case 'global':
+                    $feeValue = floatval(give_get_option('lkn_fee_recovery_setting_field_fixed', 0));
+                    $feeValuePercent = floatval(give_get_option('lkn_fee_recovery_setting_field_percent', 0)) / 100;
+
+                    break;
+
+                case 'gateway':
+                    $activeGateways = give_get_enabled_payment_gateways($form_id);
+                    foreach ($activeGateways as $key => $label) {
+                        $feeGatewayFixed = floatval(give_get_option('lkn_fee_recovery_fixed_setting_field_gateway_' . $key, 0));
+                        $feeGatewayPercent = floatval(give_get_option('lkn_fee_recovery_percent_setting_field_gateway_' . $key, 0)) / 100;
+
+                        $feeGatewayValue[$key] = array('fee_fixed' => $feeGatewayFixed, 'fee_percent' => $feeGatewayPercent);
+                    }
+
+                    break;
+
+                default:
+                    // Do nothing
+                    break;
+            }
 
             load_template(
                 plugin_dir_path(__FILE__) . 'partials/fee-recovery-for-givewp-public-display.php',
@@ -125,6 +149,7 @@ class Fee_Recovery_For_Givewp_Public {
                     'description' => $description,
                     'feeValue' => $feeValue,
                     'feeValuePercent' => $feeValuePercent,
+                    'feeGateway' => json_encode($feeGatewayValue),
                 )
             );
         }
