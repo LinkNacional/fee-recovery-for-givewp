@@ -150,6 +150,7 @@ class Fee_Recovery_For_Givewp_Public {
                     'feeValue' => $feeValue,
                     'feeValuePercent' => $feeValuePercent,
                     'feeGateway' => json_encode($feeGatewayValue),
+                    'feeEnabled' => $enabledFee,
                 )
             );
         }

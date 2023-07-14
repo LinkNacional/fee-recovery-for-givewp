@@ -89,39 +89,52 @@
 	}
 
 	function update_fee(amount) {
-		console.log('atualizar taxa de transação ' + amount);
 		var iframe = document.getElementsByName('give-embed-form')[0];
-		// var gatewaySelected = get_selected_gateway(iframe, feeGateways);
-		// var feeRecovery = getElementById('lkn-fee-recovery-enabled');
-
-		// console.log('gateway selected: ' + gatewaySelected);
 
 		if (iframe) {
-			//var feeGateways = JSON.parse(iframe.contentDocument.getElementById('lkn-fee-recovery-fee-gateway').value);
-
-			//console.log('recovery fee gateway: ' + JSON.stringify(feeGateways[gatewaySelected].fee_fixed));
+			var feeRecovery = iframe.contentDocument.getElementById('lkn-fee-recovery-enabled').value;
 
 			var checkboxLabel = iframe.contentDocument.getElementsByClassName('lkn-fee-recovery-label')[0];
 			var originalLabel = iframe.contentDocument.getElementById('lkn-fee-recovery-original-description').value;
 
-			var feeValue = parseFloat(iframe.contentDocument.getElementById('lkn-fee-recovery-value').value);
-			var feePercent = parseFloat(iframe.contentDocument.getElementById('lkn-fee-recovery-percent').value);
-			var feeTotal = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format((amount * feePercent) + feeValue);
+			if (feeRecovery === 'global') {
+				var feeValue = parseFloat(iframe.contentDocument.getElementById('lkn-fee-recovery-value').value);
+				var feePercent = parseFloat(iframe.contentDocument.getElementById('lkn-fee-recovery-percent').value);
+				var feeTotal = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format((amount * feePercent) + feeValue);
 
-			checkboxLabel.innerHTML = originalLabel.replaceAll('##', feeTotal);
+				checkboxLabel.innerHTML = originalLabel.replaceAll('##', feeTotal);
+			} else {
+				var gatewaySelected = get_selected_gateway(iframe, feeGateways);
+				var feeGateways = JSON.parse(iframe.contentDocument.getElementById('lkn-fee-recovery-fee-gateway').value);
+
+				var feeValue = parseFloat(feeGateways[gatewaySelected].fee_fixed);
+				var feePercent = parseFloat(feeGateways[gatewaySelected].fee_percent);
+				var feeTotal = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format((amount * feePercent) + feeValue);
+
+				checkboxLabel.innerHTML = originalLabel.replaceAll('##', feeTotal);
+			}
 		} else {
-			// TODO on gateway select recalculate fees
-			//var feeGateways = JSON.parse($('#lkn-fee-recovery-fee-gateway').val());
-			//console.log('recovery fee gateway: ' + JSON.stringify(feeGateways[gatewaySelected].fee_fixed));
+			var feeRecovery = $('#lkn-fee-recovery-enabled').val();
 
 			var checkboxLabel = $('.lkn-fee-recovery-label');
 			var originalLabel = $('#lkn-fee-recovery-original-description').val();
 
-			var feeValue = parseFloat($('#lkn-fee-recovery-value').val());
-			var feePercent = parseFloat($('#lkn-fee-recovery-percent').val());
-			var feeTotal = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format((amount * feePercent) + feeValue);
+			if (feeRecovery === 'global') {
+				var feeValue = parseFloat($('#lkn-fee-recovery-value').val());
+				var feePercent = parseFloat($('#lkn-fee-recovery-percent').val());
+				var feeTotal = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format((amount * feePercent) + feeValue);
 
-			checkboxLabel.html(originalLabel.replaceAll('##', feeTotal));
+				checkboxLabel.html(originalLabel.replaceAll('##', feeTotal));
+			} else {
+				var gatewaySelected = get_selected_gateway(iframe, feeGateways);
+				var feeGateways = JSON.parse($('#lkn-fee-recovery-fee-gateway').val());
+
+				var feeValue = parseFloat(feeGateways[gatewaySelected].fee_fixed);
+				var feePercent = parseFloat(feeGateways[gatewaySelected].fee_percent);
+				var feeTotal = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format((amount * feePercent) + feeValue);
+
+				checkboxLabel.html(originalLabel.replaceAll('##', feeTotal));
+			}
 		}
 	}
 })(jQuery);
