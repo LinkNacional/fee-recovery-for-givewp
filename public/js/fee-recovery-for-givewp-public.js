@@ -6,7 +6,7 @@
 
 		if (iframe) {
 			var amount = parseFloat(iframe.contentDocument.getElementById('give-amount').value);
-			update_fee(amount);
+            update_fee(amount);
 
 			// Compatibility to load css in iframe forms
 			var styleLink = document.createElement('link');
@@ -20,14 +20,14 @@
 			var inputAmount = iframe.contentDocument.getElementById('give-amount');
 			inputAmount.addEventListener('change', (event) => {
 				var amount = parseFloat(event.target.value);
-				update_fee(amount);
+                update_fee(amount);
 			});
 
 			var donationLevelWrap = iframe.contentDocument.getElementById('give-donation-level-button-wrap');
 			donationLevelWrap.addEventListener('click', (event) => {
 				setTimeout(() => {
 					var amount = parseFloat(iframe.contentDocument.getElementById('give-amount').value);
-					update_fee(amount);
+                    update_fee(amount);
 				}, 500);
 			});
 
@@ -36,21 +36,50 @@
 			inputVal.addEventListener('click', (event) => {
 				change_checkbox_opt($(event.target));
 			});
+
+			var giveGateway = iframe.contentDocument.getElementsByClassName('give-gateway');
+			for (let c = 0; c < giveGateway.length; c++) {
+				giveGateway[c].addEventListener('click', (event) => {
+                    console.log('clique iframe ' + event.target.value);
+					var amount = parseFloat(iframe.contentDocument.getElementById('give-amount').value);
+                    var feeRecovery = iframe.contentDocument.getElementById('lkn-fee-recovery-enabled').value;
+
+                    var checkboxLabel = iframe.contentDocument.getElementsByClassName('lkn-fee-recovery-label')[0];
+                    var originalLabel = iframe.contentDocument.getElementById('lkn-fee-recovery-original-description').value;
+        
+                    if (feeRecovery === 'global') {
+                        var feeValue = parseFloat(iframe.contentDocument.getElementById('lkn-fee-recovery-value').value);
+                        var feePercent = parseFloat(iframe.contentDocument.getElementById('lkn-fee-recovery-percent').value);
+                        var feeTotal = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format((amount * feePercent) + feeValue);
+        
+                        checkboxLabel.innerHTML = originalLabel.replaceAll('##', feeTotal);
+                    } else {
+                        var gatewaySelected = event.target.value;
+                        var feeGateways = JSON.parse(iframe.contentDocument.getElementById('lkn-fee-recovery-fee-gateway').value);
+        
+                        var feeValue = parseFloat(feeGateways[gatewaySelected].fee_fixed);
+                        var feePercent = parseFloat(feeGateways[gatewaySelected].fee_percent);
+                        var feeTotal = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format((amount * feePercent) + feeValue);
+        
+                        checkboxLabel.innerHTML = originalLabel.replaceAll('##', feeTotal);
+                    }
+				});
+			}
 		} else {
 			var amount = parseFloat($('#give-amount').val());
-			update_fee(amount);
+            update_fee(amount);
 
 			var inputAmount = $('#give-amount');
 			inputAmount.on('change', (event) => {
 				var amount = parseFloat($(event.target).val());
-				update_fee(amount);
+                update_fee(amount);
 			});
 
 			var donationLevelWrap = $('#give-donation-level-button-wrap');
 			donationLevelWrap.on('click', (event) => {
 				setTimeout(() => {
 					var amount = parseFloat($('#give-amount').val());
-					update_fee(amount);
+                    update_fee(amount);
 				}, 500);
 			});
 
@@ -60,6 +89,34 @@
 					change_checkbox_opt($(event.target));
 				});
 			}
+
+			var giveGateway = $('.give-gateway');
+			giveGateway.on('click', (event) => {
+                console.log('clicou legacy');
+				var amount = parseFloat($('#give-amount').val());
+                
+                var feeRecovery = $('#lkn-fee-recovery-enabled').val();
+
+			var checkboxLabel = $('.lkn-fee-recovery-label');
+			var originalLabel = $('#lkn-fee-recovery-original-description').val();
+
+			if (feeRecovery === 'global') {
+				var feeValue = parseFloat($('#lkn-fee-recovery-value').val());
+				var feePercent = parseFloat($('#lkn-fee-recovery-percent').val());
+				var feeTotal = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format((amount * feePercent) + feeValue);
+
+				checkboxLabel.html(originalLabel.replaceAll('##', feeTotal));
+			} else {
+				var gatewaySelected = $(event.target).val();
+				var feeGateways = JSON.parse($('#lkn-fee-recovery-fee-gateway').val());
+
+				var feeValue = parseFloat(feeGateways[gatewaySelected].fee_fixed);
+				var feePercent = parseFloat(feeGateways[gatewaySelected].fee_percent);
+				var feeTotal = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format((amount * feePercent) + feeValue);
+
+				checkboxLabel.html(originalLabel.replaceAll('##', feeTotal));
+			}
+			});
 		}
 	});
 
@@ -71,7 +128,8 @@
 		}
 	}
 
-	function get_selected_gateway(iframe) {
+	function get_selected_gateway() {
+        var iframe = document.getElementsByName('give-embed-form')[0];
 		var giveGateways = [];
 
 		if (iframe) {
@@ -104,8 +162,18 @@
 
 				checkboxLabel.innerHTML = originalLabel.replaceAll('##', feeTotal);
 			} else {
-				var gatewaySelected = get_selected_gateway(iframe, feeGateways);
 				var feeGateways = JSON.parse(iframe.contentDocument.getElementById('lkn-fee-recovery-fee-gateway').value);
+                var gatewaySelected = '';
+                var giveGateways = iframe.contentDocument.getElementsByClassName('give-gateway');
+
+		for (let c = 0; c < giveGateways.length; c++) {
+			var isChecked = giveGateways[c].getAttribute('checked');
+			if (isChecked) {
+				gatewaySelected = giveGateways[c].value;
+			}
+		}
+
+        console.log('gateway selected: ' + gatewaySelected);
 
 				var feeValue = parseFloat(feeGateways[gatewaySelected].fee_fixed);
 				var feePercent = parseFloat(feeGateways[gatewaySelected].fee_percent);
@@ -126,9 +194,16 @@
 
 				checkboxLabel.html(originalLabel.replaceAll('##', feeTotal));
 			} else {
-				var gatewaySelected = get_selected_gateway(iframe, feeGateways);
 				var feeGateways = JSON.parse($('#lkn-fee-recovery-fee-gateway').val());
+                var gatewaySelected = '';
+                var giveGateways = document.getElementsByClassName('give-gateway');
 
+		for (let c = 0; c < giveGateways.length; c++) {
+			var isChecked = giveGateways[c].getAttribute('checked');
+			if (isChecked) {
+				gatewaySelected = giveGateways[c].value;
+			}
+		}
 				var feeValue = parseFloat(feeGateways[gatewaySelected].fee_fixed);
 				var feePercent = parseFloat(feeGateways[gatewaySelected].fee_percent);
 				var feeTotal = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format((amount * feePercent) + feeValue);
