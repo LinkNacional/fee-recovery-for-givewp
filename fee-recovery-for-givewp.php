@@ -43,7 +43,7 @@ define( 'FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN', 'fee-recovery-for-givewp' );
  * The code that runs during plugin activation.
  * This action is documented in includes/class-fee-recovery-for-givewp-activator.php.
  */
-function activate_fee_recovery_for_givewp() {
+function activate_fee_recovery_for_givewp(): void {
     require_once plugin_dir_path( __FILE__ ) . 'includes/class-fee-recovery-for-givewp-activator.php';
     Fee_Recovery_For_Givewp_Activator::activate();
 }
@@ -52,7 +52,7 @@ function activate_fee_recovery_for_givewp() {
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-fee-recovery-for-givewp-deactivator.php.
  */
-function deactivate_fee_recovery_for_givewp() {
+function deactivate_fee_recovery_for_givewp(): void {
     require_once plugin_dir_path( __FILE__ ) . 'includes/class-fee-recovery-for-givewp-deactivator.php';
     Fee_Recovery_For_Givewp_Deactivator::deactivate();
 }
@@ -75,7 +75,7 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-fee-recovery-for-givewp.ph
  *
  * @since    1.0.0
  */
-function run_fee_recovery_for_givewp() {
+function run_fee_recovery_for_givewp(): void {
     $plugin = new Fee_Recovery_For_Givewp();
     $plugin->run();
 }

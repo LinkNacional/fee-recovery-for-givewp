@@ -16,7 +16,7 @@
  *
  * @author     Link Nacional <contato@seenacional.com>
  */
-class Fee_Recovery_For_Givewp_Activator {
+final class Fee_Recovery_For_Givewp_Activator {
     /**
      * Short Description. (use period).
      *
@@ -24,6 +24,6 @@ class Fee_Recovery_For_Givewp_Activator {
      *
      * @since    1.0.0
      */
-    public static function activate() {
+    public static function activate(): void {
     }
 }

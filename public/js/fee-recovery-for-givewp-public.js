@@ -79,6 +79,16 @@
             donationLevelWrap.on('click', (event) => {
                 setTimeout(() => {
                     var amount = parseFloat($('#give-amount').val());
+                    var giveGateways = document.getElementsByClassName('give-gateway');
+
+                    for (let c = 0; c < giveGateways.length; c++) {
+                        var isChecked = giveGateways[c].getAttribute('checked');
+                        console.log('give gateway: ' + giveGateways[c].value + ' =is checked= ' + isChecked);
+                        if (isChecked) {
+                            // return giveGateways[c].value;
+                        }
+                    }
+
                     update_fee(amount);
                 }, 500);
             });
@@ -163,7 +173,7 @@
                 checkboxLabel.innerHTML = originalLabel.replaceAll('##', feeTotal);
             } else {
                 var feeGateways = JSON.parse(iframe.contentDocument.getElementById('lkn-fee-recovery-fee-gateway').value);
-                var gatewaySelected = '';
+                let gatewaySelected = '';
                 var giveGateways = iframe.contentDocument.getElementsByClassName('give-gateway');
 
                 for (let c = 0; c < giveGateways.length; c++) {
@@ -195,7 +205,7 @@
                 checkboxLabel.html(originalLabel.replaceAll('##', feeTotal));
             } else {
                 var feeGateways = JSON.parse($('#lkn-fee-recovery-fee-gateway').val());
-                var gatewaySelected = '';
+                let gatewaySelected = '';
                 var giveGateways = document.getElementsByClassName('give-gateway');
 
                 for (let c = 0; c < giveGateways.length; c++) {

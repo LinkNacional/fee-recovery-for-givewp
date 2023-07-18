@@ -15,7 +15,7 @@
  *
  * @author     Link Nacional <contato@seenacional.com>
  */
-class Fee_Recovery_For_Givewp_Public {
+final class Fee_Recovery_For_Givewp_Public {
     /**
      * The ID of this plugin.
      *
@@ -55,7 +55,7 @@ class Fee_Recovery_For_Givewp_Public {
      *
      * @since    1.0.0
      */
-    public function enqueue_styles() {
+    public function enqueue_styles(): void {
         /*
          * This function is provided for demonstration purposes only.
          *
@@ -67,7 +67,7 @@ class Fee_Recovery_For_Givewp_Public {
          * between the defined hooks and the functions defined in this
          * class.
          */
-        wp_register_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/fee-recovery-for-givewp-public.css', array(), $this->version, 'all' );
+        wp_register_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/fee-recovery-for-givewp-public.css', array(), $this->version, 'all');
 
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
 
@@ -81,7 +81,7 @@ class Fee_Recovery_For_Givewp_Public {
      *
      * @since    1.0.0
      */
-    public function enqueue_scripts() {
+    public function enqueue_scripts(): void {
         /*
          * This function is provided for demonstration purposes only.
          *
@@ -94,12 +94,12 @@ class Fee_Recovery_For_Givewp_Public {
          * class.
          */
 
-        wp_register_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/fee-recovery-for-givewp-public.js', array('jquery'), $this->version, false );
+        wp_register_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/fee-recovery-for-givewp-public.js', array('jquery'), $this->version, false);
         wp_localize_script(
             $this->plugin_name,
             'lkn_recovery_fee_globals',
             array(
-                'css_path' => plugin_dir_url( __FILE__ ) . 'css/fee-recovery-for-givewp-public.css',
+                'css_path' => plugin_dir_url(__FILE__) . 'css/fee-recovery-for-givewp-public.css',
             )
         );
 
@@ -110,27 +110,27 @@ class Fee_Recovery_For_Givewp_Public {
         }
     }
 
-    public function load_page($form_id, $args) {
+    public function load_page($form_id, $args): void {
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
 
         if ('global' === $enabledFee || 'gateway' === $enabledFee) {
             $description = give_get_option('lkn_fee_recovery_description_setting_field');
-            $feeValue = floatval(give_get_option('lkn_fee_recovery_setting_field_fixed', 0));
-            $feeValuePercent = floatval(give_get_option('lkn_fee_recovery_setting_field_percent', 0)) / 100;
+            $feeValue = (float) give_get_option('lkn_fee_recovery_setting_field_fixed', 0);
+            $feeValuePercent = (float) give_get_option('lkn_fee_recovery_setting_field_percent', 0) / 100;
             $feeGatewayValue = array();
 
             switch ($enabledFee) {
                 case 'global':
-                    $feeValue = floatval(give_get_option('lkn_fee_recovery_setting_field_fixed', 0));
-                    $feeValuePercent = floatval(give_get_option('lkn_fee_recovery_setting_field_percent', 0)) / 100;
+                    $feeValue = (float) give_get_option('lkn_fee_recovery_setting_field_fixed', 0);
+                    $feeValuePercent = (float) give_get_option('lkn_fee_recovery_setting_field_percent', 0) / 100;
 
                     break;
 
                 case 'gateway':
                     $activeGateways = give_get_enabled_payment_gateways($form_id);
                     foreach ($activeGateways as $key => $label) {
-                        $feeGatewayFixed = floatval(give_get_option('lkn_fee_recovery_fixed_setting_field_gateway_' . $key, 0));
-                        $feeGatewayPercent = floatval(give_get_option('lkn_fee_recovery_percent_setting_field_gateway_' . $key, 0)) / 100;
+                        $feeGatewayFixed = (float) give_get_option('lkn_fee_recovery_fixed_setting_field_gateway_' . $key, 0);
+                        $feeGatewayPercent = (float) give_get_option('lkn_fee_recovery_percent_setting_field_gateway_' . $key, 0) / 100;
 
                         $feeGatewayValue[$key] = array('fee_fixed' => $feeGatewayFixed, 'fee_percent' => $feeGatewayPercent);
                     }

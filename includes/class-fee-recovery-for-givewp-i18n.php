@@ -20,13 +20,13 @@
  *
  * @author     Link Nacional <contato@seenacional.com>
  */
-class Fee_Recovery_For_Givewp_i18n {
+final class Fee_Recovery_For_Givewp_i18n {
     /**
      * Load the plugin text domain for translation.
      *
      * @since    1.0.0
      */
-    public function load_plugin_textdomain() {
+    public function load_plugin_textdomain(): void {
         load_plugin_textdomain(
             FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN,
             false,
