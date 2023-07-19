@@ -3,6 +3,7 @@
 
     $(window).on('load', () => {
         var iframe = document.getElementsByName('give-embed-form')[0];
+        get_selected_gateway();
 
         if (iframe) {
             var amount = parseFloat(iframe.contentDocument.getElementById('give-amount').value);
@@ -40,7 +41,6 @@
             var giveGateway = iframe.contentDocument.getElementsByClassName('give-gateway');
             for (let c = 0; c < giveGateway.length; c++) {
                 giveGateway[c].addEventListener('click', (event) => {
-                    console.log('clique iframe ' + event.target.value);
                     var amount = parseFloat(iframe.contentDocument.getElementById('give-amount').value);
                     var feeRecovery = iframe.contentDocument.getElementById('lkn-fee-recovery-enabled').value;
 
@@ -56,12 +56,14 @@
                     } else {
                         var gatewaySelected = event.target.value;
                         var feeGateways = JSON.parse(iframe.contentDocument.getElementById('lkn-fee-recovery-fee-gateway').value);
+                        var selectedGatewayInput = iframe.contentDocument.getElementById('lkn-fee-recovery-gateway');
 
                         var feeValue = parseFloat(feeGateways[gatewaySelected].fee_fixed);
                         var feePercent = parseFloat(feeGateways[gatewaySelected].fee_percent);
                         var feeTotal = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format((amount * feePercent) + feeValue);
 
                         checkboxLabel.innerHTML = originalLabel.replaceAll('##', feeTotal);
+                        selectedGatewayInput.value = gatewaySelected;
                     }
                 });
             }
@@ -79,16 +81,6 @@
             donationLevelWrap.on('click', (event) => {
                 setTimeout(() => {
                     var amount = parseFloat($('#give-amount').val());
-                    var giveGateways = document.getElementsByClassName('give-gateway');
-
-                    for (let c = 0; c < giveGateways.length; c++) {
-                        var isChecked = giveGateways[c].getAttribute('checked');
-                        console.log('give gateway: ' + giveGateways[c].value + ' =is checked= ' + isChecked);
-                        if (isChecked) {
-                            // return giveGateways[c].value;
-                        }
-                    }
-
                     update_fee(amount);
                 }, 500);
             });
@@ -102,7 +94,6 @@
 
             var giveGateway = $('.give-gateway');
             giveGateway.on('click', (event) => {
-                console.log('clicou legacy');
                 var amount = parseFloat($('#give-amount').val());
 
                 var feeRecovery = $('#lkn-fee-recovery-enabled').val();
@@ -119,12 +110,14 @@
                 } else {
                     var gatewaySelected = $(event.target).val();
                     var feeGateways = JSON.parse($('#lkn-fee-recovery-fee-gateway').val());
+                    var selectedGatewayInput = $('#lkn-fee-recovery-gateway');
 
                     var feeValue = parseFloat(feeGateways[gatewaySelected].fee_fixed);
                     var feePercent = parseFloat(feeGateways[gatewaySelected].fee_percent);
                     var feeTotal = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format((amount * feePercent) + feeValue);
 
                     checkboxLabel.html(originalLabel.replaceAll('##', feeTotal));
+                    selectedGatewayInput.attr('value', gatewaySelected);
                 }
             });
         }
@@ -141,19 +134,25 @@
     function get_selected_gateway() {
         var iframe = document.getElementsByName('give-embed-form')[0];
         var giveGateways = [];
+        var selectedGateway = null;
 
         if (iframe) {
             giveGateways = iframe.contentDocument.getElementsByClassName('give-gateway');
+            selectedGateway = iframe.contentDocument.getElementById('lkn-fee-recovery-gateway');
         } else {
             giveGateways = document.getElementsByClassName('give-gateway');
+            selectedGateway = document.getElementById('lkn-fee-recovery-gateway');
         }
 
         for (let c = 0; c < giveGateways.length; c++) {
             var isChecked = giveGateways[c].getAttribute('checked');
             if (isChecked) {
-                return giveGateways[c].value;
+                selectedGateway.value = giveGateways[c].value;
+                return true;
             }
         }
+
+        return false;
     }
 
     function update_fee(amount) {
@@ -173,17 +172,7 @@
                 checkboxLabel.innerHTML = originalLabel.replaceAll('##', feeTotal);
             } else {
                 var feeGateways = JSON.parse(iframe.contentDocument.getElementById('lkn-fee-recovery-fee-gateway').value);
-                let gatewaySelected = '';
-                var giveGateways = iframe.contentDocument.getElementsByClassName('give-gateway');
-
-                for (let c = 0; c < giveGateways.length; c++) {
-                    var isChecked = giveGateways[c].getAttribute('checked');
-                    if (isChecked) {
-                        gatewaySelected = giveGateways[c].value;
-                    }
-                }
-
-                console.log('gateway selected: ' + gatewaySelected);
+                var gatewaySelected = iframe.contentDocument.getElementById('lkn-fee-recovery-gateway').value;
 
                 var feeValue = parseFloat(feeGateways[gatewaySelected].fee_fixed);
                 var feePercent = parseFloat(feeGateways[gatewaySelected].fee_percent);
@@ -205,15 +194,8 @@
                 checkboxLabel.html(originalLabel.replaceAll('##', feeTotal));
             } else {
                 var feeGateways = JSON.parse($('#lkn-fee-recovery-fee-gateway').val());
-                let gatewaySelected = '';
-                var giveGateways = document.getElementsByClassName('give-gateway');
+                var gatewaySelected = $('#lkn-fee-recovery-gateway').val();
 
-                for (let c = 0; c < giveGateways.length; c++) {
-                    var isChecked = giveGateways[c].getAttribute('checked');
-                    if (isChecked) {
-                        gatewaySelected = giveGateways[c].value;
-                    }
-                }
                 var feeValue = parseFloat(feeGateways[gatewaySelected].fee_fixed);
                 var feePercent = parseFloat(feeGateways[gatewaySelected].fee_percent);
                 var feeTotal = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format((amount * feePercent) + feeValue);
