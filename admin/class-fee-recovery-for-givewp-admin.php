@@ -15,7 +15,7 @@
  *
  * @author     Link Nacional <contato@seenacional.com>
  */
-class Fee_Recovery_For_Givewp_Admin {
+final class Fee_Recovery_For_Givewp_Admin {
     /**
      * The ID of this plugin.
      *
@@ -55,7 +55,7 @@ class Fee_Recovery_For_Givewp_Admin {
      *
      * @since    1.0.0
      */
-    public function enqueue_styles() {
+    public function enqueue_styles(): void {
         /*
          * This function is provided for demonstration purposes only.
          *
@@ -76,7 +76,7 @@ class Fee_Recovery_For_Givewp_Admin {
      *
      * @since    1.0.0
      */
-    public function enqueue_scripts() {
+    public function enqueue_scripts(): void {
         /*
          * This function is provided for demonstration purposes only.
          *
@@ -100,8 +100,6 @@ class Fee_Recovery_For_Givewp_Admin {
 
     public function add_settings_into_section($settings) {
         $currentSection = give_get_current_setting_section();
-        $gateways = give_get_ordered_payment_gateways( give_get_payment_gateways() );
-        $htmlOpt = '';
 
         if ('lkn-fee-recovery' === $currentSection) {
             $pluginEnabled = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
@@ -120,6 +118,7 @@ class Fee_Recovery_For_Givewp_Admin {
                 'options' => array(
                     'global' => __('Global', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
                     'gateway' => __('By payment method', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
+                    'form' => __('Per form',FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
                     'disabled' => __('Disable', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
                 ),
             );
@@ -149,58 +148,6 @@ class Fee_Recovery_For_Givewp_Admin {
                 'type' => 'text',
                 'default' => __('Cover the payment fee?', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
             );
-
-            if ('gateway' === $pluginEnabled) {
-                foreach ($gateways as $key => $option) {
-                    if (isset($_POST['lkn_fee_recovery_fixed_setting_field_gateway_' . $key])) {
-                        give_update_option('lkn_fee_recovery_fixed_setting_field_gateway_' . $key, sanitize_text_field($_POST['lkn_fee_recovery_fixed_setting_field_gateway_' . $key]));
-                    }
-
-                    if (isset($_POST['lkn_fee_recovery_percent_setting_field_gateway_' . $key])) {
-                        give_update_option('lkn_fee_recovery_percent_setting_field_gateway_' . $key, sanitize_text_field($_POST['lkn_fee_recovery_percent_setting_field_gateway_' . $key]));
-                    }
-                }
-
-                $htmlOpt .= <<<'HTML'
-            <div class="lkn_fee_recovery_wrap_gateways">
-HTML;
-
-                foreach ($gateways as $key => $option) {
-                    $label = $option['admin_label'];
-                    $fixedValue = give_get_option('lkn_fee_recovery_fixed_setting_field_gateway_' . $key, 0);
-                    $percentValue = give_get_option('lkn_fee_recovery_percent_setting_field_gateway_' . $key, 0);
-                    $labelFixed = __('Fixed fee to be added per donation.', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN);
-                    $labelPercent = __('Percentage fee to be added per donation.', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN);
-
-                    $htmlOpt .= <<<HTML
-                <div class="lkn-recovery-fee-col">    
-                    <div class="lkn-recovery-fee-row">
-                        <div class="lkn-recovery-fee-label-wrap">
-                            <label for="lkn_fee_recovery_setting_field_gateway_{$key}">{$label}</label>
-                        </div>
-
-                        <div class="lkn-recovery-fee-input-wrap">
-                            <div>
-                                <input name="lkn_fee_recovery_fixed_setting_field_gateway_{$key}" id="lkn_fee_recovery_setting_field_gateway_{$key}" type="number" min="0" step="0.01" value="{$fixedValue}" class="give-input-field">
-                                <div class="give-field-description">{$labelFixed}</div>
-                            </div>
-
-                            <div>
-                                <input name="lkn_fee_recovery_percent_setting_field_gateway_{$key}" type="number" min="0" value="{$percentValue}" class="give-input-field">
-                                <div class="give-field-description">{$labelPercent}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-HTML;
-                }
-
-                $htmlOpt .= <<<'HTML'
-            </div>
-HTML;
-
-                echo $htmlOpt;
-            }
 
             $settings[] = array(
                 'id' => 'lkn_fee_recovery',
