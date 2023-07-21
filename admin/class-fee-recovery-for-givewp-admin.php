@@ -90,6 +90,9 @@ final class Fee_Recovery_For_Givewp_Admin {
          */
 
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/fee-recovery-for-givewp-admin.js', array('jquery'), $this->version, false );
+        wp_localize_script($this->plugin_name,'lkn_recovery_fee_admin',array(
+            'notice' => esc_html__('Get new features with', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
+        ));
     }
 
     public function add_new_setting_section($sections) {

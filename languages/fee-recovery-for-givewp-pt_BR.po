@@ -40,3 +40,9 @@ msgstr "Essa descrição aparece no formulário de doação, use \"##\" para adi
 
 msgid "Cover the payment fee?"
 msgstr "Cobrir a taxa de pagamento?"
+
+msgid "By form"
+msgstr "Por formulário"
+
+msgid "Get new features with"
+msgstr "Obtenha novos recursos com"

@@ -46,3 +46,9 @@ msgstr ""
 
 msgid "Percentage fee to be added per donation."
 msgstr ""
+
+msgid "By form"
+msgstr ""
+
+msgid "Get new features with"
+msgstr ""

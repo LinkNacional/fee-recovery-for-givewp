@@ -34,7 +34,7 @@
             // Notice to sell the plugin
             var noticeDiv = document.createElement('div');
             noticeDiv.setAttribute('id', 'lkn-fee-recovery-notice');
-            noticeDiv.innerHTML = 'Obtenha novas funcionalidades com <a href="https://www.linknacional.com/wordpress/" target="_blank">Fee Recovery Pro</a>';
+            noticeDiv.innerHTML = lkn_recovery_fee_admin.notice + ' <a href="https://www.linknacional.com/wordpress/" target="_blank">Fee Recovery Pro</a>';
 
             var formSubmit = document.getElementsByClassName('give-submit-wrap')[0];
             formSubmit.before(noticeDiv);
