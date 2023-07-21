@@ -27,3 +27,16 @@
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
     exit;
 }
+
+$lkn_recovery_fee_all_options = give_get_settings();
+
+$lkn_recovery_fee_all_options = array_filter($lkn_recovery_fee_all_options, function ($key) {
+    return strpos($key, 'lkn_fee_recovery_setting') === 0;
+}, \ARRAY_FILTER_USE_KEY);
+$lkn_recovery_fee_all_options = array_keys($lkn_recovery_fee_all_options);
+
+if (count($lkn_recovery_fee_all_options) > 0) {
+    for ($c = 0; $c < count($lkn_recovery_fee_all_options); $c++) {
+        give_delete_option($lkn_recovery_fee_all_options[$c]);
+    }
+}
