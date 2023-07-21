@@ -17,7 +17,7 @@
  * Description:       Add donor option to cover payment expenses
  * Version:           1.0.0
  * Author:            Link Nacional
- * Author URI:        https://www.linknacional.com
+ * Author URI:        https://www.linknacional.com/wordpress/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       fee-recovery-for-givewp

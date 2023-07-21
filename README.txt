@@ -1,114 +1,76 @@
-=== Plugin Name ===
-Contributors: (this should be a list of wordpress.org userid's)
-Donate link: https://www.linknacional.com
-Tags: comments, spam
-Requires at least: 3.0.1
-Tested up to: 3.4
-Stable tag: 4.3
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+=== Fee recovery for GiveWP ===
+Contributors: linknacional
+Donate link: https://www.linknacional.com/wordpress/
+Tags: fee, donation, givewp, form, recover
+Requires at least: 5.0
+Requires PHP: 7.0
+Tested up to: 6.2
+Stable tag: 1.0.0
+License: GPLv3 or later
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
+Define a recovery fee for your donations forms, give the option to your donor cover you payment fees.
 
 == Description ==
 
-This is the long description.  No limit, and you can use Markdown (as well as in the following sections).
+The [Fee recovery for GiveWP](https://www.linknacional.com/wordpress/) plugin provides donors with the choice to cover the payment fees associated with their donations made through a donation form on the website. By using this plugin, website owners or non-profit organizations can offer an additional option to donors, allowing them to assume the processing expenses of the transaction.
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+**Key Features**
 
-A few notes about the sections above:
+1. Fee Cover Option: The plugin adds an optional field to the donation form, enabling donors to decide whether they want to cover the payment processing fees or not;
 
-*   "Contributors" is a comma separated list of wp.org/wp-plugins.org usernames
-*   "Tags" is a comma separated list of tags that apply to the plugin
-*   "Requires at least" is the lowest version that the plugin will work on
-*   "Tested up to" is the highest version that you've *successfully used to test the plugin*. Note that it might work on
-higher versions... this is just the highest one you've verified.
-*   Stable tag should indicate the Subversion "tag" of the latest stable version, or "trunk," if you use `/trunk/` for
-stable.
+2. Transparent Fee Calculation: When donors choose to cover the fees, the plugin automatically calculates the exact amount required to cover the transaction costs, ensuring transparency and accurate calculations;
 
-    Note that the `readme.txt` of the stable tag is the one that is considered the defining one for the plugin, so
-if the `/trunk/readme.txt` file says that the stable tag is `4.3`, then it is `/tags/4.3/readme.txt` that'll be used
-for displaying information about the plugin.  In this situation, the only thing considered from the trunk `readme.txt`
-is the stable tag pointer.  Thus, if you develop in trunk, you can update the trunk `readme.txt` to reflect changes in
-your in-development version, without having that information incorrectly disclosed about the current stable version
-that lacks those changes -- as long as the trunk's `readme.txt` points to the correct stable tag.
+3. Customizable Messaging: Website owners can customize the messaging displayed to donors, explaining the purpose and benefits of the fee cover option;
 
-    If no stable tag is provided, it is assumed that trunk is stable, but you should specify "trunk" if that's where
-you put the stable version, in order to eliminate any doubt.
+4. Multiple Payment Gateways: The plugin is compatible with popular payment gateways, ensuring a seamless integration with the existing donation process.
+
+By integrating the Fee recovery for GiveWP plugin into their WordPress site, organizations can empower donors with the choice to contribute more effectively, enabling them to support the cause with full transparency and control over the donation process.
+
+**Dependencies**
+
+This plugin needs the [GiveWP](https://wordpress.org/plugins/give/) plugin to work.
+
+**User instructions**
+
+1. Go to GiveWP settings menu;
+
+2. Search for the tab 'fee recovery';
+
+3. Define the fees and enable the plugin;
+
+4. Save. And now the Fee recovery for GiveWP plugin is working in all donation forms.
 
 == Installation ==
 
-This section describes how to install the plugin and get it working.
-
-e.g.
-
-1. Upload `fee-recovery-for-givewp.php` to the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Place `<?php do_action('plugin_name_hook'); ?>` in your templates
+1. Upload `fee-recovery-for-givewp.zip` to the `/wp-content/plugins/` directory;
+2. Activate the plugin through the 'Plugins' menu in WordPress.
 
 == Frequently Asked Questions ==
 
-= A question that someone might have =
+= Can I require the donor to cover the fees on donation? =
 
-An answer to that question.
+The donor can choose if it will cover the payment fees for the donation or not, the option to cover the fees for the payment is not a requirement.
 
-= What about foo bar? =
+= Is there a option to have different fees for each payment gateway? =
 
-Answer to foo bar dilemma.
+Not in the free version. We have this option and more in our Fee recovery PRO plugin, you can aquire it [here](https://www.linknacional.com/contact/).
+
+= Can I define the fee option for each donation form? =
+
+Not in the free version.  We have this option and more in our Fee recovery PRO plugin, you can aquire it [here](https://www.linknacional.com/contact/).
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. Example screenshot
 
 == Changelog ==
 
-= 1.0 =
-* A change since the previous version.
-* Another change.
-
-= 0.5 =
-* List versions from most recent at top to oldest at bottom.
+= 1.0.0 =
+**21/07/2023**
+* Plugin Launch.
 
 == Upgrade Notice ==
 
-= 1.0 =
-Upgrade notices describe the reason a user should upgrade.  No more than 300 characters.
-
-= 0.5 =
-This version fixes a security related bug.  Upgrade immediately.
-
-== Arbitrary section ==
-
-You may provide arbitrary sections, in the same format as the ones above.  This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
-"installation."  Arbitrary sections will be shown below the built-in sections outlined above.
-
-== A brief Markdown Example ==
-
-Ordered list:
-
-1. Some feature
-1. Another feature
-1. Something else about the plugin
-
-Unordered list:
-
-* something
-* something else
-* third thing
-
-Here's a link to [WordPress](http://wordpress.org/ "Your favorite software") and one to [Markdown's Syntax Documentation][markdown syntax].
-Titles are optional, naturally.
-
-[markdown syntax]: http://daringfireball.net/projects/markdown/syntax
-            "Markdown is what the parser uses to process much of the readme file"
-
-Markdown uses email style notation for blockquotes and I've been told:
-> Asterisks for *emphasis*. Double it up  for **strong**.
-
-`<?php code(); // goes in backticks ?>`
+= 1.0.0 =
+* Plugin stable version.
