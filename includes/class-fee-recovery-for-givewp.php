@@ -75,6 +75,7 @@ final class Fee_Recovery_For_Givewp {
         $this->define_public_hooks();
 
         add_filter( 'give_donation_data_before_gateway', array($this, 'update_amount'), 10, 2 );
+        add_filter('plugin_action_links_' . FEE_RECOVERY_FOR_GIVEWP_BASENAME, array($this, 'define_row_meta'), 10, 2);
     }
 
     /**
@@ -221,5 +222,19 @@ final class Fee_Recovery_For_Givewp {
 
         $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
         $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+    }
+
+    public function define_row_meta($plugin_meta, $plugin_file) {
+        if ( ! defined(FEE_RECOVERY_FOR_GIVEWP_BASENAME) && ! is_plugin_active(FEE_RECOVERY_FOR_GIVEWP_BASENAME)) {
+            return $plugin_meta;
+        }
+
+        $new_meta_links['setting'] = sprintf(
+            '<a href="%1$s">%2$s</a>',
+            admin_url('edit.php?post_type=give_forms&page=give-settings&tab=general&section=lkn-fee-recovery'),
+            __('Settings', 'give')
+        );
+    
+        return array_merge($plugin_meta, $new_meta_links);
     }
 }
