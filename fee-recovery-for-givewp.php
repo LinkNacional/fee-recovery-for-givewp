@@ -35,6 +35,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Rename this for your plugin and update it as you release new versions.
  */
 define( 'FEE_RECOVERY_FOR_GIVEWP_VERSION', '1.0.0' );
+define( 'FEE_RECOVERY_FOR_GIVEWP_BASENAME', plugin_basename(__FILE__) );
 
 // Plugin text domain for translations
 define( 'FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN', 'fee-recovery-for-givewp' );
@@ -59,6 +60,7 @@ function deactivate_fee_recovery_for_givewp(): void {
 
 register_activation_hook( __FILE__, 'activate_fee_recovery_for_givewp' );
 register_deactivation_hook( __FILE__, 'deactivate_fee_recovery_for_givewp' );
+add_action('plugins_loaded', 'activate_fee_recovery_for_givewp', 999);
 
 /**
  * The core plugin class that is used to define internationalization,

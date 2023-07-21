@@ -52,3 +52,12 @@ msgstr ""
 
 msgid "Get new features with"
 msgstr ""
+
+msgid "Activation error:"
+msgstr ""
+
+msgid "You need"
+msgstr ""
+
+msgid "installed and active for Fee recovery for GiveWP to activate"
+msgstr ""

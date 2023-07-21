@@ -46,3 +46,12 @@ msgstr "Por formulário"
 
 msgid "Get new features with"
 msgstr "Obtenha novos recursos com"
+
+msgid "Activation error:"
+msgstr "Erro de ativação:"
+
+msgid "You need the plugin"
+msgstr "Você precisa do plugin"
+
+msgid "installed and active for Fee recovery for GiveWP to activate"
+msgstr "instalado e ativo para o Fee recovery for GiveWP ser ativado"
