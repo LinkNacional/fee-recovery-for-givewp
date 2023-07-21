@@ -71,7 +71,7 @@ final class Fee_Recovery_For_Givewp_Public {
 
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
 
-        if ('global' === $enabledFee || 'gateway' === $enabledFee) {
+        if ('disabled' !== $enabledFee) {
             wp_enqueue_style($this->plugin_name);
         }
     }
@@ -105,7 +105,7 @@ final class Fee_Recovery_For_Givewp_Public {
 
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
 
-        if ('global' === $enabledFee || 'gateway' === $enabledFee) {
+        if ('disabled' !== $enabledFee) {
             wp_enqueue_script($this->plugin_name);
         }
     }
@@ -113,7 +113,7 @@ final class Fee_Recovery_For_Givewp_Public {
     public function load_page($form_id, $args): void {
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
 
-        if ('global' === $enabledFee || 'gateway' === $enabledFee) {
+        if ('disabled' !== $enabledFee) {
             $description = give_get_option('lkn_fee_recovery_description_setting_field');
             $feeValue = (float) give_get_option('lkn_fee_recovery_setting_field_fixed', 0);
             $feeValuePercent = (float) give_get_option('lkn_fee_recovery_setting_field_percent', 0) / 100;

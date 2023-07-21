@@ -18,8 +18,8 @@
     <input type="hidden" id="lkn-fee-recovery-original-description" value="<?php esc_attr_e($args['description']); ?>" />
     <input type="hidden" id="lkn-fee-recovery-gateway" value="" />
 
-    <ul>
-        <li style="list-style-type: none;padding: 0px 0px !important;background-color: #ffffff;border: none;">
+    <ul id="lkn-fee-recovery-list-wrap">
+        <li id="lkn-fee-recovery-list" style="list-style-type: none;padding: 0px 0px !important;background-color: #ffffff;border: none;">
             <div id="lkn-fee-recovery-wrap">
                 <input class="give-input" type="checkbox" id="lkn-fee-recovery-input" name="lkn-fee-recovery"
                     value="no">

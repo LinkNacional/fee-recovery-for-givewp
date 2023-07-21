@@ -3,7 +3,7 @@
  * included in this file.
  */
 
-#lkn-fee-recovery-checkbox {
+#lkn-fee-recovery-input {
     cursor: pointer;
     width: 15px;
     height: 15px;
@@ -16,6 +16,10 @@
     line-height: 1em;
     box-sizing: border-box;
     clear: both;
+}
+
+#lkn-fee-recovery-list-wrap {
+    padding-left: 0px !important;
 }
 
 .lkn-fee-recovery-label {
