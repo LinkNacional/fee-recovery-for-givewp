@@ -114,7 +114,7 @@ final class Fee_Recovery_For_Givewp_Public {
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
 
         if ('disabled' !== $enabledFee) {
-            $description = give_get_option('lkn_fee_recovery_description_setting_field');
+            $description = give_get_option('lkn_fee_recovery_setting_field_description', __('Cover the payment fee?', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN));
             $feeValue = (float) give_get_option('lkn_fee_recovery_setting_field_fixed', 0);
             $feeValuePercent = (float) give_get_option('lkn_fee_recovery_setting_field_percent', 0) / 100;
             $feeGatewayValue = array();

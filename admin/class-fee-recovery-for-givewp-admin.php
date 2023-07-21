@@ -118,7 +118,7 @@ final class Fee_Recovery_For_Givewp_Admin {
                 'options' => array(
                     'global' => __('Global', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
                     'gateway' => __('By payment method', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
-                    'form' => __('Per form',FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
+                    'form' => __('By form',FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
                     'disabled' => __('Disable', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
                 ),
             );
@@ -143,7 +143,7 @@ final class Fee_Recovery_For_Givewp_Admin {
 
             $settings[] = array(
                 'name' => __('Rate field description', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
-                'id' => 'lkn_fee_recovery_description_setting_field',
+                'id' => 'lkn_fee_recovery_setting_field_description',
                 'desc' => __('This description appears on the donation form, use "##" to add the fee amount.', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
                 'type' => 'text',
                 'default' => __('Cover the payment fee?', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
