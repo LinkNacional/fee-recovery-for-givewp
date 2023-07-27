@@ -13,10 +13,8 @@
 <div id="lkn-fee-recovery-checkbox-wrapper">
     <input type="hidden" id="lkn-fee-recovery-value" value="<?php esc_attr_e($args['feeValue']); ?>" />
     <input type="hidden" id="lkn-fee-recovery-percent" value="<?php esc_attr_e($args['feeValuePercent']); ?>" />
-    <input type="hidden" id="lkn-fee-recovery-fee-gateway" value="<?php esc_attr_e($args['feeGateway']); ?>" />
     <input type="hidden" id="lkn-fee-recovery-enabled" value="<?php esc_attr_e($args['feeEnabled']); ?>" />
     <input type="hidden" id="lkn-fee-recovery-original-description" value="<?php esc_attr_e($args['description']); ?>" />
-    <input type="hidden" id="lkn-fee-recovery-gateway" value="" />
 
     <ul id="lkn-fee-recovery-list-wrap">
         <li id="lkn-fee-recovery-list" style="list-style-type: none;padding: 0px 0px !important;background-color: #ffffff;border: none;">

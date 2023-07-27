@@ -126,17 +126,6 @@ final class Fee_Recovery_For_Givewp_Public {
 
                     break;
 
-                case 'gateway':
-                    $activeGateways = give_get_enabled_payment_gateways($form_id);
-                    foreach ($activeGateways as $key => $label) {
-                        $feeGatewayFixed = (float) give_get_option('lkn_fee_recovery_fixed_setting_field_gateway_' . $key, 0);
-                        $feeGatewayPercent = (float) give_get_option('lkn_fee_recovery_percent_setting_field_gateway_' . $key, 0) / 100;
-
-                        $feeGatewayValue[$key] = array('fee_fixed' => $feeGatewayFixed, 'fee_percent' => $feeGatewayPercent);
-                    }
-
-                    break;
-
                 default:
                     // Do nothing
                     break;
@@ -149,7 +138,6 @@ final class Fee_Recovery_For_Givewp_Public {
                     'description' => $description,
                     'feeValue' => $feeValue,
                     'feeValuePercent' => $feeValuePercent,
-                    'feeGateway' => json_encode($feeGatewayValue),
                     'feeEnabled' => $enabledFee,
                 )
             );
