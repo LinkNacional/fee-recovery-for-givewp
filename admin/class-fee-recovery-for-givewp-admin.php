@@ -126,6 +126,8 @@ final class Fee_Recovery_For_Givewp_Admin {
                 ),
             );
 
+            $settings = apply_filters('fee_recovery_for_givewp_settings_menu', $settings);
+
             if ('global' === $pluginEnabled) {
                 $settings[] = array(
                     'name' => __('Fixed fee', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
