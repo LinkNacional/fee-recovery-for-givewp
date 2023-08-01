@@ -71,7 +71,7 @@ final class Fee_Recovery_For_Givewp_Public {
 
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
 
-        if ('disabled' !== $enabledFee) {
+        if ('global' === $enabledFee) {
             wp_enqueue_style($this->plugin_name);
         }
     }
@@ -105,31 +105,20 @@ final class Fee_Recovery_For_Givewp_Public {
 
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
 
-        if ('disabled' !== $enabledFee) {
+        if ('global' === $enabledFee) {
             wp_enqueue_script($this->plugin_name);
         }
     }
 
     public function load_page($form_id, $args): void {
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
+        // TODO apply filter for this opt??
 
-        if ('disabled' !== $enabledFee) {
+        if ('global' === $enabledFee) {
             $description = give_get_option('lkn_fee_recovery_setting_field_description', __('Cover the payment fee?', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN));
             $feeValue = (float) give_get_option('lkn_fee_recovery_setting_field_fixed', 0);
             $feeValuePercent = (float) give_get_option('lkn_fee_recovery_setting_field_percent', 0) / 100;
             $feeGatewayValue = array();
-
-            switch ($enabledFee) {
-                case 'global':
-                    $feeValue = (float) give_get_option('lkn_fee_recovery_setting_field_fixed', 0);
-                    $feeValuePercent = (float) give_get_option('lkn_fee_recovery_setting_field_percent', 0) / 100;
-
-                    break;
-
-                default:
-                    // Do nothing
-                    break;
-            }
 
             load_template(
                 plugin_dir_path(__FILE__) . 'partials/fee-recovery-for-givewp-public-display.php',
