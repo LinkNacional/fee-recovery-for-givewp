@@ -2,6 +2,14 @@
 {
     "name": "PHP",
     "image": "mcr.microsoft.com/vscode/devcontainers/php:8.1",
+    "features": {
+        // https://github.com/devcontainers/features/tree/main/src/node
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "18.14.0",
+            "nvmVersion": "0.39.3"
+        }
+    },
+    "postCreateCommand": "npm install",
     "mounts": [
         {
             // path in your local machine where WordPress is.

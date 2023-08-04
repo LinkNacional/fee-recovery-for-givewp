@@ -1,3 +1,4 @@
 .devcontainer/devcontainer.json
 .vscode/settings.json
 vendor
+node_modules
