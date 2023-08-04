@@ -112,13 +112,12 @@ final class Fee_Recovery_For_Givewp_Public {
 
     public function load_page($form_id, $args): void {
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
-        // TODO apply filter for this opt??
+        $enabledFee = apply_filters('fee_recovery_load_page_enabled', $enabledFee, $form_id);
 
         if ('global' === $enabledFee) {
             $description = give_get_option('lkn_fee_recovery_setting_field_description', __('Cover the payment fee?', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN));
             $feeValue = (float) give_get_option('lkn_fee_recovery_setting_field_fixed', 0);
             $feeValuePercent = (float) give_get_option('lkn_fee_recovery_setting_field_percent', 0) / 100;
-            $feeGatewayValue = array();
 
             load_template(
                 plugin_dir_path(__FILE__) . 'partials/fee-recovery-for-givewp-public-display.php',
