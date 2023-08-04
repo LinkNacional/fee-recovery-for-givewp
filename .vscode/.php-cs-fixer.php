@@ -72,15 +72,21 @@ return (new PhpCsFixer\Config())
             'identical' => true,
             'always_move_variable' => true,
         ),
-
         'modernize_types_casting' => true,
         'final_class' => true,
         'final_internal_class' => true,
         'final_public_method_for_abstract_class' => true,
         'void_return' => true,
         'logical_operators' => true,
+        'array_indentation' => true,
+        'whitespace_after_comma_in_array' => array(
+            'ensure_single_space' => true,
+        ),
+        'method_argument_space' => array(
+            'keep_multiple_spaces_after_comma' => false,
+            'on_multiline' => 'ensure_fully_multiline',
+        ),
     ))
     ->setIndent('    ')
     ->setLineEnding("\n")
-    ->setRiskyAllowed(true)
-;
+    ->setRiskyAllowed(true);
