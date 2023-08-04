@@ -73,9 +73,6 @@ final class Fee_Recovery_For_Givewp {
         $this->set_locale();
         $this->define_admin_hooks();
         $this->define_public_hooks();
-
-        add_filter( 'give_donation_data_before_gateway', array($this, 'update_amount'), 10, 2 );
-        add_filter('plugin_action_links_' . FEE_RECOVERY_FOR_GIVEWP_BASENAME, array($this, 'define_row_meta'), 10, 2);
     }
 
     /**
@@ -123,20 +120,20 @@ final class Fee_Recovery_For_Givewp {
 
     public function update_amount($donation_data, $valid_data) {
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
+        $enabledFee = apply_filters('fee_recovery_update_amount_enabled', $enabledFee, $donation_data['post_data']);
 
         if (
             isset($donation_data['post_data']['lkn-fee-recovery'])
             && 'yes' === $donation_data['post_data']['lkn-fee-recovery']
+            && 'global' === $enabledFee
         ) {
-            if ('global' === $enabledFee) {
-                $price = (float) ($donation_data['price']);
-                $feeValue = (float) (give_get_option('lkn_fee_recovery_setting_field_fixed', 0));
-                $feeValuePercent = (float) (give_get_option('lkn_fee_recovery_setting_field_percent', 0)) / 100;
+            $price = (float) ($donation_data['price']);
+            $feeValue = (float) (give_get_option('lkn_fee_recovery_setting_field_fixed', 0));
+            $feeValuePercent = (float) (give_get_option('lkn_fee_recovery_setting_field_percent', 0)) / 100;
 
-                $feeTotal = ($price * $feeValuePercent) + $feeValue;
+            $feeTotal = ($price * $feeValuePercent) + $feeValue;
 
-                $donation_data['price'] = (float) $price + $feeTotal;
-            }
+            $donation_data['price'] = (float) $price + $feeTotal;
         }
 
         return $donation_data;
@@ -209,6 +206,7 @@ final class Fee_Recovery_For_Givewp {
 
         $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
         $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+        $this->loader->add_filter('plugin_action_links_' . FEE_RECOVERY_FOR_GIVEWP_BASENAME, $this, 'define_row_meta', 10, 2);
     }
 
     /**
@@ -222,6 +220,7 @@ final class Fee_Recovery_For_Givewp {
 
         $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
         $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+        $this->loader->add_filter( 'give_donation_data_before_gateway', $this, 'update_amount', 99, 2 );
     }
 
     public function define_row_meta($plugin_meta, $plugin_file) {
