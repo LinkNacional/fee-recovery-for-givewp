@@ -1,0 +1,63 @@
+# Fee recovery for GiveWP
+msgid "Fee recovery for GiveWP"
+msgstr ""
+
+msgid "Fee recovery"
+msgstr ""
+
+msgid "Add donor option to cover payment expenses"
+msgstr ""
+
+msgid "Enable or disable the option to add the payment fee amount for the donor."
+msgstr ""
+
+msgid "Global"
+msgstr ""
+
+msgid "By payment method"
+msgstr ""
+
+msgid "Disable"
+msgstr ""
+
+msgid "Fixed fee"
+msgstr ""
+
+msgid "Fixed fee to be added per donation."
+msgstr ""
+
+msgid "Percentage fee"
+msgstr ""
+
+msgid "Percentage fee to be added per donation."
+msgstr ""
+
+msgid "Rate field description"
+msgstr ""
+
+msgid "This description appears on the donation form, use \"##\" to add the fee amount."
+msgstr ""
+
+msgid "Cover the payment fee?"
+msgstr ""
+
+msgid "Fixed fee to be added per donation."
+msgstr ""
+
+msgid "Percentage fee to be added per donation."
+msgstr ""
+
+msgid "By form"
+msgstr ""
+
+msgid "Get new features with"
+msgstr ""
+
+msgid "Activation error:"
+msgstr ""
+
+msgid "You need"
+msgstr ""
+
+msgid "installed and active for Fee recovery for GiveWP to activate"
+msgstr ""

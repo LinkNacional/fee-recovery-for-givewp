@@ -1,0 +1,15 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+#lkn-fee-recovery-notice {
+    padding: 10px 5px;
+    background-color: #fcf9e8;
+    color: #646970;
+    border: solid 1px lightgrey;
+    border-left-color: #dba617;
+    border-left-width: 4px;
+    font-size: 14px;
+    min-width: 625px;
+    margin-top: 10px;
+}

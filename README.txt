@@ -1,4 +1,17 @@
-# fee-recovery-for-givewp
+=== Fee recovery for GiveWP ===
+Contributors: linknacional
+Donate link: https://www.linknacional.com/wordpress/
+Tags: fee, donation, givewp, form, recover
+Requires at least: 5.0
+Requires PHP: 7.0
+Tested up to: 6.2
+Stable tag: 1.0.0
+License: GPLv3 or later
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
+
+Define a recovery fee for your donations forms, give the option to your donor cover you payment fees.
+
+== Description ==
 
 The [Fee recovery for GiveWP](https://www.linknacional.com/wordpress/) plugin provides donors with the choice to cover the payment fees associated with their donations made through a donation form on the website. By using this plugin, website owners or non-profit organizations can offer an additional option to donors, allowing them to assume the processing expenses of the transaction.
 
@@ -28,12 +41,12 @@ This plugin needs the [GiveWP](https://wordpress.org/plugins/give/) plugin to wo
 
 4. Save. And now the Fee recovery for GiveWP plugin is working in all donation forms.
 
-## Installation
+== Installation ==
 
 1. Upload `fee-recovery-for-givewp.zip` to the `/wp-content/plugins/` directory;
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 
-## Frequently Asked Questions
+== Frequently Asked Questions ==
 
 = Can I require the donor to cover the fees on donation? =
 
@@ -46,3 +59,18 @@ Not in the free version. We have this option and more in our Fee recovery PRO pl
 = Can I define the fee option for each donation form? =
 
 Not in the free version.  We have this option and more in our Fee recovery PRO plugin, you can aquire it [here](https://www.linknacional.com/contact/).
+
+== Screenshots ==
+
+1. Example screenshot
+
+== Changelog ==
+
+= 1.0.0 =
+**21/07/2023**
+* Plugin Launch.
+
+== Upgrade Notice ==
+
+= 1.0.0 =
+* Plugin stable version.
