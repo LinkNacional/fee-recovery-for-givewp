@@ -100,6 +100,10 @@ final class Fee_Recovery_For_Givewp_Public {
             'lknRecoveryFeeGlobals',
             array(
                 'css_path' => plugin_dir_url(__FILE__) . 'css/fee-recovery-for-givewp-public.css',
+                'currency' => give_get_currency(),
+                'decimal_separator' => give_get_price_decimal_separator(),
+                'thousand_separator' => give_get_price_thousand_separator(),
+                'decimal_qtd' => give_get_price_decimals()
             )
         );
 
