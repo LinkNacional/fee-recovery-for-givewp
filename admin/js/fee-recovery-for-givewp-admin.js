@@ -10,9 +10,9 @@
 
     if (
       postType === 'give_forms' &&
-            page === 'give-settings' &&
-            tab === 'general' &&
-            section === 'lkn-fee-recovery'
+      page === 'give-settings' &&
+      tab === 'general' &&
+      section === 'lkn-fee-recovery'
     ) {
       const feeEnabled = document.getElementsByName('lkn_fee_recovery_setting_field')
 
@@ -22,6 +22,7 @@
       fixedInput.attr('min', '0')
       fixedInput.attr('step', '0.01')
       percentInput.attr('min', '0')
+      percentInput.attr('step', '0.01')
 
       // Disables unused options
       feeEnabled[1].parentElement.setAttribute('style', 'color: #ababab;cursor: not-allowed;')
