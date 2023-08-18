@@ -5,9 +5,11 @@
   $(window).on('load', () => {
     const iframe = document.getElementsByName('give-embed-form')[0]
 
+    // Check if GiveWP donation form has iframe
     if (iframe) {
       const checkboxWrapper = iframe.contentDocument.getElementById('lkn-fee-recovery-checkbox-wrapper')
 
+      // Verify if page template is loaded
       if (checkboxWrapper) {
         const amount = lknFormatFloat(iframe.contentDocument.getElementById('give-amount').value)
         lknUpdateFee(amount)
@@ -63,8 +65,10 @@
         }
       }
     } else {
+      // GiveWP donation form is legacy template
       const checkboxWrapper = $('#lkn-fee-recovery-checkbox-wrapper')
 
+      // Verify if page template is loaded
       if (checkboxWrapper.length) {
         const amount = lknFormatFloat($('#give-amount').val())
         lknUpdateFee(amount)
@@ -121,6 +125,10 @@
     }
   }
 
+  /**
+   * Calculate and update fee value
+   * @param {string} amount
+   */
   function lknUpdateFee (amount) {
     const iframe = document.getElementsByName('give-embed-form')[0]
 

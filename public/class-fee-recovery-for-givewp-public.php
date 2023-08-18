@@ -114,6 +114,16 @@ final class Fee_Recovery_For_Givewp_Public {
         }
     }
 
+    /**
+     * Load the global HTML template checkbox
+     *
+     * @since 1.0.0
+     *
+     * @param  string $form_id 
+     * @param  array  $args
+     *
+     * @return void
+     */
     public function load_page($form_id, $args): void {
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
         $enabledFeeMeta = apply_filters('fee_recovery_load_page_enabled', $enabledFee, $form_id);

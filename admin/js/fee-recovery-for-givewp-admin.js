@@ -19,6 +19,7 @@
       const fixedInput = $('#lkn_fee_recovery_setting_field_fixed')
       const percentInput = $('#lkn_fee_recovery_setting_field_percent')
 
+      // Sets inputs as to accept float values
       fixedInput.attr('min', '0')
       fixedInput.attr('step', '0.01')
       percentInput.attr('min', '0')

@@ -90,18 +90,36 @@ final class Fee_Recovery_For_Givewp_Admin {
          */
 
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/fee-recovery-for-givewp-admin.js', array('jquery'), $this->version, false );
-        wp_localize_script($this->plugin_name,'lknRecoveryFeeAdmin',array(
+        wp_localize_script($this->plugin_name, 'lknRecoveryFeeAdmin', array(
             'notice' => esc_html__('Get new features with', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
         ));
     }
 
-    public function add_new_setting_section($sections) {
+    /**
+     * Add new section into GiveWP admin page
+     *
+     * @since 1.0.0
+     *
+     * @param  array $sections 
+     *
+     * @return array
+     */
+    public function add_new_setting_section($sections) :array {
         $sections['lkn-fee-recovery'] = __('Fee recovery', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN);
 
         return $sections;
     }
 
-    public function add_settings_into_section($settings) {
+    /**
+     * Add new setting into GiveWP admin section
+     *
+     * @since 1.0.0
+     *
+     * @param  array $settings 
+     *
+     * @return array
+     */
+    public function add_settings_into_section($settings) :array {
         $currentSection = give_get_current_setting_section();
 
         if ('lkn-fee-recovery' === $currentSection) {
@@ -121,7 +139,7 @@ final class Fee_Recovery_For_Givewp_Admin {
                 'options' => array(
                     'global' => __('Global', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
                     'gateway' => __('By payment method', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
-                    'form' => __('By form',FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
+                    'form' => __('By form', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
                     'disabled' => __('Disable', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
                 ),
             );
