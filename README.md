@@ -1,4 +1,4 @@
-# fee-recovery-for-givewp
+# Fee Recovery for GiveWP Free
 
 The [Fee recovery for GiveWP](https://www.linknacional.com/wordpress/) plugin provides donors with the choice to cover the payment fees associated with their donations made through a donation form on the website. By using this plugin, website owners or non-profit organizations can offer an additional option to donors, allowing them to assume the processing expenses of the transaction.
 
