@@ -15,7 +15,7 @@
  * Plugin Name:       Fee recovery for GiveWP
  * Plugin URI:        https://wordpress.org/plugins/fee-recovery-for-givewp
  * Description:       Add donor option to cover payment expenses
- * Version:           1.0.0
+ * Version:           1.1.0
  * Author:            Link Nacional
  * Author URI:        https://www.linknacional.com/wordpress/
  * License:           GPL-2.0+
@@ -34,7 +34,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'FEE_RECOVERY_FOR_GIVEWP_VERSION', '1.0.0' );
+define( 'FEE_RECOVERY_FOR_GIVEWP_VERSION', '1.1.0' );
 define( 'FEE_RECOVERY_FOR_GIVEWP_BASENAME', plugin_basename(__FILE__) );
 
 // Plugin text domain for translations
