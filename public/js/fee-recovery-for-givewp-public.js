@@ -9,7 +9,7 @@
       const checkboxWrapper = iframe.contentDocument.getElementById('lkn-fee-recovery-checkbox-wrapper')
 
       if (checkboxWrapper) {
-        const amount = parseFloat(iframe.contentDocument.getElementById('give-amount').value)
+        const amount = lknFormatFloat(iframe.contentDocument.getElementById('give-amount').value)
         lknUpdateFee(amount)
 
         // Compatibility to load css in iframe forms
@@ -23,14 +23,14 @@
 
         const inputAmount = iframe.contentDocument.getElementById('give-amount')
         inputAmount.addEventListener('change', (event) => {
-          const amount = parseFloat(event.target.value)
+          const amount = lknFormatFloat(event.target.value)
           lknUpdateFee(amount)
         })
 
         const donationLevelWrap = iframe.contentDocument.getElementById('give-donation-level-button-wrap')
         donationLevelWrap.addEventListener('click', (event) => {
           setTimeout(() => {
-            const amount = parseFloat(iframe.contentDocument.getElementById('give-amount').value)
+            const amount = lknFormatFloat(iframe.contentDocument.getElementById('give-amount').value)
             lknUpdateFee(amount)
           }, 500)
         })
@@ -39,14 +39,14 @@
         const inputVal = iframe.contentDocument.getElementById('lkn-fee-recovery-input')
         inputVal.addEventListener('click', (event) => {
           lknChangeFeeCheckboxOpt($(event.target))
-          const amount = parseFloat(iframe.contentDocument.getElementById('give-amount').value)
+          const amount = lknFormatFloat(iframe.contentDocument.getElementById('give-amount').value)
           lknUpdateTotalAmount(amount)
         })
 
         const giveGateway = iframe.contentDocument.getElementsByClassName('give-gateway')
         for (let c = 0; c < giveGateway.length; c++) {
           giveGateway[c].addEventListener('click', (event) => {
-            const amount = parseFloat(iframe.contentDocument.getElementById('give-amount').value)
+            const amount = lknFormatFloat(iframe.contentDocument.getElementById('give-amount').value)
             const feeRecovery = iframe.contentDocument.getElementById('lkn-fee-recovery-enabled').value
 
             const checkboxLabel = iframe.contentDocument.getElementsByClassName('lkn-fee-recovery-label')[0]
@@ -66,19 +66,19 @@
       const checkboxWrapper = $('#lkn-fee-recovery-checkbox-wrapper')
 
       if (checkboxWrapper.length) {
-        const amount = parseFloat($('#give-amount').val())
+        const amount = lknFormatFloat($('#give-amount').val())
         lknUpdateFee(amount)
 
         const inputAmount = $('#give-amount')
         inputAmount.on('change', (event) => {
-          const amount = parseFloat($(event.target).val())
+          const amount = lknFormatFloat($(event.target).val())
           lknUpdateFee(amount)
         })
 
         const donationLevelWrap = $('#give-donation-level-button-wrap')
         donationLevelWrap.on('click', (event) => {
           setTimeout(() => {
-            const amount = parseFloat($('#give-amount').val())
+            const amount = lknFormatFloat($('#give-amount').val())
             lknUpdateFee(amount)
           }, 500)
         })
@@ -87,14 +87,14 @@
         if (inputVal.length) {
           inputVal.on('click', (event) => {
             lknChangeFeeCheckboxOpt($(event.target))
-            const amount = parseFloat($('#give-amount').val())
+            const amount = lknFormatFloat($('#give-amount').val())
             lknUpdateTotalAmount(amount)
           })
         }
 
         const giveGateway = $('.give-gateway')
         giveGateway.on('click', (event) => {
-          const amount = parseFloat($('#give-amount').val())
+          const amount = lknFormatFloat($('#give-amount').val())
 
           const feeRecovery = $('#lkn-fee-recovery-enabled').val()
 
@@ -140,7 +140,7 @@
       }
 
       setTimeout(() => {
-        const amount = parseFloat(iframe.contentDocument.getElementById('give-amount').value)
+        const amount = lknFormatFloat(iframe.contentDocument.getElementById('give-amount').value)
         lknUpdateTotalAmount(amount)
       }, 500)
     } else {
@@ -159,7 +159,7 @@
       }
 
       setTimeout(() => {
-        const amount = parseFloat($('#give-amount').val())
+        const amount = lknFormatFloat($('#give-amount').val())
         lknUpdateTotalAmount(amount)
       }, 500)
     }
@@ -239,5 +239,17 @@
     amount = amount.replaceAll('|', lknRecoveryFeeGlobals.decimal_separator)
 
     return amount
+  }
+
+  /**
+   * Format string currency to float
+   * @param {string} amount
+   * @return {float}
+   */
+  function lknFormatFloat (amount) {
+    amount = amount.replaceAll(lknRecoveryFeeGlobals.thousand_separator, '')
+    amount = amount.replaceAll(lknRecoveryFeeGlobals.decimal_separator, '.')
+
+    return parseFloat(amount)
   }
 })(jQuery)
