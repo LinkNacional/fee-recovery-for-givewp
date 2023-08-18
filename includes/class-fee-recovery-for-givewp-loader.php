@@ -105,7 +105,7 @@ final class Fee_Recovery_For_Givewp_Loader {
      *
      * @return array the collection of actions and filters registered with WordPress
      */
-    private function add($hooks, $hook, $component, $callback, $priority, $accepted_args) {
+    private function add($hooks, $hook, $component, $callback, $priority, $accepted_args) :array {
         $hooks[] = array(
             'hook' => $hook,
             'component' => $component,

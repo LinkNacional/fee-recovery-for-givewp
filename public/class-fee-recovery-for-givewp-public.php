@@ -100,6 +100,10 @@ final class Fee_Recovery_For_Givewp_Public {
             'lknRecoveryFeeGlobals',
             array(
                 'css_path' => plugin_dir_url(__FILE__) . 'css/fee-recovery-for-givewp-public.css',
+                'currency' => give_get_currency(),
+                'decimal_separator' => give_get_price_decimal_separator(),
+                'thousand_separator' => give_get_price_thousand_separator(),
+                'decimal_qtd' => give_get_price_decimals()
             )
         );
 
@@ -110,11 +114,21 @@ final class Fee_Recovery_For_Givewp_Public {
         }
     }
 
+    /**
+     * Load the global HTML template checkbox
+     *
+     * @since 1.0.0
+     *
+     * @param  string $form_id 
+     * @param  array  $args
+     *
+     * @return void
+     */
     public function load_page($form_id, $args): void {
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
-        $enabledFee = apply_filters('fee_recovery_load_page_enabled', $enabledFee, $form_id);
+        $enabledFeeMeta = apply_filters('fee_recovery_load_page_enabled', $enabledFee, $form_id);
 
-        if ('global' === $enabledFee) {
+        if ('global' === $enabledFee && 'global' === $enabledFeeMeta) {
             $description = give_get_option('lkn_fee_recovery_setting_field_description', __('Cover the payment fee?', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN));
             $feeValue = (float) give_get_option('lkn_fee_recovery_setting_field_fixed', 0);
             $feeValuePercent = (float) give_get_option('lkn_fee_recovery_setting_field_percent', 0) / 100;

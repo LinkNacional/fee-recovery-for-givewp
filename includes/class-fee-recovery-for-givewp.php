@@ -92,7 +92,7 @@ final class Fee_Recovery_For_Givewp {
      *
      * @return string the name of the plugin
      */
-    public function get_plugin_name() {
+    public function get_plugin_name() :string {
         return $this->plugin_name;
     }
 
@@ -103,7 +103,7 @@ final class Fee_Recovery_For_Givewp {
      *
      * @return Fee_Recovery_For_Givewp_Loader orchestrates the hooks of the plugin
      */
-    public function get_loader() {
+    public function get_loader() :Fee_Recovery_For_Givewp_Loader {
         return $this->loader;
     }
 
@@ -114,18 +114,29 @@ final class Fee_Recovery_For_Givewp {
      *
      * @return string the version number of the plugin
      */
-    public function get_version() {
+    public function get_version() :string {
         return $this->version;
     }
 
-    public function update_amount($donation_data, $valid_data) {
+    /**
+     * Update donation amount with fees
+     *
+     * @since 1.0.0
+     *
+     * @param  array $donation_data 
+     * @param  array $valid_data    
+     *
+     * @return array
+     */
+    public function update_amount($donation_data, $valid_data) :array {
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
-        $enabledFee = apply_filters('fee_recovery_update_amount_enabled', $enabledFee, $donation_data['post_data']);
+        $enabledFeeMeta = apply_filters('fee_recovery_update_amount_enabled', $enabledFee, $donation_data['post_data']);
 
         if (
             isset($donation_data['post_data']['lkn-fee-recovery'])
             && 'yes' === $donation_data['post_data']['lkn-fee-recovery']
             && 'global' === $enabledFee
+            && 'global' === $enabledFeeMeta
         ) {
             $price = (float) ($donation_data['price']);
             $feeValue = (float) (give_get_option('lkn_fee_recovery_setting_field_fixed', 0));
@@ -223,7 +234,17 @@ final class Fee_Recovery_For_Givewp {
         $this->loader->add_filter( 'give_donation_data_before_gateway', $this, 'update_amount', 99, 2 );
     }
 
-    public function define_row_meta($plugin_meta, $plugin_file) {
+    /**
+     * Define meta links for plugin
+     *
+     * @since 1.0.0
+     *
+     * @param  array $plugin_meta 
+     * @param  string $plugin_file 
+     *
+     * @return array
+     */
+    public function define_row_meta($plugin_meta, $plugin_file) :array {
         if ( ! defined(FEE_RECOVERY_FOR_GIVEWP_BASENAME) && ! is_plugin_active(FEE_RECOVERY_FOR_GIVEWP_BASENAME)) {
             return $plugin_meta;
         }

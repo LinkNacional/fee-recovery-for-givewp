@@ -52,6 +52,8 @@ final class Fee_Recovery_For_Givewp_Activator {
 
     /**
      * Notice for No Core Activation.
+     * 
+     * @since 1.0.0
      */
     public static function inactive_notice(): void {
         // Admin notice.
