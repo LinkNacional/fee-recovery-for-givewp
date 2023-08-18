@@ -5,7 +5,7 @@ Tags: fee, donation, givewp, form, recover
 Requires at least: 5.0
 Requires PHP: 7.0
 Tested up to: 6.2
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -65,6 +65,14 @@ Not in the free version.  We have this option and more in our Fee recovery PRO p
 1. Example screenshot
 
 == Changelog ==
+
+= 1.1.0 =
+**18/08/2023**
+* Plugin percent fee option now accept float values;
+* After the checkbox is marked the total amount is updated with fees;
+* Dinamically change the currency symbol;
+* Adds compatibility with any currency;
+* Fixed a bug in fee calculation for numbers in the thousands.
 
 = 1.0.0 =
 **21/07/2023**
