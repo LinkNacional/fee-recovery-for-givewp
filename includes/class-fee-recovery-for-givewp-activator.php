@@ -43,10 +43,6 @@ final class Fee_Recovery_For_Givewp_Activator {
         if ($is_deactivate_plugin) {
             // Deactivate plugin.
             deactivate_plugins(FEE_RECOVERY_FOR_GIVEWP_BASENAME);
-
-            if (isset($_GET['activate'])) {
-                unset($_GET['activate']);
-            }
         }
     }
 
