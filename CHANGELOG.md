@@ -1,3 +1,8 @@
+# 1.1.1 - 28/12/2023
+* Remove security vulnerabilities;
+* Compatibility with WordPress 6.4;
+* Update license with GPLv3.
+
 # 1.1.0 - 18/08/2023
 * Plugin percent fee option now accept float values;
 * After the checkbox is marked the total amount is updated with fees;
