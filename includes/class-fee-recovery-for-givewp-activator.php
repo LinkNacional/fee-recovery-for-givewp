@@ -62,6 +62,6 @@ final class Fee_Recovery_For_Givewp_Activator {
             __('installed and active for Fee recovery for GiveWP to activate', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN)
         );
 
-        echo $message;
+        echo wp_kses_post($message);
     }
 }
