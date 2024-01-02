@@ -1,3 +1,7 @@
+# 1.1.2 - 02/01/2024
+* Fix security issues with plugin;
+* Fix internationalization.
+
 # 1.1.1 - 28/12/2023
 * Remove security vulnerabilities;
 * Compatibility with WordPress 6.4;

@@ -91,7 +91,7 @@ final class Fee_Recovery_For_Givewp_Admin {
 
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/fee-recovery-for-givewp-admin.js', array('jquery'), $this->version, false );
         wp_localize_script($this->plugin_name, 'lknRecoveryFeeAdmin', array(
-            'notice' => esc_html__('Get new features with', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
+            'notice' => esc_html__('Get new features with', 'fee-recovery-for-givewp'),
         ));
     }
 
@@ -105,7 +105,7 @@ final class Fee_Recovery_For_Givewp_Admin {
      * @return array
      */
     public function add_new_setting_section($sections) :array {
-        $sections['lkn-fee-recovery'] = __('Fee recovery', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN);
+        $sections['lkn-fee-recovery'] = __('Fee recovery', 'fee-recovery-for-givewp');
 
         return $sections;
     }
@@ -131,16 +131,16 @@ final class Fee_Recovery_For_Givewp_Admin {
             );
 
             $settings[] = array(
-                'name' => __('Fee recovery', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
+                'name' => __('Fee recovery', 'fee-recovery-for-givewp'),
                 'id' => 'lkn_fee_recovery_setting_field',
-                'desc' => __('Enable or disable the option to add the payment fee amount for the donor.', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
+                'desc' => __('Enable or disable the option to add the payment fee amount for the donor.', 'fee-recovery-for-givewp'),
                 'type' => 'radio',
                 'default' => 'disabled',
                 'options' => array(
-                    'global' => __('Global', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
-                    'gateway' => __('By payment method', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
-                    'form' => __('By form', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
-                    'disabled' => __('Disable', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
+                    'global' => __('Global', 'fee-recovery-for-givewp'),
+                    'gateway' => __('By payment method', 'fee-recovery-for-givewp'),
+                    'form' => __('By form', 'fee-recovery-for-givewp'),
+                    'disabled' => __('Disable', 'fee-recovery-for-givewp'),
                 ),
             );
 
@@ -148,28 +148,28 @@ final class Fee_Recovery_For_Givewp_Admin {
 
             if ('global' === $pluginEnabled) {
                 $settings[] = array(
-                    'name' => __('Fixed fee', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
+                    'name' => __('Fixed fee', 'fee-recovery-for-givewp'),
                     'id' => 'lkn_fee_recovery_setting_field_fixed',
-                    'desc' => __('Fixed fee to be added per donation.', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
+                    'desc' => __('Fixed fee to be added per donation.', 'fee-recovery-for-givewp'),
                     'type' => 'number',
                     'default' => 0,
                 );
 
                 $settings[] = array(
-                    'name' => __('Percentage fee', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
+                    'name' => __('Percentage fee', 'fee-recovery-for-givewp'),
                     'id' => 'lkn_fee_recovery_setting_field_percent',
-                    'desc' => __('Percentage fee to be added per donation.', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
+                    'desc' => __('Percentage fee to be added per donation.', 'fee-recovery-for-givewp'),
                     'type' => 'number',
                     'default' => 0,
                 );
             }
 
             $settings[] = array(
-                'name' => __('Rate field description', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
+                'name' => __('Rate field description', 'fee-recovery-for-givewp'),
                 'id' => 'lkn_fee_recovery_setting_field_description',
-                'desc' => __('This description appears on the donation form, use "##" to add the fee amount.', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
+                'desc' => __('This description appears on the donation form, use "##" to add the fee amount.', 'fee-recovery-for-givewp'),
                 'type' => 'text',
-                'default' => __('Cover the payment fee?', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
+                'default' => __('Cover the payment fee?', 'fee-recovery-for-givewp'),
             );
 
             $settings[] = array(
