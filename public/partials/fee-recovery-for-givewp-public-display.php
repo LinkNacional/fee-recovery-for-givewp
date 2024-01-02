@@ -17,13 +17,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div id="lkn-fee-recovery-checkbox-wrapper">
 	<input type="hidden" id="lkn-fee-recovery-value"
-		value="<?php esc_attr_e($args['feeValue']); ?>" />
+		value="<?php echo esc_attr($args['feeValue']); ?>" />
 	<input type="hidden" id="lkn-fee-recovery-percent"
-		value="<?php esc_attr_e($args['feeValuePercent']); ?>" />
+		value="<?php echo esc_attr($args['feeValuePercent']); ?>" />
 	<input type="hidden" id="lkn-fee-recovery-enabled"
-		value="<?php esc_attr_e($args['feeEnabled']); ?>" />
+		value="<?php echo esc_attr($args['feeEnabled']); ?>" />
 	<input type="hidden" id="lkn-fee-recovery-original-description"
-		value="<?php esc_attr_e($args['description']); ?>" />
+		value="<?php echo esc_attr($args['description']); ?>" />
 
 	<ul id="lkn-fee-recovery-list-wrap">
 		<li id="lkn-fee-recovery-list"
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<input class="give-input" type="checkbox" id="lkn-fee-recovery-input" name="lkn-fee-recovery"
 					value="no">
 				<label class="lkn-fee-recovery-label"
-					for="lkn-fee-recovery-input"><?php esc_html_e($args['description'], FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN); ?></label>
+					for="lkn-fee-recovery-input"><?php echo esc_html($args['description']); ?></label>
 			</div>
 		</li>
 	</ul>

@@ -55,11 +55,11 @@ final class Fee_Recovery_For_Givewp_Activator {
         // Admin notice.
         $message = sprintf(
             '<div class="notice notice-error"><p><strong>%1$s</strong> %2$s <a href="%3$s" target="_blank">%4$s</a> %5$s.</p></div>',
-            __('Activation error:', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
-            __('You need the plugin', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
+            __('Activation error:', 'fee-recovery-for-givewp'),
+            __('You need the plugin', 'fee-recovery-for-givewp'),
             'https://wordpress.org/plugins/give/',
-            __('GiveWP', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN),
-            __('installed and active for Fee recovery for GiveWP to activate', FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN)
+            __('GiveWP', 'fee-recovery-for-givewp'),
+            __('installed and active for Fee recovery for GiveWP to activate', 'fee-recovery-for-givewp')
         );
 
         echo wp_kses_post($message);

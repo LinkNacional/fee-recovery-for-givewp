@@ -37,9 +37,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'FEE_RECOVERY_FOR_GIVEWP_VERSION', '1.1.1' );
 define( 'FEE_RECOVERY_FOR_GIVEWP_BASENAME', plugin_basename(__FILE__) );
 
-// Plugin text domain for translations
-define( 'FEE_RECOVERY_FOR_GIVEWP_TEXT_DOMAIN', 'fee-recovery-for-givewp' );
-
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-fee-recovery-for-givewp-activator.php.
