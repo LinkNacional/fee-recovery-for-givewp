@@ -4,7 +4,6 @@
 
   $(window).on('load', () => {
     const iframe = document.getElementsByName('give-embed-form')[0]
-
     // Check if GiveWP donation form has iframe
     if (iframe) {
       const checkboxWrapper = iframe.contentDocument.getElementById('lkn-fee-recovery-checkbox-wrapper')

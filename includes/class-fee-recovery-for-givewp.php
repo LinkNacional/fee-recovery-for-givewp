@@ -10,6 +10,12 @@
  * @since      1.0.0
  */
 
+use Give\DonationForms\DataTransferObjects\DonateControllerData;
+use Give\Donations\Models\Donation;
+use Give\Framework\FieldsAPI\DonationForm;
+use Give\Framework\Support\ValueObjects\Money;
+use Give\Helpers\Hooks;
+
 /**
  * The core plugin class.
  *
@@ -62,7 +68,7 @@ final class Fee_Recovery_For_Givewp {
      * @since    1.0.0
      */
     public function __construct() {
-        if ( defined( 'FEE_RECOVERY_FOR_GIVEWP_VERSION' ) ) {
+        if (defined('FEE_RECOVERY_FOR_GIVEWP_VERSION')) {
             $this->version = FEE_RECOVERY_FOR_GIVEWP_VERSION;
         } else {
             $this->version = '1.0.0';
@@ -92,7 +98,7 @@ final class Fee_Recovery_For_Givewp {
      *
      * @return string the name of the plugin
      */
-    public function get_plugin_name() :string {
+    public function get_plugin_name(): string {
         return $this->plugin_name;
     }
 
@@ -103,7 +109,7 @@ final class Fee_Recovery_For_Givewp {
      *
      * @return Fee_Recovery_For_Givewp_Loader orchestrates the hooks of the plugin
      */
-    public function get_loader() :Fee_Recovery_For_Givewp_Loader {
+    public function get_loader(): Fee_Recovery_For_Givewp_Loader {
         return $this->loader;
     }
 
@@ -114,7 +120,7 @@ final class Fee_Recovery_For_Givewp {
      *
      * @return string the version number of the plugin
      */
-    public function get_version() :string {
+    public function get_version(): string {
         return $this->version;
     }
 
@@ -128,10 +134,10 @@ final class Fee_Recovery_For_Givewp {
      *
      * @return array
      */
-    public function update_amount($donation_data, $valid_data) :array {
+    public function update_amount($donation_data, $valid_data): array {
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
         $enabledFeeMeta = apply_filters('fee_recovery_update_amount_enabled', $enabledFee, $donation_data['post_data']);
-
+        add_option(uniqid("lkn_fee_data_"), json_encode($_POST));
         if (
             isset($donation_data['post_data']['lkn-fee-recovery'])
             && 'yes' === $donation_data['post_data']['lkn-fee-recovery']
@@ -170,24 +176,24 @@ final class Fee_Recovery_For_Givewp {
          * The class responsible for orchestrating the actions and filters of the
          * core plugin.
          */
-        require_once plugin_dir_path( __DIR__ ) . 'includes/class-fee-recovery-for-givewp-loader.php';
+        require_once plugin_dir_path(__DIR__) . 'includes/class-fee-recovery-for-givewp-loader.php';
 
         /**
          * The class responsible for defining internationalization functionality
          * of the plugin.
          */
-        require_once plugin_dir_path( __DIR__ ) . 'includes/class-fee-recovery-for-givewp-i18n.php';
+        require_once plugin_dir_path(__DIR__) . 'includes/class-fee-recovery-for-givewp-i18n.php';
 
         /**
          * The class responsible for defining all actions that occur in the admin area.
          */
-        require_once plugin_dir_path( __DIR__ ) . 'admin/class-fee-recovery-for-givewp-admin.php';
+        require_once plugin_dir_path(__DIR__) . 'admin/class-fee-recovery-for-givewp-admin.php';
 
         /**
          * The class responsible for defining all actions that occur in the public-facing
          * side of the site.
          */
-        require_once plugin_dir_path( __DIR__ ) . 'public/class-fee-recovery-for-givewp-public.php';
+        require_once plugin_dir_path(__DIR__) . 'public/class-fee-recovery-for-givewp-public.php';
 
         $this->loader = new Fee_Recovery_For_Givewp_Loader();
     }
@@ -203,7 +209,7 @@ final class Fee_Recovery_For_Givewp {
     private function set_locale(): void {
         $plugin_i18n = new Fee_Recovery_For_Givewp_i18n();
 
-        $this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
+        $this->loader->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
     }
 
     /**
@@ -213,10 +219,10 @@ final class Fee_Recovery_For_Givewp {
      * @since    1.0.0
      */
     private function define_admin_hooks(): void {
-        $plugin_admin = new Fee_Recovery_For_Givewp_Admin( $this->get_plugin_name(), $this->get_version() );
+        $plugin_admin = new Fee_Recovery_For_Givewp_Admin($this->get_plugin_name(), $this->get_version());
 
-        $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-        $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+        $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
+        $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
         $this->loader->add_filter('plugin_action_links_' . FEE_RECOVERY_FOR_GIVEWP_BASENAME, $this, 'define_row_meta', 10, 2);
     }
 
@@ -227,11 +233,24 @@ final class Fee_Recovery_For_Givewp {
      * @since    1.0.0
      */
     private function define_public_hooks(): void {
-        $plugin_public = new Fee_Recovery_For_Givewp_Public( $this->get_plugin_name(), $this->get_version() );
+        $plugin_public = new Fee_Recovery_For_Givewp_Public($this->get_plugin_name(), $this->get_version());
 
-        $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-        $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-        $this->loader->add_filter( 'give_donation_data_before_gateway', $this, 'update_amount', 99, 2 );
+        $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
+        $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
+        $this->loader->add_filter('give_donation_data_before_gateway', $this, 'update_amount', 99, 2);
+        $this->loader->add_action("give_init", $this, "initialize_new_form");
+    }
+
+    public function initialize_new_form(): void {
+        Hooks::addAction("givewp_donation_form_schema", __CLASS__, "load_template", 10, 2);
+        Hooks::addAction('give_update_payment_status', __CLASS__, 'teste', 10, 2);
+    }
+
+    public static function teste($donation_id, $teste): void {
+        add_option(uniqid('teste'), $_POST);
+        $donation = Donation::find($donation_id);
+        $donation->amount = new Money(50, "BRL");
+        $donation->save();
     }
 
     /**
@@ -244,7 +263,7 @@ final class Fee_Recovery_For_Givewp {
      *
      * @return array
      */
-    public function define_row_meta($plugin_meta, $plugin_file) :array {
+    public function define_row_meta($plugin_meta, $plugin_file): array {
         if ( ! defined(FEE_RECOVERY_FOR_GIVEWP_BASENAME) && ! is_plugin_active(FEE_RECOVERY_FOR_GIVEWP_BASENAME)) {
             return $plugin_meta;
         }
@@ -254,7 +273,27 @@ final class Fee_Recovery_For_Givewp {
             admin_url('edit.php?post_type=give_forms&page=give-settings&tab=general&section=lkn-fee-recovery'),
             __('Settings', 'give')
         );
-    
+
         return array_merge($plugin_meta, $new_meta_links);
+    }
+
+    public static function load_template(DonationForm $donationForm, $formId): void {
+        // Obtendo as opções do GiveWP
+        $description = give_get_option('lkn_fee_recovery_setting_field_description', __('Cover the payment fee?', 'fee-recovery-for-givewp'));
+        $feeValue = (float) give_get_option('lkn_fee_recovery_setting_field_fixed', 0);
+        $feeValuePercent = (float) give_get_option('lkn_fee_recovery_setting_field_percent', 0) / 100;
+        $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
+
+        // Enfileirando o script e localizando variáveis (comentado para referência futura)
+        wp_enqueue_script("lkn-fee-recovery-new-form", FEE_RECOVERY_FOR_GIVEWP_URL . "/public/js/fee-recovery-for-givewp-new-form.js", array('jquery'), null, true);
+        wp_localize_script("lkn-fee-recovery-new-form", "varsPhp", array(
+    "description" => $description,
+    "feeValue" => $feeValue,
+    "feeValuePercent" => $feeValuePercent,
+    "enabledFee" => $enabledFee
+        ));
+
+        // Gerando o HTML com as variáveis PHP
+
     }
 }
