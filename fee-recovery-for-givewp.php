@@ -36,6 +36,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 define( 'FEE_RECOVERY_FOR_GIVEWP_VERSION', '1.1.2' );
 define( 'FEE_RECOVERY_FOR_GIVEWP_BASENAME', plugin_basename(__FILE__) );
+define("FEE_RECOVERY_FOR_GIVEWP_URL", plugin_dir_url(__FILE__));
+define("FEE_RECOVERY_FOR_GIVEWP_DIR", plugin_dir_path(__FILE__));
 
 /**
  * The code that runs during plugin activation.
