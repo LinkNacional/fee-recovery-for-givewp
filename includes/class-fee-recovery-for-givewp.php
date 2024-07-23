@@ -29,7 +29,8 @@ use Give\Helpers\Hooks;
  *
  * @author     Link Nacional <contato@seenacional.com>
  */
-final class Fee_Recovery_For_Givewp {
+final class Fee_Recovery_For_Givewp
+{
     /**
      * The loader that's responsible for maintaining and registering all hooks that power
      * the plugin.
@@ -67,7 +68,8 @@ final class Fee_Recovery_For_Givewp {
      *
      * @since    1.0.0
      */
-    public function __construct() {
+    public function __construct()
+    {
         if (defined('FEE_RECOVERY_FOR_GIVEWP_VERSION')) {
             $this->version = FEE_RECOVERY_FOR_GIVEWP_VERSION;
         } else {
@@ -86,7 +88,8 @@ final class Fee_Recovery_For_Givewp {
      *
      * @since    1.0.0
      */
-    public function run(): void {
+    public function run(): void
+    {
         $this->loader->run();
     }
 
@@ -98,7 +101,8 @@ final class Fee_Recovery_For_Givewp {
      *
      * @return string the name of the plugin
      */
-    public function get_plugin_name(): string {
+    public function get_plugin_name(): string
+    {
         return $this->plugin_name;
     }
 
@@ -109,7 +113,8 @@ final class Fee_Recovery_For_Givewp {
      *
      * @return Fee_Recovery_For_Givewp_Loader orchestrates the hooks of the plugin
      */
-    public function get_loader(): Fee_Recovery_For_Givewp_Loader {
+    public function get_loader(): Fee_Recovery_For_Givewp_Loader
+    {
         return $this->loader;
     }
 
@@ -120,7 +125,8 @@ final class Fee_Recovery_For_Givewp {
      *
      * @return string the version number of the plugin
      */
-    public function get_version(): string {
+    public function get_version(): string
+    {
         return $this->version;
     }
 
@@ -134,7 +140,8 @@ final class Fee_Recovery_For_Givewp {
      *
      * @return array
      */
-    public function update_amount($donation_data, $valid_data): array {
+    public function update_amount($donation_data, $valid_data): array
+    {
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
         $enabledFeeMeta = apply_filters('fee_recovery_update_amount_enabled', $enabledFee, $donation_data['post_data']);
         add_option(uniqid("lkn_fee_data_"), json_encode($_POST));
@@ -171,7 +178,8 @@ final class Fee_Recovery_For_Givewp {
      *
      * @since    1.0.0
      */
-    private function load_dependencies(): void {
+    private function load_dependencies(): void
+    {
         /**
          * The class responsible for orchestrating the actions and filters of the
          * core plugin.
@@ -206,7 +214,8 @@ final class Fee_Recovery_For_Givewp {
      *
      * @since    1.0.0
      */
-    private function set_locale(): void {
+    private function set_locale(): void
+    {
         $plugin_i18n = new Fee_Recovery_For_Givewp_i18n();
 
         $this->loader->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
@@ -218,7 +227,8 @@ final class Fee_Recovery_For_Givewp {
      *
      * @since    1.0.0
      */
-    private function define_admin_hooks(): void {
+    private function define_admin_hooks(): void
+    {
         $plugin_admin = new Fee_Recovery_For_Givewp_Admin($this->get_plugin_name(), $this->get_version());
 
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
@@ -232,25 +242,28 @@ final class Fee_Recovery_For_Givewp {
      *
      * @since    1.0.0
      */
-    private function define_public_hooks(): void {
+    private function define_public_hooks(): void
+    {
         $plugin_public = new Fee_Recovery_For_Givewp_Public($this->get_plugin_name(), $this->get_version());
 
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
         $this->loader->add_filter('give_donation_data_before_gateway', $this, 'update_amount', 99, 2);
-        $this->loader->add_action("give_init", $this, "initialize_new_form");
+        $this->loader->add_action("plugins_loaded", $this, "initialize_new_form");
     }
 
-    public function initialize_new_form(): void {
+    public function initialize_new_form(): void
+    {
         Hooks::addAction("givewp_donation_form_schema", __CLASS__, "load_template", 10, 2);
-        Hooks::addAction('give_update_payment_status', __CLASS__, 'teste', 10, 2);
+        add_action('givewp_donate_controller_donation_created', $this, 'teste', 10, 2);
+        // Hooks::addAction('give_update_payment_status', $this, 'teste', 10, 2);
     }
 
-    public static function teste($donation_id, $teste): void {
+    public function teste($formId, Donation $donation)
+    {
         add_option(uniqid('teste'), $_POST);
-        $donation = Donation::find($donation_id);
-        $donation->amount = new Money(50, "BRL");
-        $donation->save();
+        // $donation->amount = new Money(500, give_get_currency($donation->formId));
+        // $donation->save();
     }
 
     /**
@@ -263,8 +276,9 @@ final class Fee_Recovery_For_Givewp {
      *
      * @return array
      */
-    public function define_row_meta($plugin_meta, $plugin_file): array {
-        if ( ! defined(FEE_RECOVERY_FOR_GIVEWP_BASENAME) && ! is_plugin_active(FEE_RECOVERY_FOR_GIVEWP_BASENAME)) {
+    public function define_row_meta($plugin_meta, $plugin_file): array
+    {
+        if (!defined(FEE_RECOVERY_FOR_GIVEWP_BASENAME) && !is_plugin_active(FEE_RECOVERY_FOR_GIVEWP_BASENAME)) {
             return $plugin_meta;
         }
 
@@ -277,7 +291,8 @@ final class Fee_Recovery_For_Givewp {
         return array_merge($plugin_meta, $new_meta_links);
     }
 
-    public static function load_template(DonationForm $donationForm, $formId): void {
+    public function load_template(DonationForm $donationForm, $formId): void
+    {
         // Obtendo as opções do GiveWP
         $description = give_get_option('lkn_fee_recovery_setting_field_description', __('Cover the payment fee?', 'fee-recovery-for-givewp'));
         $feeValue = (float) give_get_option('lkn_fee_recovery_setting_field_fixed', 0);
@@ -287,13 +302,12 @@ final class Fee_Recovery_For_Givewp {
         // Enfileirando o script e localizando variáveis (comentado para referência futura)
         wp_enqueue_script("lkn-fee-recovery-new-form", FEE_RECOVERY_FOR_GIVEWP_URL . "/public/js/fee-recovery-for-givewp-new-form.js", array('jquery'), null, true);
         wp_localize_script("lkn-fee-recovery-new-form", "varsPhp", array(
-    "description" => $description,
-    "feeValue" => $feeValue,
-    "feeValuePercent" => $feeValuePercent,
-    "enabledFee" => $enabledFee
+            "description" => $description,
+            "feeValue" => $feeValue,
+            "feeValuePercent" => $feeValuePercent,
+            "enabledFee" => $enabledFee
         ));
 
         // Gerando o HTML com as variáveis PHP
-
     }
 }
