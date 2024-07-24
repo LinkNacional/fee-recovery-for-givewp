@@ -3,85 +3,98 @@ document.addEventListener('DOMContentLoaded', function () {
     var feeValue = parseFloat(varsPhp.feeValue);
     var feeValuePercent = parseFloat(varsPhp.feeValuePercent);
 
-    // Função para incrementar o número no texto
+    // Função para extrair e incrementar o número no texto
     function incrementarNumero(texto) {
-        // Extrair o número atual do texto usando uma expressão regular
         var numeroAtual = parseFloat(texto.replace(/[^0-9.,]/g, '').replace(',', '.'));
-
-        // Verificar se a extração foi bem-sucedida e se o número não é NaN
         if (!isNaN(numeroAtual)) {
-            // Incrementar o número
-            var novoNumero = numeroAtual * (1 + feeValuePercent) + feeValue; // Corrigido para incrementar
-
-            // Atualizar o texto com o novo número formatado
-            return texto.replace(numeroAtual, novoNumero.toFixed(0)); // Garantir que o número tenha duas casas decimais
+            var novoNumero = numeroAtual * (1 + feeValuePercent) + feeValue;
+            return texto.replace(numeroAtual, novoNumero.toFixed(0));
         } else {
-            // Retornar o texto original se o número não puder ser extraído
             return texto;
         }
     }
 
-    // Função para atualizar os textos dos elementos
-    function atualizarTextos() {
-        var elements = document.querySelectorAll(".givewp-elements-donationSummary__list__item__value");
-        
-        if (elements.length >= 3) {
-            var lastElement = elements[elements.length - 1];
-
-      
-
-            // Atualizar o texto do último elemento
-            var textoAtualUltimo = lastElement.textContent;
-            var novoTextoUltimo = incrementarNumero(textoAtualUltimo);
-            lastElement.textContent = novoTextoUltimo;
-        }
-    }
-
-    adicionarNovoElemento();
-
-    // Adicionar o novo elemento
-    function adicionarNovoElemento() {
-        var list = document.querySelector(".givewp-elements-donationSummary__list");
+    // Função para atualizar o valor da taxa de recuperação
+    function atualizarTaxaDeRecuperacao() {
         var hiddenInput = document.querySelector('input[name="amount"]');
-        
-        // Verificar se o input foi encontrado
         if (hiddenInput) {
-            // Obter o valor do input hidden
-            var amountValue = hiddenInput.value;
-    
-            if (list) {
-                // Criar o novo item
-                var novoItem = document.createElement('li');
-                novoItem.id = 'fee-recovery';
-                novoItem.className = 'givewp-elements-donationSummary__list__item';
-                novoItem.innerHTML = `
-                    <div class="givewp-elements-donationSummary__list__item__label-container">
-                        <div class="givewp-elements-donationSummary__list__item__label">Taxa de recuperação</div>
-                    </div>
-                    <div class="givewp-elements-donationSummary__list__item__value">R$ ${(parseFloat(amountValue) * feeValuePercent + feeValue).toFixed(2)}</div>
-                `;
-                
-                // Inserir o novo item como o segundo filho
-                var items = list.querySelectorAll('.givewp-elements-donationSummary__list__item');
-                if (items.length >= 1) {
-                    // Inserir o novo item antes do segundo item existente (índice 1)
-                    list.insertBefore(novoItem, items[1]);
-                } else {
-                    // Caso a lista não tenha pelo menos um item, adicionar o novo item ao final
-                    list.appendChild(novoItem);
-                }
+            var amountValue = parseFloat(hiddenInput.value);
+            var feeRecoveryValue = (amountValue * feeValuePercent + feeValue).toFixed(2);
+            var feeRecoveryElement = document.querySelector("#fee-recovery .givewp-elements-donationSummary__list__item__value");
+            if (feeRecoveryElement) {
+                feeRecoveryElement.innerHTML = `R$ ${feeRecoveryValue}`;
             }
         }
     }
-    
 
-    // Atualizar textos e adicionar novo elemento
-    atualizarTextos();
+    // Função para atualizar os textos dos elementos de doação
+    function atualizarTextos() {
+        var elements = document.querySelectorAll(".givewp-elements-donationSummary__list__item__value");
+        if (elements.length > 0) {
+            var lastElement = elements[elements.length - 1];
+            var hiddenInput = document.querySelector('input[name="amount"]');
+            if (hiddenInput) {
+                var amountValue = parseFloat(hiddenInput.value);
+                lastElement.innerHTML = `R$ ${(amountValue + (amountValue * feeValuePercent + feeValue)).toFixed(2)}`;
+            }
 
-    // Adicionar um event listener para cliques em qualquer botão, exceto submit
-    document.body.addEventListener('click', function (event) {
-        if (event.target.tagName === 'BUTTON' && event.target.type !== 'submit') {
-            atualizarTextos();
+            atualizarTaxaDeRecuperacao();
         }
+    }
+
+    // Função para adicionar um novo item na lista de doações
+    function adicionarElementoTaxaDeRecuperacao() {
+        var list = document.querySelector(".givewp-elements-donationSummary__list");
+        var hiddenInput = document.querySelector('input[name="amount"]');
+        if (list && hiddenInput) {
+            var amountValue = parseFloat(hiddenInput.value);
+            var novoItem = document.createElement('li');
+            novoItem.id = 'fee-recovery';
+            novoItem.className = 'givewp-elements-donationSummary__list__item';
+            novoItem.innerHTML = `
+                <div class="givewp-elements-donationSummary__list__item__label-container">
+                    <div class="givewp-elements-donationSummary__list__item__label">Taxa de recuperação</div>
+                </div>
+                <div class="givewp-elements-donationSummary__list__item__value">R$ ${(amountValue * feeValuePercent + feeValue).toFixed(2)}</div>
+            `;
+
+            var items = list.querySelectorAll('.givewp-elements-donationSummary__list__item');
+            if (items.length >= 1) {
+                list.insertBefore(novoItem, items[1]);
+            } else {
+                list.appendChild(novoItem);
+            }
+        }
+    }
+
+    // Função para inicializar as atualizações e adicionar o elemento de taxa de recuperação
+    function inicializar() {
+        adicionarElementoTaxaDeRecuperacao();
+        atualizarTextos();
+    }
+
+    // Inicializa ao carregar o DOM
+    inicializar();
+
+    // Adiciona event listener para atualizar os textos ao clicar em qualquer elemento
+    document.addEventListener('click', function () {
+        atualizarTextos();
     });
+
+    // Função debounce para introduzir um atraso antes da execução da função
+    function debounce(func, wait) {
+        let timeout;
+        return function (...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), wait);
+        };
+    }
+
+    // Adiciona event listener para atualizar os textos ao alterar o valor do input "amount-custom" com debounce
+    var amountCustomInput = document.querySelector('input[name="amount-custom"]');
+    if (amountCustomInput) {
+        amountCustomInput.addEventListener('input', debounce(function () {
+            atualizarTextos();
+        }, 500)); // Ajuste o tempo de espera conforme necessário (500ms neste exemplo)
+    }
 });
