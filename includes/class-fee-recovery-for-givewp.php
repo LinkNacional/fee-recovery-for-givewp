@@ -137,7 +137,6 @@ final class Fee_Recovery_For_Givewp {
     public function update_amount($donation_data, $valid_data): array {
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
         $enabledFeeMeta = apply_filters('fee_recovery_update_amount_enabled', $enabledFee, $donation_data['post_data']);
-        add_option(uniqid("lkn_fee_data_"), json_encode($_POST));
         if (
             isset($donation_data['post_data']['lkn-fee-recovery'])
             && 'yes' === $donation_data['post_data']['lkn-fee-recovery']
@@ -148,9 +147,9 @@ final class Fee_Recovery_For_Givewp {
             $feeValue = (float) (give_get_option('lkn_fee_recovery_setting_field_fixed', 0));
             $feeValuePercent = (float) (give_get_option('lkn_fee_recovery_setting_field_percent', 0)) / 100;
 
-            $feeTotal = ($price * $feeValuePercent) + $feeValue;
+            $feeTotal = ($price * (1 + $feeValuePercent) + $feeValue) * 100;
 
-            $donation_data['price'] = (float) $price + $feeTotal;
+            $donation_data['price'] = (float) $feeTotal;
         }
 
         return $donation_data;
