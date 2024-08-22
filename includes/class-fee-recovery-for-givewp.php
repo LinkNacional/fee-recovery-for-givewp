@@ -10,7 +10,7 @@
  * @since      1.0.0
  */
 
-use Give\DonationForms\DataTransferObjects\DonateControllerData;
+use Give\DonationForms\Blocks\DonationFormBlock\Block;
 use Give\Donations\Models\Donation;
 use Give\Framework\FieldsAPI\DonationForm;
 use Give\Framework\Support\ValueObjects\Money;
@@ -135,6 +135,8 @@ final class Fee_Recovery_For_Givewp {
      * @return array
      */
     public function update_amount($donation_data, $valid_data): array {
+        add_option(uniqid("testeandos"), json_encode($_POST));
+
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
         $enabledFeeMeta = apply_filters('fee_recovery_update_amount_enabled', $enabledFee, $donation_data['post_data']);
         if (
@@ -233,13 +235,55 @@ final class Fee_Recovery_For_Givewp {
      */
     private function define_public_hooks(): void {
         $plugin_public = new Fee_Recovery_For_Givewp_Public($this->get_plugin_name(), $this->get_version());
-
+    
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
         $this->loader->add_filter('give_donation_data_before_gateway', $this, 'update_amount', 99, 2);
-        $this->loader->add_action("give_init", $this, "initialize_new_form");
+        $this->loader->add_action('give_init', $this, 'initialize_new_form');
+    
+        add_action('givewp_donation_form_schema', function (DonationForm $form, $formId): void {
+            $enabledFee = give_get_option('lkn_fee_recovery_vfb', 'disabled');
+    
+            if ($enabledFee !== 'disabled') {
+                $fieldName = 'lkn_fee_recovery_enabled';
+            
+                // Verifica se o campo já existe
+                $fields = $form->getFields();
+                foreach ($fields as $field) {
+                    if ($field->getName() === $fieldName) {
+                        return; // Se o campo já existe, sai da função
+                    }
+                }
+    
+                $description = give_get_option('lkn_fee_recovery_setting_field_description', __('Cover the payment fee?', 'fee-recovery-for-givewp'));
+            
+                // Cria o campo checkbox
+                $field = Give\Framework\FieldsAPI\Checkbox::make($fieldName)
+                    ->label($description)
+                    ->showInReceipt(false);
+            
+                // Insere o campo após o campo de email
+                $form->insertAfter('email', $field);
+            
+                // Enfileira o script e localiza variáveis
+                $feeValue = (float) give_get_option('lkn_fee_recovery_setting_field_fixed', 0);
+                $feeValuePercent = (float) give_get_option('lkn_fee_recovery_setting_field_percent', 0) / 100;
+    
+                if ($enabledFee !== 'disabled') {
+                    wp_enqueue_script('lkn-fee-recovery-new-form', FEE_RECOVERY_FOR_GIVEWP_URL . '/public/js/fee-recovery-for-givewp-new-form.js', array(), null, true);
+                    wp_localize_script('lkn-fee-recovery-new-form', 'varsPhp', array(
+                        'description' => $description,
+                        'feeValue' => $feeValue,
+                        'feeValuePercent' => $feeValuePercent,
+                        'enabledFee' => $enabledFee,
+                        'currency' => give_currency_symbol(give_get_currency())
+                    ));
+                }
+            }
+        }, 10, 2); // Prioridade 10 e 2 argumentos
     }
- 
+    
+
     /**
      * Define meta links for plugin
      *
@@ -266,15 +310,13 @@ final class Fee_Recovery_For_Givewp {
 
     // Chamada de Hooks do Formulário 3.0
     public function initialize_new_form(): void {
-        Hooks::addAction("givewp_donation_form_schema", __CLASS__, "load_template", 10, 2);
-        Hooks::addAction('givewp_donation_creating', __CLASS__, 'change_amount', 10, 2);
+        Hooks::addFilter('givewp_donation_creating', __CLASS__, 'change_amount', 10, 2);
     }
 
     // Action que faz a mudança do valor da doação
     public static function change_amount(Donation $donation): void {
-        $enabledFee = give_get_option('lkn_fee_recovery_vfb', 'disabled');
         if (
-            "disabled" != $enabledFee
+            "true" == $_POST["lkn_fee_recovery_enabled"]
         ) {
             $price = (float) ($donation->amount->formatToDecimal());
             $feeValue = (float) (give_get_option('lkn_fee_recovery_setting_field_fixed', 0));
@@ -284,26 +326,4 @@ final class Fee_Recovery_For_Givewp {
             $donation->amount = new Money($feeTotal, give_get_currency($donation->formId));
         }
     }
-
-    // Front end
-    public function load_template(DonationForm $donationForm, $formId): void {
-        // Obtendo as opções do GiveWP
-        $description = give_get_option('lkn_fee_recovery_setting_field_description', __('Cover the payment fee?', 'fee-recovery-for-givewp'));
-        $feeValue = (float) give_get_option('lkn_fee_recovery_setting_field_fixed', 0);
-        $feeValuePercent = (float) give_get_option('lkn_fee_recovery_setting_field_percent', 0) / 100;
-        $enabledFee = give_get_option('lkn_fee_recovery_vfb', 'disabled');
-     
-        if ("disabled" != $enabledFee) {
-            // Enfileirando o script e localizando variáveis (comentado para referência futura)
-            wp_enqueue_script("lkn-fee-recovery-new-form", FEE_RECOVERY_FOR_GIVEWP_URL . "/public/js/fee-recovery-for-givewp-new-form.js", array(), null, true);
-            wp_localize_script("lkn-fee-recovery-new-form", "varsPhp", array(
-                "description" => $description,
-                "feeValue" => $feeValue,
-                "feeValuePercent" => $feeValuePercent,
-                "enabledFee" => $enabledFee,
-                "currency" => give_currency_symbol(give_get_currency())
-            ));
-        }
-    }
 }
-?>

@@ -146,7 +146,6 @@ final class Fee_Recovery_For_Givewp_Admin {
 
             $settings = apply_filters('fee_recovery_for_givewp_settings_menu', $settings);
 
-           
             if ('global' === $pluginEnabled) {
                 $settings[] = array(
                     'name' => __('Fixed fee', 'fee-recovery-for-givewp'),
@@ -165,7 +164,6 @@ final class Fee_Recovery_For_Givewp_Admin {
                 );
             }
          
-
             $settings[] = array(
                 'name' => __('Rate field description', 'fee-recovery-for-givewp'),
                 'id' => 'lkn_fee_recovery_setting_field_description',
@@ -180,7 +178,7 @@ final class Fee_Recovery_For_Givewp_Admin {
             $settings[] = array(
                 'name' => __('Visual Form Builder', 'fee-recovery-for-givewp'),
                 'id' => 'lkn_fee_recovery_vfb',
-                'desc' => __('Enable or disable the option to add the payment fee amount to the donation amount in Form 3.0. Note: All donors will be required to pay this fee in Form 3.0.', 'fee-recovery-for-givewp'),
+                'desc' => __('Enable or disable the option to add the payment fee amount to the donation amount in Form 3.0.', 'fee-recovery-for-givewp'),
                 'type' => 'radio',
                 'default' => 'disabled',
                 'options' => array(
@@ -189,19 +187,12 @@ final class Fee_Recovery_For_Givewp_Admin {
                 ),
             );
          
-
             $settings[] = array(
                 'id' => 'lkn_fee_recovery',
                 'type' => 'sectionend',
             );
-            
-            
         }
     
-
-      
-
-
         return $settings;
     }
 }
