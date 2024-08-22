@@ -55,3 +55,6 @@ msgstr "Você precisa do plugin"
 
 msgid "installed and active for Fee recovery for GiveWP to activate"
 msgstr "instalado e ativo para o Fee recovery for GiveWP ser ativado"
+
+msgid "Enable or disable the option to add the payment fee amount to the donation amount in Form 3.0."
+msgstr "Habilitar ou desabilitar a opção de adicionar o pagamento da taxa na doação do formulário 3.0."
