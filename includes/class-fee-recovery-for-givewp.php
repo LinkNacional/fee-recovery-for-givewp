@@ -135,8 +135,6 @@ final class Fee_Recovery_For_Givewp {
      * @return array
      */
     public function update_amount($donation_data, $valid_data): array {
-        add_option(uniqid("testeandos"), json_encode($_POST));
-
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
         $enabledFeeMeta = apply_filters('fee_recovery_update_amount_enabled', $enabledFee, $donation_data['post_data']);
         if (
@@ -244,7 +242,7 @@ final class Fee_Recovery_For_Givewp {
         add_action('givewp_donation_form_schema', function (DonationForm $form, $formId): void {
             $enabledFee = give_get_option('lkn_fee_recovery_vfb', 'disabled');
     
-            if ($enabledFee !== 'disabled') {
+            if ('disabled' !== $enabledFee) {
                 $fieldName = 'lkn_fee_recovery_enabled';
             
                 // Verifica se o campo já existe
@@ -269,7 +267,7 @@ final class Fee_Recovery_For_Givewp {
                 $feeValue = (float) give_get_option('lkn_fee_recovery_setting_field_fixed', 0);
                 $feeValuePercent = (float) give_get_option('lkn_fee_recovery_setting_field_percent', 0) / 100;
     
-                if ($enabledFee !== 'disabled') {
+                if ('disabled' !== $enabledFee) {
                     wp_enqueue_script('lkn-fee-recovery-new-form', FEE_RECOVERY_FOR_GIVEWP_URL . '/public/js/fee-recovery-for-givewp-new-form.js', array(), null, true);
                     wp_localize_script('lkn-fee-recovery-new-form', 'varsPhp', array(
                         'description' => $description,
@@ -281,8 +279,7 @@ final class Fee_Recovery_For_Givewp {
                 }
             }
         }, 10, 2); // Prioridade 10 e 2 argumentos
-    }
-    
+    }    
 
     /**
      * Define meta links for plugin
@@ -315,7 +312,7 @@ final class Fee_Recovery_For_Givewp {
 
     // Action que faz a mudança do valor da doação
     public static function change_amount(Donation $donation): void {
-        if (
+        if ( isset($_POST["lkn_fee_recovery_enabled"]) &&
             "true" == $_POST["lkn_fee_recovery_enabled"]
         ) {
             $price = (float) ($donation->amount->formatToDecimal());
