@@ -1,63 +1,169 @@
-# Fee recovery for GiveWP
-msgid "Fee recovery for GiveWP"
+# Blank WordPress Pot
+# Copyright 2014 ...
+# This file is distributed under the GNU General Public License v3 or later.
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: fee-"
+"recovery-for-givewp\n"
+"Report-Msgid-Bugs-To: "
+"Translator Name "
+"<translations@example."
+"com>\n"
+"POT-Creation-Date: "
+"2024-12-09 13:06-0300\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Your "
+"Name <you@example.com>\n"
+"Language-Team: Your Team "
+"<translations@example."
+"com>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/"
+"plain; charset=UTF-8\n"
+"Content-Transfer-"
+"Encoding: 8bit\n"
+"Plural-Forms: "
+"nplurals=2; plural=n != "
+"1;\n"
+"X-Textdomain-Support: "
+"yesX-Generator: Poedit "
+"1.6.4\n"
+"X-Poedit-SourceCharset: "
+"UTF-8\n"
+"X-Poedit-KeywordsList: "
+"__;_e;esc_html_e;"
+"esc_html_x:1,2c;"
+"esc_html__;esc_attr_e;"
+"esc_attr_x:1,2c;"
+"esc_attr__;_ex:1,2c;"
+"_nx:4c,1,2;"
+"_nx_noop:4c,1,2;_x:1,2c;"
+"_n:1,2;_n_noop:1,2;"
+"__ngettext:1,2;"
+"__ngettext_noop:1,2;_c,"
+"_nc:4c,1,2\n"
+"X-Poedit-Basepath: ..\n"
+"X-Generator: Poedit "
+"3.4.2\n"
+"X-Poedit-"
+"SearchPath-0: .\n"
+
+#: admin/class-fee-recovery-for-givewp-admin.php:94
+msgid ""
+"Get new features with"
 msgstr ""
 
+#: admin/class-fee-recovery-for-givewp-admin.php:108
+#: admin/class-fee-recovery-for-givewp-admin.php:134
 msgid "Fee recovery"
 msgstr ""
 
-msgid "Add donor option to cover payment expenses"
+#: admin/class-fee-recovery-for-givewp-admin.php:136
+msgid ""
+"Enable or disable the "
+"option to add the "
+"payment fee amount for "
+"the donor."
 msgstr ""
 
-msgid "Enable or disable the option to add the payment fee amount for the donor."
-msgstr ""
-
+#: admin/class-fee-recovery-for-givewp-admin.php:140
 msgid "Global"
 msgstr ""
 
+#: admin/class-fee-recovery-for-givewp-admin.php:141
 msgid "By payment method"
 msgstr ""
 
-msgid "Disable"
-msgstr ""
-
-msgid "Fixed fee"
-msgstr ""
-
-msgid "Fixed fee to be added per donation."
-msgstr ""
-
-msgid "Percentage fee"
-msgstr ""
-
-msgid "Percentage fee to be added per donation."
-msgstr ""
-
-msgid "Rate field description"
-msgstr ""
-
-msgid "This description appears on the donation form, use \"##\" to add the fee amount."
-msgstr ""
-
-msgid "Cover the payment fee?"
-msgstr ""
-
-msgid "Fixed fee to be added per donation."
-msgstr ""
-
-msgid "Percentage fee to be added per donation."
-msgstr ""
-
+#: admin/class-fee-recovery-for-givewp-admin.php:142
 msgid "By form"
 msgstr ""
 
-msgid "Get new features with"
+#: admin/class-fee-recovery-for-givewp-admin.php:143
+msgid "Disable"
 msgstr ""
 
+#: admin/class-fee-recovery-for-givewp-admin.php:151
+msgid "Fixed fee"
+msgstr ""
+
+#: admin/class-fee-recovery-for-givewp-admin.php:153
+msgid ""
+"Fixed fee to be added "
+"per donation."
+msgstr ""
+
+#: admin/class-fee-recovery-for-givewp-admin.php:159
+msgid "Percentage fee"
+msgstr ""
+
+#: admin/class-fee-recovery-for-givewp-admin.php:161
+msgid ""
+"Percentage fee to be "
+"added per donation."
+msgstr ""
+
+#: admin/class-fee-recovery-for-givewp-admin.php:168
+msgid ""
+"Rate field description"
+msgstr ""
+
+#: admin/class-fee-recovery-for-givewp-admin.php:170
+msgid ""
+"This description appears "
+"on the donation form, "
+"use \"##\" to add the "
+"fee amount."
+msgstr ""
+
+#: admin/class-fee-recovery-for-givewp-admin.php:172
+#: includes/class-fee-recovery-for-givewp.php:270
+#: public/class-fee-recovery-for-givewp-public.php:132
+msgid ""
+"Cover the payment fee?"
+msgstr ""
+
+#: admin/class-fee-recovery-for-givewp-admin.php:179
+msgid "Visual Form Builder"
+msgstr ""
+
+#: admin/class-fee-recovery-for-givewp-admin.php:181
+msgid ""
+"Enable or disable the "
+"option to add the "
+"payment fee amount to "
+"the donation amount in "
+"Form 3.0."
+msgstr ""
+
+#: admin/class-fee-recovery-for-givewp-admin.php:185
+msgid "Enabled"
+msgstr ""
+
+#: admin/class-fee-recovery-for-givewp-admin.php:186
+msgid "Disabled"
+msgstr ""
+
+#: includes/class-fee-recovery-for-givewp-activator.php:58
 msgid "Activation error:"
 msgstr ""
 
-msgid "You need"
+#: includes/class-fee-recovery-for-givewp-activator.php:59
+msgid "You need the plugin"
 msgstr ""
 
-msgid "installed and active for Fee recovery for GiveWP to activate"
+#: includes/class-fee-recovery-for-givewp-activator.php:61
+msgid "GiveWP"
+msgstr ""
+
+#: includes/class-fee-recovery-for-givewp-activator.php:62
+msgid ""
+"installed and active for "
+"Fee recovery for GiveWP "
+"to activate"
+msgstr ""
+
+#: includes/class-fee-recovery-for-givewp.php:322
+msgid "Settings"
 msgstr ""
