@@ -69,6 +69,9 @@ Not in the free version.  We have this option and more in our Fee recovery PRO p
 5. Donation summary
 
 == Changelog ==
+= 1.2.0 =
+**14/12/2024**
+* Compatibility with 3.0.0 forms.
 
 = 1.1.2 =
 **02/01/2024**
