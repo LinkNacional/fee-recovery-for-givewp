@@ -1,3 +1,6 @@
+# 1.2.0 - 14/12/2024
+* Compatibility with Form 3.0
+
 # 1.1.2 - 02/01/2024
 * Fix security issues with plugin;
 * Fix internationalization.

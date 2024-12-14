@@ -1,4 +1,4 @@
-/**
+/* *
  * All of the CSS for your public-facing functionality should be
  * included in this file.
  */
@@ -10,15 +10,15 @@
 }
 
 #lkn-fee-recovery-wrap {
-    padding: 2% 1% 2% 1%;
+    padding: 2% 1% 2% 1%; 
     position: relative;
-    display: block;
-    line-height: 1em;
-    box-sizing: border-box;
-    clear: both;
+    display: block; 
+     line-height: 1em; 
+     box-sizing: border-box; 
+     clear: both;
 }
 
-#lkn-fee-recovery-list-wrap {
+ #lkn-fee-recovery-list-wrap {
     padding-left: 0px !important;
 }
 

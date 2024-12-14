@@ -4,8 +4,8 @@ Donate link: https://www.linknacional.com/wordpress/
 Tags: fee, donation, givewp, form, recover
 Requires at least: 5.0
 Requires PHP: 7.4
-Tested up to: 6.4
-Stable tag: 1.1.2
+Tested up to: 6.7
+Stable tag: 1.2.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -62,9 +62,16 @@ Not in the free version.  We have this option and more in our Fee recovery PRO p
 
 == Screenshots ==
 
-1. Example screenshot
+1. Configuration page
+2. Legacy template form recovery fee option
+3. Multi-step template form recovery fee option
+4. Classic template form recovery fee option
+5. Donation summary
 
 == Changelog ==
+= 1.2.0 =
+**14/12/2024**
+* Compatibility with 3.0.0 forms.
 
 = 1.1.2 =
 **02/01/2024**
