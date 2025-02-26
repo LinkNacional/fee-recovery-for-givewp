@@ -151,12 +151,11 @@ final class Fee_Recovery_For_Givewp
             && 'global' === $enabledFeeMeta
         ) {
             $price = (float) ($donation_data['price']);
-            // $feeValue = (float) (give_get_option('lkn_fee_recovery_setting_field_fixed', 0));
-            // $feeValuePercent = (float) (give_get_option('lkn_fee_recovery_setting_field_percent', 0)) / 100;
+            $feeValue = (float) (give_get_option('lkn_fee_recovery_setting_field_fixed', 0));
+            $feeValuePercent = (float) (give_get_option('lkn_fee_recovery_setting_field_percent', 0)) / 100;
+            $feeTotal = $price * (1 + $feeValuePercent) + $feeValue;
 
-            // $feeTotal = ($price * (1 + $feeValuePercent) + $feeValue) * 100;
-
-            // $donation_data['price'] = (float) $feeTotal;
+            $donation_data['price'] = (float) $feeTotal;
         }
 
         return $donation_data;
