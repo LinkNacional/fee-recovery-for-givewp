@@ -5,7 +5,7 @@ Tags: fee, donation, givewp, form, recover
 Requires at least: 5.0
 Requires PHP: 7.4
 Tested up to: 6.7
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -69,6 +69,10 @@ Not in the free version.  We have this option and more in our Fee recovery PRO p
 5. Donation summary
 
 == Changelog ==
+= 1.2.1 = 
+**27/02/2025**
+* Fix fee value in legacy forms.
+
 = 1.2.0 =
 **14/12/2024**
 * Compatibility with 3.0.0 forms.
