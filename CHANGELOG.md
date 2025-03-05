@@ -1,3 +1,6 @@
+# 1.2.1 - 27/02/2025
+* Fix fee value in legacy forms.
+
 # 1.2.0 - 14/12/2024
 * Compatibility with Form 3.0
 
