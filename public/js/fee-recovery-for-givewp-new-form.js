@@ -100,4 +100,49 @@ document.addEventListener('DOMContentLoaded', function () {
             })
         }
     }
+
+    // Compatibilidade com o multi-steps
+    const formElement = document.querySelector('.givewp-donation-form__steps-body');
+    if(formElement){
+        const observer = new MutationObserver((mutationsList) => {
+            mutationsList.forEach((mutation) => {
+                if (mutation.type === 'childList') {
+                    if(!window.checkboxInput){
+                        window.checkboxInput = document.querySelector("input[name='lkn_fee_recovery_enabled']")
+                        if (window.checkboxInput) {
+                            window.checkboxInput.addEventListener('click', () => {
+                                if (window.checkboxInput.checked) {
+                                    window.lknFeeCheckbox = true
+                                } else {
+                                    window.lknFeeCheckbox = false
+                                }
+                            })
+                        }
+                    }
+    
+                    if(!window.listValues){
+                        window.listValues = document.querySelector('.givewp-elements-donationSummary__list__item__value')
+        
+                        if (listValues && window.lknFeeCheckbox) {
+                            const feeValue = parseFloat(varsPhp.feeValue)
+                            const feeValuePercent = parseFloat(varsPhp.feeValuePercent)
+                            adicionarElementoTaxaDeRecuperacao()
+                            atualizarTextos(true)
+                            info = document.querySelector('#fee-recovery')
+                            info.style.display = 'block'
+                            window.testeTentativas = true
+                        }
+                    }else{
+                        listValues = document.querySelector('.givewp-elements-donationSummary__list__item__value')
+                        info = document.querySelector('#fee-recovery')
+                        if(listValues && !info){
+                            window.listValues = false
+                        }
+                    }
+                }
+            });
+        });
+    
+        observer.observe(formElement, { childList: true, subtree: true });
+    }
 })
