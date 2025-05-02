@@ -15,7 +15,8 @@
  *
  * @author     Link Nacional <contato@seenacional.com>
  */
-final class Fee_Recovery_For_Givewp_Public {
+final class Fee_Recovery_For_Givewp_Public
+{
     /**
      * The ID of this plugin.
      *
@@ -42,7 +43,8 @@ final class Fee_Recovery_For_Givewp_Public {
      * @param string $plugin_name the name of the plugin
      * @param string $version     the version of this plugin
      */
-    public function __construct($plugin_name, $version) {
+    public function __construct($plugin_name, $version)
+    {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
 
@@ -55,7 +57,8 @@ final class Fee_Recovery_For_Givewp_Public {
      *
      * @since    1.0.0
      */
-    public function enqueue_styles(): void {
+    public function enqueue_styles(): void
+    {
         /*
          * This function is provided for demonstration purposes only.
          *
@@ -81,7 +84,8 @@ final class Fee_Recovery_For_Givewp_Public {
      *
      * @since    1.0.0
      */
-    public function enqueue_scripts(): void {
+    public function enqueue_scripts(): void
+    {
         /*
          * This function is provided for demonstration purposes only.
          *
@@ -95,6 +99,10 @@ final class Fee_Recovery_For_Givewp_Public {
          */
 
         wp_register_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/fee-recovery-for-givewp-public.js', array('jquery'), $this->version, false);
+
+        $feeValue = (float) give_get_option('lkn_fee_recovery_setting_field_fixed', 0);
+        $feeValuePercent = (float) give_get_option('lkn_fee_recovery_setting_field_percent', 0) / 100;
+
         wp_localize_script(
             $this->plugin_name,
             'lknRecoveryFeeGlobals',
@@ -103,7 +111,10 @@ final class Fee_Recovery_For_Givewp_Public {
                 'currency' => give_get_currency(),
                 'decimal_separator' => give_get_price_decimal_separator(),
                 'thousand_separator' => give_get_price_thousand_separator(),
-                'decimal_qtd' => give_get_price_decimals()
+                'decimal_qtd' => give_get_price_decimals(),
+                'feeValue' => $feeValue,
+                'feeValuePercent' => $feeValuePercent,
+                'currency' => give_currency_symbol(give_get_currency())
             )
         );
 
@@ -119,12 +130,13 @@ final class Fee_Recovery_For_Givewp_Public {
      *
      * @since 1.0.0
      *
-     * @param  string $form_id 
+     * @param  string $form_id
      * @param  array  $args
      *
      * @return void
      */
-    public function load_page($form_id, $args): void {
+    public function load_page($form_id, $args): void
+    {
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
         $enabledFeeMeta = apply_filters('fee_recovery_load_page_enabled', $enabledFee, $form_id);
 

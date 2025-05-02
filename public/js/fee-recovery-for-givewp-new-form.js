@@ -11,7 +11,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (hiddenInput && feeRecoveryElement) {
             const amountValue = parseFloat(hiddenInput.value)
             const feeRecoveryValue = (amountValue * feeValuePercent + feeValue).toFixed(2)
-            feeRecoveryElement.textContent = `R$ ${feeRecoveryValue}`
+
+            const currencySymbol = document.querySelector('input[name="currency"]');
+            const feeTotal = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: currencySymbol.value }).format(feeRecoveryValue)
+
+            feeRecoveryElement.textContent = feeTotal
         }
     }
 
@@ -27,7 +31,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 ? (amountValue + (amountValue * feeValuePercent + feeValue)).toFixed(2)
                 : amountValue.toFixed(2)
 
-            lastElement.textContent = `R$ ${newAmount}`
+            const currencySymbol = document.querySelector('input[name="currency"]');
+            const feeTotal = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: currencySymbol.value }).format(newAmount)
+
+            lastElement.textContent = feeTotal
             atualizarTaxaDeRecuperacao()
         }
     }
@@ -40,12 +47,14 @@ document.addEventListener('DOMContentLoaded', function () {
         if (list && hiddenInput) {
             const amountValue = parseFloat(hiddenInput.value)
             const novoItem = document.createElement('li')
+            const currencySymbol = document.querySelector('input[name="currency"]');
+            const feeTotal = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: currencySymbol.value }).format((amountValue * feeValuePercent + feeValue).toFixed(2))
             novoItem.id = 'fee-recovery'
             novoItem.className = 'givewp-elements-donationSummary__list__item'
             novoItem.innerHTML = `
                 <div class="givewp-elements-donationSummary__list__item">
-                    <div class="givewp-elements-donationSummary__list__item__label">Taxa de recuperação</div>
-                    <div class="givewp-elements-donationSummary__list__item__value">R$ ${(amountValue * feeValuePercent + feeValue).toFixed(2)}</div>
+                    <div class="givewp-elements-donationSummary__list__item__label">Taxa de recuperação(${feeValuePercent * 100}% valor do pagamento + valor fixo de ${feeValue})</div>
+                    <div class="givewp-elements-donationSummary__list__item__value">${feeTotal}</div>
                 </div>
             `
             novoItem.style.display = 'none'
@@ -103,11 +112,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Compatibilidade com o multi-steps
     const formElement = document.querySelector('.givewp-donation-form__steps-body');
-    if(formElement){
+    if (formElement) {
         const observer = new MutationObserver((mutationsList) => {
             mutationsList.forEach((mutation) => {
                 if (mutation.type === 'childList') {
-                    if(!window.checkboxInput){
+                    if (!window.checkboxInput) {
                         window.checkboxInput = document.querySelector("input[name='lkn_fee_recovery_enabled']")
                         if (window.checkboxInput) {
                             window.checkboxInput.addEventListener('click', () => {
@@ -119,10 +128,10 @@ document.addEventListener('DOMContentLoaded', function () {
                             })
                         }
                     }
-    
-                    if(!window.listValues){
+
+                    if (!window.listValues) {
                         window.listValues = document.querySelector('.givewp-elements-donationSummary__list__item__value')
-        
+
                         if (listValues && window.lknFeeCheckbox) {
                             const feeValue = parseFloat(varsPhp.feeValue)
                             const feeValuePercent = parseFloat(varsPhp.feeValuePercent)
@@ -132,17 +141,17 @@ document.addEventListener('DOMContentLoaded', function () {
                             info.style.display = 'block'
                             window.testeTentativas = true
                         }
-                    }else{
+                    } else {
                         listValues = document.querySelector('.givewp-elements-donationSummary__list__item__value')
                         info = document.querySelector('#fee-recovery')
-                        if(listValues && !info){
+                        if (listValues && !info) {
                             window.listValues = false
                         }
                     }
                 }
             });
         });
-    
+
         observer.observe(formElement, { childList: true, subtree: true });
     }
 })
