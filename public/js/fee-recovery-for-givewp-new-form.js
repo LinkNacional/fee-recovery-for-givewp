@@ -49,11 +49,31 @@ document.addEventListener('DOMContentLoaded', function () {
             const novoItem = document.createElement('li')
             const currencySymbol = document.querySelector('input[name="currency"]');
             const feeTotal = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: currencySymbol.value }).format((amountValue * feeValuePercent + feeValue).toFixed(2))
+            let feeText = ''
+            let feePorcentText = ''
+            let feeDescriptionText = 'Sem taxa de recuperação'
+            if (feeValue && feeValue > 0 || feeValuePercent && feeValuePercent > 0) {
+                if (feeValue && feeValue > 0) {
+                    if (feeValuePercent && feeValuePercent > 0) {
+                        feeText = `+ valor fixo de ${feeValue}`
+                    } else {
+                        feeText = `valor fixo de ${feeValue}`
+                    }
+                }
+
+                if (feeValuePercent && feeValuePercent > 0) {
+                    feePorcentText = `${feeValuePercent * 100}% valor do pagamento`
+                }
+
+                feeDescriptionText = `Taxa de recuperação (${feePorcentText} ${feeText})`
+
+            }
+
             novoItem.id = 'fee-recovery'
             novoItem.className = 'givewp-elements-donationSummary__list__item'
             novoItem.innerHTML = `
                 <div class="givewp-elements-donationSummary__list__item">
-                    <div class="givewp-elements-donationSummary__list__item__label">Taxa de recuperação(${feeValuePercent * 100}% valor do pagamento + valor fixo de ${feeValue})</div>
+                    <div class="givewp-elements-donationSummary__list__item__label">${feeDescriptionText}</div>
                     <div class="givewp-elements-donationSummary__list__item__value">${feeTotal}</div>
                 </div>
             `

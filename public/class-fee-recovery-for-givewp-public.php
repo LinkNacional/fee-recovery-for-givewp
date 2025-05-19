@@ -114,7 +114,7 @@ final class Fee_Recovery_For_Givewp_Public
                 'decimal_qtd' => give_get_price_decimals(),
                 'feeValue' => $feeValue,
                 'feeValuePercent' => $feeValuePercent,
-                'currency' => give_currency_symbol(give_get_currency())
+                'currency_symbol' => give_currency_symbol(give_get_currency())
             )
         );
 

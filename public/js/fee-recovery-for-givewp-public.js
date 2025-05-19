@@ -3,6 +3,7 @@
   'use strict'
 
   let previousValue = '##'
+  let valueFound = false
   const feePercent = lknRecoveryFeeGlobals.feeValuePercent ? lknRecoveryFeeGlobals.feeValuePercent : null
   const feeValue = lknRecoveryFeeGlobals.feeValue ? lknRecoveryFeeGlobals.feeValue : null
 
@@ -30,10 +31,7 @@
 
                   if (feePercent && feeValue) {
                     const currencySymbol = innerDoc.querySelector('input[name="currency"]');
-                    const feeTotal = new Intl.NumberFormat('pt-BR', {
-                      style: 'currency',
-                      currency: currencySymbol.value
-                    }).format((amountValue * feePercent) + parseInt(feeValue));
+                    const feeTotal = lknFeeTotal((amountValue * feePercent) + parseInt(feeValue), currencySymbol.value)
 
                     const oldText = checkboxLabel.textContent;
 
@@ -77,10 +75,7 @@
                   if (checkboxLabel && inputAmount) {
                     const amountValue = lknFormatFloat(inputAmount.value);
                     if (feePercent && feeValue) {
-                      const feeTotal = new Intl.NumberFormat('pt-BR', {
-                        style: 'currency',
-                        currency: currencySymbol.value
-                      }).format((amountValue * feePercent) + parseInt(feeValue));
+                      const feeTotal = lknFeeTotal((amountValue * feePercent) + parseInt(feeValue), currencySymbol.value)
 
                       checkboxLabel.innerHTML = checkboxLabel.textContent.replaceAll(previousValue, feeTotal);
                       previousValue = feeTotal;
@@ -92,10 +87,7 @@
 
                         let amountCalc = isVisible ? (amountValue * feePercent) + parseInt(feeValue) : 0;
                         const feeCalc = amountCalc + amountValue;
-                        const feeTotalValue = new Intl.NumberFormat('pt-BR', {
-                          style: 'currency',
-                          currency: currencySymbol.value
-                        }).format(feeCalc);
+                        const feeTotalValue = lknFeeTotal(feeCalc, currencySymbol.value);
 
                         donationTotal.textContent = feeTotalValue;
                         feeRecoverySummary.textContent = feeTotal;
@@ -129,10 +121,7 @@
 
                     if (feePercent && feeValue) {
                       const currencySymbol = innerDoc.querySelector('input[name="currency"]');
-                      const feeTotal = new Intl.NumberFormat('pt-BR', {
-                        style: 'currency',
-                        currency: currencySymbol.value
-                      }).format((amountValue * feePercent) + parseInt(feeValue));
+                      const feeTotal = lknFeeTotal((amountValue * feePercent) + parseInt(feeValue), currencySymbol.value)
 
                       const oldText = checkboxLabel.textContent;
 
@@ -158,190 +147,31 @@
         }
       }
     } else {
-      // GiveWP donation form is legacy template
-      const checkboxWrapper = $('#lkn-fee-recovery-checkbox-wrapper')
-
-      // Verify if page template is loaded
-      if (checkboxWrapper.length) {
-        const amount = lknFormatFloat($('#give-amount').val())
-        lknUpdateFee(amount)
-
-        const inputAmount = $('#give-amount')
-        inputAmount.on('change', (event) => {
-          const amount = lknFormatFloat($(event.target).val())
-          lknUpdateFee(amount)
-        })
-
-        const donationLevelWrap = $('#give-donation-level-button-wrap')
-        donationLevelWrap.on('click', (event) => {
-          setTimeout(() => {
-            const amount = lknFormatFloat($('#give-amount').val())
-            lknUpdateFee(amount)
-          }, 500)
-        })
-
-        const inputVal = $('#lkn-fee-recovery-input')
-        if (inputVal.length) {
-          inputVal.on('click', (event) => {
-            lknChangeFeeCheckboxOpt($(event.target))
-            const amount = lknFormatFloat($('#give-amount').val())
-            lknUpdateTotalAmount(amount)
-          })
-        }
-
-        const giveGateway = $('.give-gateway')
-        giveGateway.on('click', (event) => {
-          const amount = lknFormatFloat($('#give-amount').val())
-
-          const feeRecovery = $('#lkn-fee-recovery-enabled').val()
-
-          const checkboxLabel = $('.lkn-fee-recovery-label')
-          const originalLabel = $('#lkn-fee-recovery-original-description').val()
-
-          if (feeRecovery === 'global') {
-            const feeValue = parseFloat($('#lkn-fee-recovery-value').val())
-            const feePercent = parseFloat($('#lkn-fee-recovery-percent').val())
-            const feeTotal = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format((amount * feePercent) + feeValue)
-
-            checkboxLabel.html(originalLabel.replaceAll('##', feeTotal))
+      // Legacy code for non-iframe forms
+      const observer = new MutationObserver((mutationsList, observer) => {
+        for (const mutation of mutationsList) {
+          if (mutation.type === 'childList' || mutation.type === 'subtree') {
+            const amountValue = document.querySelector('#give-amount')
+            if (amountValue && ) {
+              const amountList = document.querySelector('#give-donation-level-radio-list')
+              if (amountList) {
+                amountList.addEventListener('change', handleAmountChange)
+              }
+              amountValue.addEventListener('input', handleAmountChange)
+              handleAmountChange()
+            }
           }
-        })
-      }
+        }
+      })
+
+      // Configuração de observação
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true
+      })
+
     }
   })
-
-  function lknChangeFeeCheckboxOpt(inputCheckbox) {
-    if (inputCheckbox.val() === 'yes') {
-      inputCheckbox.attr('value', 'no')
-    } else {
-      inputCheckbox.attr('value', 'yes')
-    }
-  }
-
-  /**
-   * Calculate and update fee value
-   * @param {string} amount
-   */
-  function lknUpdateFee(amount) {
-    const iframe = document.querySelector('iframe[title="Donation Form"]')
-    // Check if GiveWP donation form has iframe
-    if (iframe) {
-      const innerDoc = iframe.contentDocument || iframe.contentWindow.document;
-      const feeRecovery = innerDoc.getElementById('lkn-fee-recovery-enabled')
-
-      if (feeRecovery && feeRecovery.value === 'global') {
-        const checkboxLabel = innerDoc.getElementsByClassName('lkn-fee-recovery-label')[0]
-        const originalLabel = innerDoc.getElementById('lkn-fee-recovery-original-description').value
-
-        const feeValue = parseFloat(innerDoc.getElementById('lkn-fee-recovery-value').value)
-        const feePercent = parseFloat(innerDoc.getElementById('lkn-fee-recovery-percent').value)
-        let feeTotal = (amount * feePercent) + feeValue
-        feeTotal = lknFeeFormatCurrency(feeTotal.toFixed(lknRecoveryFeeGlobals.decimal_qtd))
-
-        checkboxLabel.innerHTML = originalLabel.replaceAll('##', feeTotal)
-      }
-
-      setTimeout(() => {
-        const amount = lknFormatFloat(innerDoc.getElementById('give-amount').value)
-        lknUpdateTotalAmount(amount)
-      }, 500)
-    } else {
-      const feeRecovery = $('#lkn-fee-recovery-enabled').val()
-
-      if (feeRecovery === 'global') {
-        const checkboxLabel = $('.lkn-fee-recovery-label')
-        const originalLabel = $('#lkn-fee-recovery-original-description').val()
-
-        const feeValue = parseFloat($('#lkn-fee-recovery-value').val())
-        const feePercent = parseFloat($('#lkn-fee-recovery-percent').val())
-        let feeTotal = (amount * feePercent) + feeValue
-        feeTotal = lknFeeFormatCurrency(feeTotal.toFixed(lknRecoveryFeeGlobals.decimal_qtd))
-
-        checkboxLabel.html(originalLabel.replaceAll('##', feeTotal))
-      }
-
-      setTimeout(() => {
-        const amount = lknFormatFloat($('#give-amount').val())
-        lknUpdateTotalAmount(amount)
-      }, 500)
-    }
-  }
-
-  /**
-   * Update the GiveWP total amount with the fee amount
-   * @param {Number} amount
-   */
-  function lknUpdateTotalAmount(amount) {
-    const iframe = document.getElementsByName('give-embed-form')[0]
-
-    if (iframe) {
-      const feeRecovery = innerDoc.getElementById('lkn-fee-recovery-enabled').value
-      const totalAmountInput = innerDoc.querySelector("[data-tag='total']")
-      const inputCheckbox = innerDoc.getElementById('lkn-fee-recovery-input')
-
-      switch (feeRecovery) {
-        case 'global': {
-          const feeValue = parseFloat(innerDoc.getElementById('lkn-fee-recovery-value').value)
-          const feePercent = parseFloat(innerDoc.getElementById('lkn-fee-recovery-percent').value)
-          let feeTotal = (amount * feePercent) + feeValue
-          feeTotal = amount + feeTotal
-          const feeTotalAmount = lknFeeFormatCurrency(feeTotal.toFixed(lknRecoveryFeeGlobals.decimal_qtd))
-
-          if (inputCheckbox.value === 'yes') {
-            totalAmountInput.innerHTML = feeTotalAmount
-          } else {
-            amount = lknFeeFormatCurrency(amount.toFixed(lknRecoveryFeeGlobals.decimal_qtd))
-            totalAmountInput.innerHTML = amount
-          }
-
-          break
-        }
-
-        default:
-          break
-      }
-    } else {
-      const feeRecovery = $('#lkn-fee-recovery-enabled').val()
-      const totalAmountInput = $('.give-final-total-amount')
-      const inputCheckbox = document.getElementById('lkn-fee-recovery-input')
-
-      switch (feeRecovery) {
-        case 'global': {
-          const feeValue = parseFloat($('#lkn-fee-recovery-value').val())
-          const feePercent = parseFloat($('#lkn-fee-recovery-percent').val())
-          let feeTotal = (amount * feePercent) + feeValue
-          feeTotal = amount + feeTotal
-          const feeTotalAmount = lknFeeFormatCurrency(feeTotal.toFixed(lknRecoveryFeeGlobals.decimal_qtd))
-
-          if (inputCheckbox.value === 'yes') {
-            totalAmountInput.html(feeTotalAmount)
-          } else {
-            amount = lknFeeFormatCurrency(amount.toFixed(lknRecoveryFeeGlobals.decimal_qtd))
-            totalAmountInput.html(amount)
-          }
-
-          break
-        }
-
-        default:
-          break
-      }
-    }
-  }
-
-  /**
-   * Format currency to locale
-   * @param {string} amount
-   * @returns {string}
-   */
-  function lknFeeFormatCurrency(amount) {
-    amount = new Intl.NumberFormat('en-US', { style: 'currency', currency: lknRecoveryFeeGlobals.currency, minimumFractionDigits: lknRecoveryFeeGlobals.decimal_qtd }).format(amount)
-    amount = amount.replaceAll('.', '|')
-    amount = amount.replaceAll(',', lknRecoveryFeeGlobals.thousand_separator)
-    amount = amount.replaceAll('|', lknRecoveryFeeGlobals.decimal_separator)
-
-    return amount
-  }
 
   /**
    * Format string currency to float
@@ -353,5 +183,49 @@
     amount = amount.replaceAll(lknRecoveryFeeGlobals.decimal_separator, '.')
 
     return parseFloat(amount)
+  }
+
+  /**
+   * Format float to string currency
+   * @param {float} amount
+   * @return {string/null}
+   */
+  function lknFeeTotal(amount, currencySymbol = null) {
+    currencySymbol = currencySymbol || lknRecoveryFeeGlobals.currency;
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: currencySymbol
+    }).format(amount);
+  }
+
+  /**
+   * Update fee recovery label
+   */
+  function handleAmountChange() {
+    const checkboxWrapper = document.querySelector('.lkn-fee-recovery-label')
+    const amountValue = document.querySelector('#give-amount')
+
+    console.log(document.querySelector('#give-amount').value)
+
+    if (checkboxWrapper) {
+      let feeTotal = 0
+      const currencySymbol = document.querySelector('#give-mc-currency-selected')
+      const amount = amountValue ? lknFormatFloat(amountValue.value) : 0
+
+      if (currencySymbol) {
+        feeTotal = lknFeeTotal((amount * feePercent) + parseInt(feeValue), currencySymbol.value)
+      } else {
+        feeTotal = lknFeeTotal((amount * feePercent) + parseInt(feeValue))
+      }
+
+      const oldText = checkboxWrapper.textContent;
+
+      const newText = oldText.includes('##') ? checkboxWrapper.textContent.replaceAll('##', feeTotal) :
+        checkboxWrapper.textContent.replaceAll(previousValue, feeTotal);
+
+      checkboxWrapper.textContent = newText
+
+      previousValue = feeTotal
+    }
   }
 })(jQuery)

@@ -53,7 +53,7 @@ if (! defined('ABSPATH')) {
 				<label
 					class="lkn-fee-recovery-label"
 					for="lkn-fee-recovery-input"
-				><?php echo esc_html($args['description']) . 'opaaaaaaaaaa'; ?></label>
+				><?php echo esc_html($args['description']); ?></label>
 			</div>
 		</li>
 	</ul>
