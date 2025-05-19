@@ -26,6 +26,7 @@
                 const inputAmount = innerDoc.querySelector('input[name="amount"]');
                 const checkboxLabel = innerDoc.querySelector('.givewp-fields-checkbox-lkn_fee_recovery_enabled label span');
 
+                // TODO aquiiii
                 if (checkboxLabel && inputAmount) {
                   const amountValue = lknFormatFloat(inputAmount.value);
 
