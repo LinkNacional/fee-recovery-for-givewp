@@ -346,6 +346,8 @@ final class Fee_Recovery_For_Givewp
                 $feeValuePercent = (float) give_get_option('lkn_fee_recovery_setting_field_percent', 0) / 100;
 
                 $_POST['give-amount'] = ceil(($default_give_amount * $feeValuePercent) + $feeValue + $default_give_amount);
+
+                error_log($_POST['give-amount']);
             }
 
         }

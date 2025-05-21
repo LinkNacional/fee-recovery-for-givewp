@@ -4,6 +4,7 @@
 
   let previousValue = '##'
   let valueFound = false
+  let previousCheckboxValue = null
   const feePercent = lknRecoveryFeeGlobals.feeValuePercent ? lknRecoveryFeeGlobals.feeValuePercent : null
   const feeValue = lknRecoveryFeeGlobals.feeValue ? lknRecoveryFeeGlobals.feeValue : null
 
@@ -151,14 +152,28 @@
       // Legacy code for non-iframe forms
       const observer = new MutationObserver((mutationsList, observer) => {
         for (const mutation of mutationsList) {
-          if (mutation.type === 'childList' || mutation.type === 'subtree') {
+          if (mutation.type === 'childList') {
             const amountValue = document.querySelector('#give-amount')
-            if (amountValue && ) {
+            const feeCheckbox = document.querySelector('#lkn-fee-recovery-input')
+
+            if (!amountValue && !feeCheckbox) {
+              valueFound = false
+            }
+
+            if (amountValue && feeCheckbox && !valueFound) {
+              valueFound = true
               const amountList = document.querySelector('#give-donation-level-radio-list')
+              const multiCurrencySelect = document.querySelector('#give-mc-select')
+
+              if (multiCurrencySelect) {
+                multiCurrencySelect.addEventListener('change', handleAmountChange)
+              }
+
               if (amountList) {
                 amountList.addEventListener('change', handleAmountChange)
               }
               amountValue.addEventListener('input', handleAmountChange)
+              feeCheckbox.addEventListener('change', handleTotalAmount)
               handleAmountChange()
             }
           }
@@ -171,6 +186,60 @@
         subtree: true
       })
 
+      const originalOpen = XMLHttpRequest.prototype.open;
+      const originalSend = XMLHttpRequest.prototype.send;
+
+      XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
+        this._url = url;
+        console.log(url)
+        return originalOpen.apply(this, arguments);
+      };
+
+      XMLHttpRequest.prototype.send = function (body) {
+        console.log(this._url)
+        if (this._url && this._url.includes('admin-ajax.php')) {
+          const feeCheckbox = document.querySelector('#lkn-fee-recovery-input');
+          const amountValue = document.querySelector('#give-amount')
+          const feeHiddenPriceId = document.querySelector('input[name="give-price-id"]')
+
+          console.log(feeCheckbox)
+
+          if (feeCheckbox && feeCheckbox.checked) {
+            console.log('entrei aquiiii')
+            let feeTotal = 0
+            const amount = amountValue ? lknFormatFloat(amountValue.value) : 0
+
+            feeTotal = (amount * feePercent) + parseInt(feeValue) + amount
+
+            if (typeof body === 'string') {
+              // Transforma string em objeto
+              const params = new URLSearchParams(body);
+
+              if (params.has('give-amount')) {
+                console.log('entrei aquiiii222')
+                if (feeTotal !== 0) {
+                  params.set('give-amount', feeTotal);
+                  params.set('give-radio-donation-level', 'custom');
+                  params.set('give-price-id', 'custom');
+
+                  if (amountValue) {
+                    amountValue.value = feeTotal
+                  }
+
+                  if (feeHiddenPriceId) {
+                    feeHiddenPriceId.value = "custom"
+                  }
+                }
+              }
+
+              // Converte de volta para string
+              body = params.toString();
+            }
+          }
+        }
+
+        return originalSend.call(this, body);
+      };
     }
   })
 
@@ -202,16 +271,30 @@
   /**
    * Update fee recovery label
    */
-  function handleAmountChange() {
+  function handleAmountChange(event) {
+    let value = event?.target?.value;
+
+    // Verifica se existe valor
+    // TODO verificar
+    if (value) {
+      console.log('entreiii')
+      console.log(/[^\d]$/.test(value))
+      // Remove o último caractere se for uma letra ou caractere especial (não numérico ou ponto ou vírgula)
+      if (/[^\d]$/.test(value)) {
+        value = value.slice(0, -1);
+        event.target.value = value; // Atualiza o campo com o valor corrigido
+      }
+    }
+
     const checkboxWrapper = document.querySelector('.lkn-fee-recovery-label')
     const amountValue = document.querySelector('#give-amount')
-
-    console.log(document.querySelector('#give-amount').value)
 
     if (checkboxWrapper) {
       let feeTotal = 0
       const currencySymbol = document.querySelector('#give-mc-currency-selected')
       const amount = amountValue ? lknFormatFloat(amountValue.value) : 0
+
+      handleTotalAmount()
 
       if (currencySymbol) {
         feeTotal = lknFeeTotal((amount * feePercent) + parseInt(feeValue), currencySymbol.value)
@@ -227,6 +310,36 @@
       checkboxWrapper.textContent = newText
 
       previousValue = feeTotal
+    }
+  }
+
+  function handleTotalAmount() {
+    const totalAmountComponent = document.querySelector('.give-final-total-amount')
+    const amountValueComponent = document.querySelector('#give-amount')
+    const feeCheckbox = document.querySelector('#lkn-fee-recovery-input')
+
+    if (totalAmountComponent && amountValueComponent && (feeCheckbox && feeCheckbox.checked)) {
+      const amount = amountValueComponent ? lknFormatFloat(amountValueComponent.value) : 0
+      const totalAmount = totalAmountComponent.getAttribute('data-total') ? lknFormatFloat(totalAmountComponent.getAttribute('data-total')) : 0
+
+      if (amount !== 0 && totalAmount !== 0) {
+        const feeTotalValue = (amount * feePercent) + parseInt(feeValue)
+        const newTotal = totalAmount + feeTotalValue
+        previousCheckboxValue = newTotal
+
+        totalAmountComponent.textContent = lknFeeTotal(newTotal)
+      }
+    } else if (totalAmountComponent && amountValueComponent && (feeCheckbox || !feeCheckbox.checked)) {
+      const amount = amountValueComponent ? lknFormatFloat(amountValueComponent.value) : 0
+      const totalAmount = totalAmountComponent.getAttribute('data-total') ? lknFormatFloat(totalAmountComponent.getAttribute('data-total')) : 0
+
+      if (amount !== 0 && totalAmount !== 0 && previousCheckboxValue) {
+        const feeTotalValue = (amount * feePercent) + parseInt(feeValue)
+        const newTotal = previousCheckboxValue - feeTotalValue
+        previousCheckboxValue = null
+
+        totalAmountComponent.textContent = lknFeeTotal(newTotal)
+      }
     }
   }
 })(jQuery)
