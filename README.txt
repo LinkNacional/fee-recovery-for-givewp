@@ -1,5 +1,5 @@
 === Fee recovery for GiveWP ===
-Contributors: linknacional
+Contributors: linknacional, luizbills
 Donate link: https://www.linknacional.com/wordpress/
 Tags: fee, donation, givewp, form, recover
 Requires at least: 5.0

@@ -5,6 +5,7 @@
   let previousValue = '##'
   let valueFound = false
   let previousCheckboxValue = null
+  let defaultDonationValue = 0
   const feePercent = lknRecoveryFeeGlobals.feeValuePercent ? lknRecoveryFeeGlobals.feeValuePercent : null
   const feeValue = lknRecoveryFeeGlobals.feeValue ? lknRecoveryFeeGlobals.feeValue : null
 
@@ -162,6 +163,7 @@
 
             if (amountValue && feeCheckbox && !valueFound) {
               valueFound = true
+              defaultDonationValue = lknFormatFloat(amountValue.value)
               const amountList = document.querySelector('#give-donation-level-radio-list')
               const multiCurrencySelect = document.querySelector('#give-mc-select')
 
@@ -191,21 +193,16 @@
 
       XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
         this._url = url;
-        console.log(url)
         return originalOpen.apply(this, arguments);
       };
 
       XMLHttpRequest.prototype.send = function (body) {
-        console.log(this._url)
         if (this._url && this._url.includes('admin-ajax.php')) {
           const feeCheckbox = document.querySelector('#lkn-fee-recovery-input');
           const amountValue = document.querySelector('#give-amount')
           const feeHiddenPriceId = document.querySelector('input[name="give-price-id"]')
 
-          console.log(feeCheckbox)
-
           if (feeCheckbox && feeCheckbox.checked) {
-            console.log('entrei aquiiii')
             let feeTotal = 0
             const amount = amountValue ? lknFormatFloat(amountValue.value) : 0
 
@@ -216,7 +213,6 @@
               const params = new URLSearchParams(body);
 
               if (params.has('give-amount')) {
-                console.log('entrei aquiiii222')
                 if (feeTotal !== 0) {
                   params.set('give-amount', feeTotal);
                   params.set('give-radio-donation-level', 'custom');
@@ -274,15 +270,11 @@
   function handleAmountChange(event) {
     let value = event?.target?.value;
 
-    // Verifica se existe valor
-    // TODO verificar
-    if (value) {
-      console.log('entreiii')
-      console.log(/[^\d]$/.test(value))
+    if (value && event.type === "input") {
       // Remove o último caractere se for uma letra ou caractere especial (não numérico ou ponto ou vírgula)
       if (/[^\d]$/.test(value)) {
         value = value.slice(0, -1);
-        event.target.value = value; // Atualiza o campo com o valor corrigido
+        event.target.value = value;
       }
     }
 
@@ -292,7 +284,7 @@
     if (checkboxWrapper) {
       let feeTotal = 0
       const currencySymbol = document.querySelector('#give-mc-currency-selected')
-      const amount = amountValue ? lknFormatFloat(amountValue.value) : 0
+      const amount = amountValue && amountValue.value != '' ? lknFormatFloat(amountValue.value) : defaultDonationValue
 
       handleTotalAmount()
 
