@@ -18,8 +18,9 @@
       const innerDoc = iframe.contentDocument || iframe.contentWindow.document;
 
       const multiStepForm = innerDoc.querySelector('.givewp-donation-form.givewp-donation-form-design--multi-step')
+      const twoPanelForm = innerDoc.querySelector('.givewp-donation-form.givewp-donation-form-design--two-panel-steps')
 
-      if (multiStepForm) {
+      if (multiStepForm || twoPanelForm) {
         const observer = new MutationObserver((mutations) => {
           for (const mutation of mutations) {
             if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
@@ -29,13 +30,43 @@
                 const inputAmount = innerDoc.querySelector('input[name="amount"]');
                 const checkboxLabel = innerDoc.querySelector('.givewp-fields-checkbox-lkn_fee_recovery_enabled label span');
 
-                // TODO aquiiii
                 if (checkboxLabel && inputAmount) {
                   const amountValue = lknFormatFloat(inputAmount.value);
 
                   if (feePercent && feeValue) {
                     const currencySymbol = innerDoc.querySelector('input[name="currency"]');
                     const feeTotal = lknFeeTotal((amountValue * feePercent) + parseInt(feeValue), currencySymbol.value)
+
+                    // Cielo installments
+                    let cieloInstallments = innerDoc.getElementById('lkn-card-amount')
+
+                    if (!cieloInstallments) {
+                      feeCheckboxDisabled = true
+                    }
+
+                    if (checkboxWrapper.checked && feeCheckboxDisabled && cieloInstallments) {
+                      feeCheckboxDisabled = false
+
+                      setTimeout(() => {
+                        cieloInstallments.value = parseFloat((amountValue * feePercent) + parseInt(feeValue) + amountValue).toFixed(2)
+                        if (window[0] && typeof window[0].lknInitInstallment === 'function') {
+                          window[0].lknInitInstallment();
+                          console.log('cieloInstallments')
+                          console.log(cieloInstallments)
+                        }
+                      }, 600)
+                    }
+
+                    if (!checkboxWrapper.checked && !feeCheckboxDisabled && cieloInstallments) {
+                      feeCheckboxDisabled = true
+
+                      setTimeout(() => {
+                        cieloInstallments.value = parseFloat(amountValue).toFixed(2)
+                        if (window[0] && typeof window[0].lknInitInstallment === 'function') {
+                          window[0].lknInitInstallment();
+                        }
+                      }, 600)
+                    }
 
                     const oldText = checkboxLabel.textContent;
 
@@ -163,7 +194,6 @@
                         }
                       }
 
-
                       const oldText = checkboxLabel.textContent;
 
                       const newText = oldText.includes('##')
@@ -205,6 +235,8 @@
               const amountList = document.querySelector('#give-donation-level-radio-list')
               const multiCurrencySelect = document.querySelector('#give-mc-select')
 
+              const cieloInstallmentsSelect = document.querySelector('#lkn-cielo-installment-select')
+
               if (multiCurrencySelect) {
                 multiCurrencySelect.addEventListener('change', handleAmountChange)
               }
@@ -216,6 +248,11 @@
               amountValue.addEventListener('blur', handleAmountChange)
               feeCheckbox.addEventListener('change', handleTotalAmount)
               handleAmountChange()
+
+              // TODO fix cielo and remove this code
+              if (cieloInstallmentsSelect) {
+                cieloInstallmentsSelect.style.display = 'none';
+              }
             }
           }
         }
