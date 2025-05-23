@@ -51,8 +51,6 @@
                         cieloInstallments.value = parseFloat((amountValue * feePercent) + parseInt(feeValue) + amountValue).toFixed(2)
                         if (window[0] && typeof window[0].lknInitInstallment === 'function') {
                           window[0].lknInitInstallment();
-                          console.log('cieloInstallments')
-                          console.log(cieloInstallments)
                         }
                       }, 600)
                     }
