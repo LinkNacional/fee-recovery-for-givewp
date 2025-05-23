@@ -6,6 +6,7 @@
   let valueFound = false
   let previousCheckboxValue = null
   let defaultDonationValue = 0
+  let feeCheckboxDisabled = true
   const feePercent = lknRecoveryFeeGlobals.feeValuePercent ? lknRecoveryFeeGlobals.feeValuePercent : null
   const feeValue = lknRecoveryFeeGlobals.feeValue ? lknRecoveryFeeGlobals.feeValue : null
 
@@ -92,6 +93,18 @@
                         const feeCalc = amountCalc + amountValue;
                         const feeTotalValue = lknFeeTotal(feeCalc, currencySymbol.value);
 
+                        // Cielo installments
+                        if (checkboxWrapper.checked) {
+                          let cieloInstallments = innerDoc.getElementById('lkn-card-amount')
+
+                          if (cieloInstallments) {
+                            cieloInstallments.value = parseFloat((amountValue * feePercent) + parseInt(feeValue) + amountValue).toFixed(2)
+                            if (window[0] && typeof window[0].lknInitInstallment === 'function') {
+                              window[0].lknInitInstallment();
+                            }
+                          }
+                        }
+
                         donationTotal.textContent = feeTotalValue;
                         feeRecoverySummary.textContent = feeTotal;
                       }
@@ -125,6 +138,31 @@
                     if (feePercent && feeValue) {
                       const currencySymbol = innerDoc.querySelector('input[name="currency"]');
                       const feeTotal = lknFeeTotal((amountValue * feePercent) + parseInt(feeValue), currencySymbol.value)
+
+                      if (checkboxWrapper.checked && feeCheckboxDisabled) {
+                        feeCheckboxDisabled = false
+                        let cieloInstallments = innerDoc.getElementById('lkn-card-amount')
+
+                        if (cieloInstallments) {
+                          cieloInstallments.value = parseFloat((amountValue * feePercent) + parseInt(feeValue) + amountValue).toFixed(2)
+                          if (window[0] && typeof window[0].lknInitInstallment === 'function') {
+                            window[0].lknInitInstallment();
+                          }
+                        }
+                      }
+
+                      if (!checkboxWrapper.checked && !feeCheckboxDisabled) {
+                        feeCheckboxDisabled = true
+                        let cieloInstallments = innerDoc.getElementById('lkn-card-amount')
+
+                        if (cieloInstallments) {
+                          cieloInstallments.value = parseFloat(amountValue).toFixed(2)
+                          if (window[0] && typeof window[0].lknInitInstallment === 'function') {
+                            window[0].lknInitInstallment();
+                          }
+                        }
+                      }
+
 
                       const oldText = checkboxLabel.textContent;
 
@@ -175,6 +213,7 @@
                 amountList.addEventListener('change', handleAmountChange)
               }
               amountValue.addEventListener('input', handleAmountChange)
+              amountValue.addEventListener('blur', handleAmountChange)
               feeCheckbox.addEventListener('change', handleTotalAmount)
               handleAmountChange()
             }
@@ -284,8 +323,7 @@
     if (checkboxWrapper) {
       let feeTotal = 0
       const currencySymbol = document.querySelector('#give-mc-currency-selected')
-      const amount = amountValue && amountValue.value != '' ? lknFormatFloat(amountValue.value) : defaultDonationValue
-
+      let amount = amountValue && amountValue.value != '' ? lknFormatFloat(amountValue.value) : defaultDonationValue
       handleTotalAmount()
 
       if (currencySymbol) {
