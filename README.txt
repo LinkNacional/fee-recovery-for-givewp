@@ -65,7 +65,7 @@ Not in the free version.  We have this option and more in our Fee recovery PRO p
 1. Configuration page
 2. Legacy template form recovery fee option
 3. Multi-step template form recovery fee option
-4. Classic template form recovery fee option
+4. New template form recovery fee option
 5. Donation summary
 
 == Changelog ==
