@@ -316,9 +316,17 @@ final class Fee_Recovery_For_Givewp
             sanitize_text_field(wp_unslash($_POST['lkn_fee_recovery_enabled'])) === '1')
         ) {
             if ($default_amount === null) {
-                $default_amount = $_POST['amount'];
-                $user_ip = $_SERVER['REMOTE_ADDR']; // pode usar HTTP_X_FORWARDED_FOR se houver proxy
-                $form_id = $_POST['formId'] ?? $_POST['formId'] ?? 'unknown';
+                $default_amount = isset($_POST['amount']) ? floatval(wp_unslash($_POST['amount'])) : 0;
+
+                if ($default_amount === 0) {
+                    give_set_error(
+                        'lkn-invalid-amount', // ID único do erro
+                        __('The donation amount must be greater than zero.', 'fee-recovery-for-givewp')
+                    );
+                }
+
+                $user_ip = isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'])) : 'unknown';
+                $form_id = isset($_POST['formId']) ? sanitize_text_field(wp_unslash($_POST['formId'])) : 'unknown';
                 $transient_key = 'lkn_fee_recovery_' . md5($user_ip . $form_id);
                 $feeCheckout = sanitize_text_field(wp_unslash($_POST['lkn_fee_recovery_enabled']));
 
@@ -333,9 +341,17 @@ final class Fee_Recovery_For_Givewp
 
         if (isset($_POST['give-amount'])) {
             if ($default_give_amount === null) {
-                $default_give_amount = $_POST['give-amount'];
-                $user_ip = $_SERVER['REMOTE_ADDR'];
-                $form_id = $_POST['give-form-id'] ?? $_POST['give-form-id'] ?? 'unknown';
+                $default_give_amount = isset($_POST['give-amount']) ? floatval(wp_unslash($_POST['give-amount'])) : 0;
+
+                if ($default_give_amount === 0) {
+                    give_set_error(
+                        'lkn-invalid-amount', // ID único do erro
+                        __('The donation amount must be greater than zero.', 'fee-recovery-for-givewp')
+                    );
+                }
+
+                $user_ip = isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'])) : 'unknown';
+                $form_id = isset($_POST['give-form-id']) ? sanitize_text_field(wp_unslash($_POST['give-form-id'])) : 'unknown';
                 $transient_key = 'lkn_fee_recovery_' . md5($user_ip . $form_id);
 
                 $fee_enabled = get_transient($transient_key);
