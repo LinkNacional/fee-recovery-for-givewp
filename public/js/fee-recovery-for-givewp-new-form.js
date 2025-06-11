@@ -65,7 +65,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     feePorcentText = `${feeValuePercent * 100}% valor do pagamento`
                 }
 
-                feeDescriptionText = `Taxa de recuperação (${feePorcentText} ${feeText})`
+                if (feePorcentText === '') {
+                    feeDescriptionText = `Taxa de recuperação (${feeText})`
+                } else if (feeText === '') {
+                    feeDescriptionText = `Taxa de recuperação (${feePorcentText})`
+                } else {
+                    feeDescriptionText = `Taxa de recuperação (${feePorcentText} ${feeText})`
+                }
 
             }
 
