@@ -42,7 +42,7 @@ if (! defined('ABSPATH')) {
 			id="lkn-fee-recovery-list"
 			style="list-style-type: none;padding: 0px 0px !important;background-color: #ffffff;border: none;"
 		>
-			<div id="lkn-fee-recovery-wrap">
+			<div id="lkn-fee-recovery-wrap" style="position: relative;">
 				<input
 					class="give-input"
 					type="checkbox"

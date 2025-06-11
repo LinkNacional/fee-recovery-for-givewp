@@ -217,99 +217,176 @@
       }
     } else {
       // Legacy code for non-iframe forms
-      const observer = new MutationObserver((mutationsList, observer) => {
-        for (const mutation of mutationsList) {
-          if (mutation.type === 'childList') {
-            const amountValue = document.querySelector('#give-amount')
-            const feeCheckbox = document.querySelector('#lkn-fee-recovery-input')
+      function initializeObserver(targetDocument) {
+        const observer = new MutationObserver((mutationsList, observer) => {
+          for (const mutation of mutationsList) {
+            if (mutation.type === 'childList') {
+              const amountValue = targetDocument.querySelector('#give-amount');
+              const feeCheckbox = targetDocument.querySelector('#lkn-fee-recovery-input');
 
-            if (!amountValue && !feeCheckbox) {
-              valueFound = false
-            }
-
-            if (amountValue && feeCheckbox && !valueFound) {
-              valueFound = true
-              defaultDonationValue = lknFormatFloat(amountValue.value)
-              const amountList = document.querySelector('#give-donation-level-radio-list')
-              const multiCurrencySelect = document.querySelector('#give-mc-select')
-
-              const cieloInstallmentsSelect = document.querySelector('#lkn-cielo-installment-select')
-
-              if (multiCurrencySelect) {
-                multiCurrencySelect.addEventListener('change', handleAmountChange)
+              if (!amountValue && !feeCheckbox) {
+                valueFound = false;
               }
 
-              if (amountList) {
-                amountList.addEventListener('change', handleAmountChange)
-              }
-              amountValue.addEventListener('input', handleAmountChange)
-              amountValue.addEventListener('blur', handleAmountChange)
-              feeCheckbox.addEventListener('change', handleTotalAmount)
-              handleAmountChange()
+              if (amountValue && feeCheckbox && !valueFound) {
 
-              // TODO fix cielo and remove this code
-              if (cieloInstallmentsSelect) {
-                cieloInstallmentsSelect.style.display = 'none';
-              }
-            }
-          }
-        }
-      })
+                valueFound = true;
+                defaultDonationValue = lknFormatFloat(amountValue.value);
+                const amountList = targetDocument.querySelector('#give-donation-level-radio-list, #give-donation-level-button-wrap');
+                const multiCurrencySelect = targetDocument.querySelector('#give-mc-select');
+                const cieloInstallmentsSelect = targetDocument.querySelector('#lkn-cielo-installment-select');
+                const levelButtons = targetDocument.querySelectorAll('.give-donation-level-btn');
 
-      // Configuração de observação
-      observer.observe(document.body, {
-        childList: true,
-        subtree: true
-      })
+                if (levelButtons && levelButtons.length > 0) {
+                  levelButtons.forEach((button) => {
+                    button.addEventListener('click', (event) => {
+                      setTimeout(() => handleAmountChange(targetDocument, event), 100);
+                    });
+                  });
+                }
 
-      const originalOpen = XMLHttpRequest.prototype.open;
-      const originalSend = XMLHttpRequest.prototype.send;
+                if (multiCurrencySelect) {
+                  multiCurrencySelect.addEventListener('change', (event) => handleAmountChange(targetDocument, event));
+                }
 
-      XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
-        this._url = url;
-        return originalOpen.apply(this, arguments);
-      };
+                if (amountList) {
+                  amountList.addEventListener('change', (event) => handleAmountChange(targetDocument, event));
+                }
 
-      XMLHttpRequest.prototype.send = function (body) {
-        if (this._url && this._url.includes('admin-ajax.php')) {
-          const feeCheckbox = document.querySelector('#lkn-fee-recovery-input');
-          const amountValue = document.querySelector('#give-amount')
-          const feeHiddenPriceId = document.querySelector('input[name="give-price-id"]')
+                amountValue.addEventListener('input', (event) => handleAmountChange(targetDocument, event));
+                amountValue.addEventListener('blur', (event) => handleAmountChange(targetDocument, event));
+                feeCheckbox.addEventListener('change', () => handleTotalAmount(targetDocument));
 
-          if (feeCheckbox && feeCheckbox.checked) {
-            let feeTotal = 0
-            const amount = amountValue ? lknFormatFloat(amountValue.value) : 0
+                // Chama a função diretamente com o parâmetro
+                handleAmountChange(targetDocument);
 
-            feeTotal = (amount * feePercent) + parseInt(feeValue) + amount
-
-            if (typeof body === 'string') {
-              // Transforma string em objeto
-              const params = new URLSearchParams(body);
-
-              if (params.has('give-amount')) {
-                if (feeTotal !== 0) {
-                  params.set('give-amount', feeTotal);
-                  params.set('give-radio-donation-level', 'custom');
-                  params.set('give-price-id', 'custom');
-
-                  if (amountValue) {
-                    amountValue.value = feeTotal
-                  }
-
-                  if (feeHiddenPriceId) {
-                    feeHiddenPriceId.value = "custom"
-                  }
+                // TODO fix cielo and remove this code
+                if (cieloInstallmentsSelect) {
+                  cieloInstallmentsSelect.style.display = 'none';
                 }
               }
-
-              // Converte de volta para string
-              body = params.toString();
             }
           }
-        }
+        });
 
-        return originalSend.call(this, body);
-      };
+        observer.observe(targetDocument.body, {
+          childList: true,
+          subtree: true,
+        });
+
+        return observer;
+      }
+
+      // Check if the form is inside an iframe
+      const iframe = document.querySelector('#container iframe');
+      if (iframe) {
+        const innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+        initializeObserver(innerDoc);
+
+        // Sobrescreve o XMLHttpRequest no contexto do iframe
+        const originalOpen = innerDoc.defaultView.XMLHttpRequest.prototype.open;
+        const originalSend = innerDoc.defaultView.XMLHttpRequest.prototype.send;
+
+        innerDoc.defaultView.XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
+          this._url = url; // Armazena a URL para uso posterior no send
+          return originalOpen.apply(this, arguments);
+        };
+
+        innerDoc.defaultView.XMLHttpRequest.prototype.send = function (body) {
+          if (this._url && this._url.includes('admin-ajax.php')) {
+            const feeCheckbox = innerDoc.querySelector('#lkn-fee-recovery-input');
+            const amountValue = innerDoc.querySelector('#give-amount');
+            const feeHiddenPriceId = innerDoc.querySelector('input[name="give-price-id"]');
+            previousCheckboxValue = null;
+
+            if (feeCheckbox && feeCheckbox.checked) {
+              let feeTotal = 0;
+              const amount = amountValue ? lknFormatFloat(amountValue.value) : 0;
+
+              feeTotal = (amount * feePercent) + parseInt(feeValue) + amount;
+
+              if (typeof body === 'string') {
+                // Transforma string em objeto
+                const params = new URLSearchParams(body);
+
+                if (params.has('give-amount')) {
+                  if (feeTotal !== 0) {
+                    params.set('give-amount', feeTotal);
+                    params.set('give-radio-donation-level', 'custom');
+                    params.set('give-price-id', 'custom');
+
+                    if (amountValue) {
+                      amountValue.value = feeTotal;
+                    }
+
+                    if (feeHiddenPriceId) {
+                      feeHiddenPriceId.value = 'custom';
+                    }
+                  }
+                }
+
+                // Converte de volta para string
+                body = params.toString();
+              }
+            }
+          }
+
+          return originalSend.call(this, body);
+        };
+      } else {
+        // Observe the main document
+        initializeObserver(document);
+
+        const originalOpen = XMLHttpRequest.prototype.open;
+        const originalSend = XMLHttpRequest.prototype.send;
+
+        XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
+          this._url = url; // Armazena a URL para uso posterior no send
+          return originalOpen.apply(this, arguments);
+        };
+
+        XMLHttpRequest.prototype.send = function (body) {
+          if (this._url && this._url.includes('admin-ajax.php')) {
+            const feeCheckbox = document.querySelector('#lkn-fee-recovery-input');
+            const amountValue = document.querySelector('#give-amount');
+            const feeHiddenPriceId = document.querySelector('input[name="give-price-id"]');
+            previousCheckboxValue = null
+
+            if (feeCheckbox && feeCheckbox.checked) {
+              let feeTotal = 0;
+              const amount = amountValue ? lknFormatFloat(amountValue.value) : 0;
+
+              feeTotal = (amount * feePercent) + parseInt(feeValue) + amount;
+
+              if (typeof body === 'string') {
+                // Transforma string em objeto
+                const params = new URLSearchParams(body);
+
+                if (params.has('give-amount')) {
+                  if (feeTotal !== 0) {
+                    params.set('give-amount', feeTotal);
+                    params.set('give-radio-donation-level', 'custom');
+                    params.set('give-price-id', 'custom');
+
+                    if (amountValue) {
+                      amountValue.value = feeTotal;
+                    }
+
+                    if (feeHiddenPriceId) {
+                      feeHiddenPriceId.value = 'custom';
+                    }
+                  }
+                }
+
+                // Converte de volta para string
+                body = params.toString();
+              }
+            }
+          }
+
+          return originalSend.call(this, body);
+        };
+      }
     }
   })
 
@@ -319,6 +396,7 @@
    * @return {float}
    */
   function lknFormatFloat(amount) {
+    amount = amount.replace(/[^0-9.,]/g, '')
     amount = amount.replaceAll(lknRecoveryFeeGlobals.thousand_separator, '')
     amount = amount.replaceAll(lknRecoveryFeeGlobals.decimal_separator, '.')
 
@@ -341,7 +419,7 @@
   /**
    * Update fee recovery label
    */
-  function handleAmountChange(event) {
+  function handleAmountChange(targetDocument, event) {
     let value = event?.target?.value;
 
     if (value && event.type === "input") {
@@ -352,14 +430,14 @@
       }
     }
 
-    const checkboxWrapper = document.querySelector('.lkn-fee-recovery-label')
-    const amountValue = document.querySelector('#give-amount')
+    const checkboxWrapper = targetDocument.querySelector('.lkn-fee-recovery-label')
+    const amountValue = targetDocument.querySelector('#give-amount')
 
     if (checkboxWrapper) {
       let feeTotal = 0
-      const currencySymbol = document.querySelector('#give-mc-currency-selected')
+      const currencySymbol = targetDocument.querySelector('#give-mc-currency-selected')
       let amount = amountValue && amountValue.value != '' ? lknFormatFloat(amountValue.value) : defaultDonationValue
-      handleTotalAmount()
+      handleTotalAmount(targetDocument)
 
       if (currencySymbol) {
         feeTotal = lknFeeTotal((amount * feePercent) + parseInt(feeValue), currencySymbol.value)
@@ -378,14 +456,21 @@
     }
   }
 
-  function handleTotalAmount() {
-    const totalAmountComponent = document.querySelector('.give-final-total-amount')
-    const amountValueComponent = document.querySelector('#give-amount')
-    const feeCheckbox = document.querySelector('#lkn-fee-recovery-input')
+  function handleTotalAmount(targetDocument) {
+    const totalAmountComponent = targetDocument.querySelector('.give-final-total-amount, th[data-tag="total"]')
+    const subTotalAmountComponent = targetDocument.querySelector('td[data-tag="amount"]')
+    const amountValueComponent = targetDocument.querySelector('#give-amount')
+    const feeCheckbox = targetDocument.querySelector('#lkn-fee-recovery-input')
 
     if (totalAmountComponent && amountValueComponent && (feeCheckbox && feeCheckbox.checked)) {
       const amount = amountValueComponent ? lknFormatFloat(amountValueComponent.value) : 0
-      const totalAmount = totalAmountComponent.getAttribute('data-total') ? lknFormatFloat(totalAmountComponent.getAttribute('data-total')) : 0
+      let totalAmount = totalAmountComponent.getAttribute('data-total') ? lknFormatFloat(totalAmountComponent.getAttribute('data-total')) : 0
+
+      if (totalAmount === 0) {
+        if (totalAmountComponent.getAttribute('data-tag')) {
+          totalAmount = lknFormatFloat(totalAmountComponent.textContent)
+        }
+      }
 
       if (amount !== 0 && totalAmount !== 0) {
         const feeTotalValue = (amount * feePercent) + parseInt(feeValue)
@@ -393,10 +478,37 @@
         previousCheckboxValue = newTotal
 
         totalAmountComponent.textContent = lknFeeTotal(newTotal)
+
+        if (subTotalAmountComponent) {
+          const observer = new MutationObserver((mutationsList, observer) => {
+            for (const mutation of mutationsList) {
+              if (mutation.type === 'childList' || mutation.type === 'characterData') {
+                subTotalAmountComponent.textContent = lknFeeTotal(newTotal);
+
+                // Desconecta o observer após a mudança
+                observer.disconnect();
+                break;
+              }
+            }
+          });
+
+          // Configura o observer para observar mudanças no conteúdo do subTotalAmountComponent
+          observer.observe(subTotalAmountComponent, {
+            childList: true,
+            characterData: true,
+            subtree: true,
+          });
+        }
       }
     } else if (totalAmountComponent && amountValueComponent && (feeCheckbox || !feeCheckbox.checked)) {
       const amount = amountValueComponent ? lknFormatFloat(amountValueComponent.value) : 0
-      const totalAmount = totalAmountComponent.getAttribute('data-total') ? lknFormatFloat(totalAmountComponent.getAttribute('data-total')) : 0
+      let totalAmount = totalAmountComponent.getAttribute('data-total') ? lknFormatFloat(totalAmountComponent.getAttribute('data-total')) : 0
+
+      if (totalAmount === 0) {
+        if (totalAmountComponent.getAttribute('data-tag')) {
+          totalAmount = lknFormatFloat(totalAmountComponent.textContent)
+        }
+      }
 
       if (amount !== 0 && totalAmount !== 0 && previousCheckboxValue) {
         const feeTotalValue = (amount * feePercent) + parseInt(feeValue)
@@ -404,6 +516,27 @@
         previousCheckboxValue = null
 
         totalAmountComponent.textContent = lknFeeTotal(newTotal)
+
+        if (subTotalAmountComponent) {
+          const observer = new MutationObserver((mutationsList, observer) => {
+            for (const mutation of mutationsList) {
+              if (mutation.type === 'childList' || mutation.type === 'characterData') {
+                subTotalAmountComponent.textContent = lknFeeTotal(newTotal);
+
+                // Desconecta o observer após a mudança
+                observer.disconnect();
+                break;
+              }
+            }
+          });
+
+          // Configura o observer para observar mudanças no conteúdo do subTotalAmountComponent
+          observer.observe(subTotalAmountComponent, {
+            childList: true,
+            characterData: true,
+            subtree: true,
+          });
+        }
       }
     }
   }

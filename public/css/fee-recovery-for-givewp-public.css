@@ -11,7 +11,7 @@
 
 #lkn-fee-recovery-wrap {
     padding: 2% 1% 2% 1%;
-    position: relative;
+    position: relative !important;
     display: block;
     line-height: 1em;
     box-sizing: border-box;

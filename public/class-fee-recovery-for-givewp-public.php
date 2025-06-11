@@ -103,6 +103,7 @@ final class Fee_Recovery_For_Givewp_Public
             $enabledFeeNewForm = give_get_option('lkn_fee_recovery_vfb', 'disabled');
             $enabledFeeLegacyForm = give_get_option('lkn_fee_recovery_vfb_legacy', 'enabled');
 
+
             wp_register_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/fee-recovery-for-givewp-public.js', array('jquery'), $this->version, false);
 
             $feeValue = (float) give_get_option('lkn_fee_recovery_setting_field_fixed', 0);
@@ -129,9 +130,9 @@ final class Fee_Recovery_For_Givewp_Public
                 $form_id = get_the_ID();
                 $is_legacy_form = give_get_meta($form_id, '_give_form_template', 'newForm');
 
-                if ('legacy' === $is_legacy_form && $enabledFeeLegacyForm === 'enabled') {
+                if (('legacy' === $is_legacy_form || 'sequoia' === $is_legacy_form) && $enabledFeeLegacyForm === 'enabled') {
                     wp_enqueue_script($this->plugin_name);
-                } elseif ('legacy' !== $is_legacy_form && $enabledFeeNewForm === 'enabled') {
+                } elseif ('legacy' !== $is_legacy_form && 'sequoia' !== $is_legacy_form && $enabledFeeNewForm === 'enabled') {
                     wp_enqueue_script($this->plugin_name);
                 }
             }
