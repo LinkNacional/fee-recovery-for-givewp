@@ -101,7 +101,7 @@ final class Fee_Recovery_For_Givewp_Public
         if (is_singular('give_forms')) {
 
             $enabledFeeNewForm = give_get_option('lkn_fee_recovery_vfb', 'disabled');
-            $enabledFeeLegacyForm = give_get_option('lkn_fee_recovery_vfb_legacy', 'disabled');
+            $enabledFeeLegacyForm = give_get_option('lkn_fee_recovery_vfb_legacy', 'enabled');
 
             wp_register_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/fee-recovery-for-givewp-public.js', array('jquery'), $this->version, false);
 
@@ -154,7 +154,7 @@ final class Fee_Recovery_For_Givewp_Public
     {
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
         $enabledFeeMeta = apply_filters('fee_recovery_load_page_enabled', $enabledFee, $form_id);
-        $enabledFeeLegacyForm = give_get_option('lkn_fee_recovery_vfb_legacy', 'disabled');
+        $enabledFeeLegacyForm = give_get_option('lkn_fee_recovery_vfb_legacy', 'enabled');
 
         if ('global' === $enabledFee && 'global' === $enabledFeeMeta && $enabledFeeLegacyForm === 'enabled') {
             $description = give_get_option('lkn_fee_recovery_setting_field_description', __('Cover the payment fee?', 'fee-recovery-for-givewp'));
