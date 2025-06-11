@@ -15,7 +15,7 @@
  * Plugin Name:       Fee recovery for GiveWP
  * Plugin URI:        https://wordpress.org/plugins/fee-recovery-for-givewp
  * Description:       Add donor option to cover payment expenses
- * Version:           1.2.1
+ * Version:           1.3.0
  * Author:            Link Nacional
  * Author URI:        https://www.linknacional.com/wordpress/
  * License:           GPL-3.0+
@@ -25,7 +25,7 @@
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
     exit;
 }
 
@@ -34,8 +34,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'FEE_RECOVERY_FOR_GIVEWP_VERSION', '1.2.1' );
-define( 'FEE_RECOVERY_FOR_GIVEWP_BASENAME', plugin_basename(__FILE__) );
+define('FEE_RECOVERY_FOR_GIVEWP_VERSION', '1.3.0');
+define('FEE_RECOVERY_FOR_GIVEWP_BASENAME', plugin_basename(__FILE__));
 define("FEE_RECOVERY_FOR_GIVEWP_URL", plugin_dir_url(__FILE__));
 define("FEE_RECOVERY_FOR_GIVEWP_DIR", plugin_dir_path(__FILE__));
 
@@ -43,8 +43,9 @@ define("FEE_RECOVERY_FOR_GIVEWP_DIR", plugin_dir_path(__FILE__));
  * The code that runs during plugin activation.
  * This action is documented in includes/class-fee-recovery-for-givewp-activator.php.
  */
-function activate_fee_recovery_for_givewp(): void {
-    require_once plugin_dir_path( __FILE__ ) . 'includes/class-fee-recovery-for-givewp-activator.php';
+function activate_fee_recovery_for_givewp(): void
+{
+    require_once plugin_dir_path(__FILE__) . 'includes/class-fee-recovery-for-givewp-activator.php';
     Fee_Recovery_For_Givewp_Activator::activate();
 }
 
@@ -52,20 +53,21 @@ function activate_fee_recovery_for_givewp(): void {
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-fee-recovery-for-givewp-deactivator.php.
  */
-function deactivate_fee_recovery_for_givewp(): void {
-    require_once plugin_dir_path( __FILE__ ) . 'includes/class-fee-recovery-for-givewp-deactivator.php';
+function deactivate_fee_recovery_for_givewp(): void
+{
+    require_once plugin_dir_path(__FILE__) . 'includes/class-fee-recovery-for-givewp-deactivator.php';
     Fee_Recovery_For_Givewp_Deactivator::deactivate();
 }
 
-register_activation_hook( __FILE__, 'activate_fee_recovery_for_givewp' );
-register_deactivation_hook( __FILE__, 'deactivate_fee_recovery_for_givewp' );
+register_activation_hook(__FILE__, 'activate_fee_recovery_for_givewp');
+register_deactivation_hook(__FILE__, 'deactivate_fee_recovery_for_givewp');
 add_action('plugins_loaded', 'activate_fee_recovery_for_givewp', 999);
 
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-fee-recovery-for-givewp.php';
+require plugin_dir_path(__FILE__) . 'includes/class-fee-recovery-for-givewp.php';
 
 /**
  * Begins execution of the plugin.
@@ -76,7 +78,8 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-fee-recovery-for-givewp.ph
  *
  * @since    1.0.0
  */
-function run_fee_recovery_for_givewp(): void {
+function run_fee_recovery_for_givewp(): void
+{
     $plugin = new Fee_Recovery_For_Givewp();
     $plugin->run();
 }

@@ -15,7 +15,8 @@
  *
  * @author     Link Nacional <contato@seenacional.com>
  */
-final class Fee_Recovery_For_Givewp_Admin {
+final class Fee_Recovery_For_Givewp_Admin
+{
     /**
      * The ID of this plugin.
      *
@@ -42,12 +43,13 @@ final class Fee_Recovery_For_Givewp_Admin {
      * @param string $plugin_name the name of this plugin
      * @param string $version     the version of this plugin
      */
-    public function __construct($plugin_name, $version) {
+    public function __construct($plugin_name, $version)
+    {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
 
-        add_filter( 'give_get_sections_general', array($this, 'add_new_setting_section') );
-        add_filter( 'give_get_settings_general', array($this, 'add_settings_into_section') );
+        add_filter('give_get_sections_general', array($this, 'add_new_setting_section'));
+        add_filter('give_get_settings_general', array($this, 'add_settings_into_section'));
     }
 
     /**
@@ -55,7 +57,8 @@ final class Fee_Recovery_For_Givewp_Admin {
      *
      * @since    1.0.0
      */
-    public function enqueue_styles(): void {
+    public function enqueue_styles(): void
+    {
         /*
          * This function is provided for demonstration purposes only.
          *
@@ -68,7 +71,7 @@ final class Fee_Recovery_For_Givewp_Admin {
          * class.
          */
 
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/fee-recovery-for-givewp-admin.css', array(), $this->version, 'all' );
+        wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/fee-recovery-for-givewp-admin.css', array(), $this->version, 'all');
     }
 
     /**
@@ -76,7 +79,8 @@ final class Fee_Recovery_For_Givewp_Admin {
      *
      * @since    1.0.0
      */
-    public function enqueue_scripts(): void {
+    public function enqueue_scripts(): void
+    {
         /*
          * This function is provided for demonstration purposes only.
          *
@@ -89,7 +93,7 @@ final class Fee_Recovery_For_Givewp_Admin {
          * class.
          */
 
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/fee-recovery-for-givewp-admin.js', array('jquery'), $this->version, false );
+        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/fee-recovery-for-givewp-admin.js', array('jquery'), $this->version, false);
         wp_localize_script($this->plugin_name, 'lknRecoveryFeeAdmin', array(
             'notice' => esc_html__('Get new features with', 'fee-recovery-for-givewp'),
         ));
@@ -100,11 +104,12 @@ final class Fee_Recovery_For_Givewp_Admin {
      *
      * @since 1.0.0
      *
-     * @param  array $sections 
+     * @param  array $sections
      *
      * @return array
      */
-    public function add_new_setting_section($sections) :array {
+    public function add_new_setting_section($sections): array
+    {
         $sections['lkn-fee-recovery'] = __('Fee recovery', 'fee-recovery-for-givewp');
 
         return $sections;
@@ -115,11 +120,12 @@ final class Fee_Recovery_For_Givewp_Admin {
      *
      * @since 1.0.0
      *
-     * @param  array $settings 
+     * @param  array $settings
      *
      * @return array
      */
-    public function add_settings_into_section($settings) :array {
+    public function add_settings_into_section($settings): array
+    {
         $currentSection = give_get_current_setting_section();
 
         if ('lkn-fee-recovery' === $currentSection) {
@@ -163,7 +169,7 @@ final class Fee_Recovery_For_Givewp_Admin {
                     'default' => 0,
                 );
             }
-         
+
             $settings[] = array(
                 'name' => __('Rate field description', 'fee-recovery-for-givewp'),
                 'id' => 'lkn_fee_recovery_setting_field_description',
@@ -186,13 +192,25 @@ final class Fee_Recovery_For_Givewp_Admin {
                     'disabled' => __('Disabled', 'fee-recovery-for-givewp'),
                 ),
             );
-         
+
+            $settings[] = array(
+                'name' => __('Legacy Form Builder', 'fee-recovery-for-givewp'),
+                'id' => 'lkn_fee_recovery_vfb_legacy',
+                'desc' => __('Enable or disable the option to add the payment fee amount to the donation amount in Legacy Form.', 'fee-recovery-for-givewp'),
+                'type' => 'radio',
+                'default' => 'enabled',
+                'options' => array(
+                    'enabled' => __('Enabled', 'fee-recovery-for-givewp'),
+                    'disabled' => __('Disabled', 'fee-recovery-for-givewp'),
+                ),
+            );
+
             $settings[] = array(
                 'id' => 'lkn_fee_recovery',
                 'type' => 'sectionend',
             );
         }
-    
+
         return $settings;
     }
 }

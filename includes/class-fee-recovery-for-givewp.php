@@ -248,6 +248,7 @@ final class Fee_Recovery_For_Givewp
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
         $this->loader->add_filter('give_donation_data_before_gateway', $this, 'update_amount', 99, 2);
         $this->loader->add_action('give_init', $this, 'initialize_new_form');
+        $this->loader->add_filter('get_post_metadata', $this, 'lkn_fee_update_amount', 10, 4);
 
         add_action('givewp_donation_form_schema', function (DonationForm $form, $formId): void {
             $enabledFee = give_get_option('lkn_fee_recovery_vfb', 'disabled');
@@ -297,6 +298,75 @@ final class Fee_Recovery_For_Givewp
                 }
             }
         }, 10, 2); // Prioridade 10 e 2 argumentos
+    }
+
+    public function lkn_fee_custom_metadata()
+    {
+        add_filter('get_post_metadata', array($this, 'lkn_fee_update_amount'), 10, 4);
+    }
+
+    public function lkn_fee_update_amount($value, $object_id, $meta_key, $single)
+    {
+        static $default_amount = null;
+        static $default_give_amount = null;
+
+        if (
+            isset($_POST['lkn_fee_recovery_enabled']) &&
+            (sanitize_text_field(wp_unslash($_POST['lkn_fee_recovery_enabled'])) === 'true' ||
+            sanitize_text_field(wp_unslash($_POST['lkn_fee_recovery_enabled'])) === '1')
+        ) {
+            if ($default_amount === null) {
+                $default_amount = isset($_POST['amount']) ? floatval(wp_unslash($_POST['amount'])) : 0;
+
+                if ($default_amount === 0) {
+                    give_set_error(
+                        'lkn-invalid-amount', // ID único do erro
+                        __('The donation amount must be greater than zero.', 'fee-recovery-for-givewp')
+                    );
+                }
+
+                $user_ip = isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'])) : 'unknown';
+                $form_id = isset($_POST['formId']) ? sanitize_text_field(wp_unslash($_POST['formId'])) : 'unknown';
+                $transient_key = 'lkn_fee_recovery_' . md5($user_ip . $form_id);
+                $feeCheckout = sanitize_text_field(wp_unslash($_POST['lkn_fee_recovery_enabled']));
+
+                set_transient($transient_key, $feeCheckout, 7);
+            }
+
+            $feeValue = (float) give_get_option('lkn_fee_recovery_setting_field_fixed', 0);
+            $feeValuePercent = (float) give_get_option('lkn_fee_recovery_setting_field_percent', 0) / 100;
+
+            $_POST['amount'] = ceil(($default_amount * $feeValuePercent) + $feeValue + $default_amount);
+        }
+
+        if (isset($_POST['give-amount'])) {
+            if ($default_give_amount === null) {
+                $default_give_amount = isset($_POST['give-amount']) ? floatval(wp_unslash($_POST['give-amount'])) : 0;
+
+                if ($default_give_amount === 0) {
+                    give_set_error(
+                        'lkn-invalid-amount', // ID único do erro
+                        __('The donation amount must be greater than zero.', 'fee-recovery-for-givewp')
+                    );
+                }
+
+                $user_ip = isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'])) : 'unknown';
+                $form_id = isset($_POST['give-form-id']) ? sanitize_text_field(wp_unslash($_POST['give-form-id'])) : 'unknown';
+                $transient_key = 'lkn_fee_recovery_' . md5($user_ip . $form_id);
+
+                $fee_enabled = get_transient($transient_key);
+            }
+
+            if (!empty($fee_enabled)) {
+                $feeValue = (float) give_get_option('lkn_fee_recovery_setting_field_fixed', 0);
+                $feeValuePercent = (float) give_get_option('lkn_fee_recovery_setting_field_percent', 0) / 100;
+
+                $_POST['give-amount'] = ceil(($default_give_amount * $feeValuePercent) + $feeValue + $default_give_amount);
+            }
+
+        }
+
+        return null;
     }
 
     /**
