@@ -98,30 +98,45 @@ final class Fee_Recovery_For_Givewp_Public
          * class.
          */
 
-        wp_register_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/fee-recovery-for-givewp-public.js', array('jquery'), $this->version, false);
+        if (is_singular('give_forms')) {
 
-        $feeValue = (float) give_get_option('lkn_fee_recovery_setting_field_fixed', 0);
-        $feeValuePercent = (float) give_get_option('lkn_fee_recovery_setting_field_percent', 0) / 100;
+            $enabledFeeNewForm = give_get_option('lkn_fee_recovery_vfb', 'disabled');
+            $enabledFeeLegacyForm = give_get_option('lkn_fee_recovery_vfb_legacy', 'disabled');
 
-        wp_localize_script(
-            $this->plugin_name,
-            'lknRecoveryFeeGlobals',
-            array(
-                'css_path' => plugin_dir_url(__FILE__) . 'css/fee-recovery-for-givewp-public.css',
-                'currency' => give_get_currency(),
-                'decimal_separator' => give_get_price_decimal_separator(),
-                'thousand_separator' => give_get_price_thousand_separator(),
-                'decimal_qtd' => give_get_price_decimals(),
-                'feeValue' => $feeValue,
-                'feeValuePercent' => $feeValuePercent,
-                'currency_symbol' => give_currency_symbol(give_get_currency())
-            )
-        );
+            wp_register_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/fee-recovery-for-givewp-public.js', array('jquery'), $this->version, false);
 
-        $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
+            $feeValue = (float) give_get_option('lkn_fee_recovery_setting_field_fixed', 0);
+            $feeValuePercent = (float) give_get_option('lkn_fee_recovery_setting_field_percent', 0) / 100;
 
-        if ('global' === $enabledFee) {
-            wp_enqueue_script($this->plugin_name);
+            wp_localize_script(
+                $this->plugin_name,
+                'lknRecoveryFeeGlobals',
+                array(
+                    'css_path' => plugin_dir_url(__FILE__) . 'css/fee-recovery-for-givewp-public.css',
+                    'currency' => give_get_currency(),
+                    'decimal_separator' => give_get_price_decimal_separator(),
+                    'thousand_separator' => give_get_price_thousand_separator(),
+                    'decimal_qtd' => give_get_price_decimals(),
+                    'feeValue' => $feeValue,
+                    'feeValuePercent' => $feeValuePercent,
+                    'currency_symbol' => give_currency_symbol(give_get_currency())
+                )
+            );
+
+            $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
+
+            if ('global' === $enabledFee) {
+                $form_id = get_the_ID();
+                $is_legacy_form = give_get_meta($form_id, '_give_form_template', 'newForm');
+
+                if ('legacy' === $is_legacy_form && $enabledFeeLegacyForm === 'enabled') {
+                    wp_enqueue_script($this->plugin_name);
+                } elseif ('legacy' !== $is_legacy_form && $enabledFeeNewForm === 'enabled') {
+                    wp_enqueue_script($this->plugin_name);
+                }
+            }
+
+
         }
     }
 
@@ -139,8 +154,9 @@ final class Fee_Recovery_For_Givewp_Public
     {
         $enabledFee = give_get_option('lkn_fee_recovery_setting_field', 'disabled');
         $enabledFeeMeta = apply_filters('fee_recovery_load_page_enabled', $enabledFee, $form_id);
+        $enabledFeeLegacyForm = give_get_option('lkn_fee_recovery_vfb_legacy', 'disabled');
 
-        if ('global' === $enabledFee && 'global' === $enabledFeeMeta) {
+        if ('global' === $enabledFee && 'global' === $enabledFeeMeta && $enabledFeeLegacyForm === 'enabled') {
             $description = give_get_option('lkn_fee_recovery_setting_field_description', __('Cover the payment fee?', 'fee-recovery-for-givewp'));
             $feeValue = (float) give_get_option('lkn_fee_recovery_setting_field_fixed', 0);
             $feeValuePercent = (float) give_get_option('lkn_fee_recovery_setting_field_percent', 0) / 100;
