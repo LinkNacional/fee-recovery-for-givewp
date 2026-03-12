@@ -1,10 +1,10 @@
 {
-  "name": "docker-php-dev-container",
+  "name": "fee-recovery-for-givewp",
   "version": "1.0.0",
   "description": "This repository provides a development environment for WHMCS or WordPress",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/srbrunoferreira/docker-php-dev-container.git"
+    "url": "git+https://github.com/LinkNacional/fee-recovery-for-givewp.git"
   },
   "scripts": {
     "lint": "eslint --fix --ext .js ./"
@@ -13,15 +13,15 @@
     "WordPress",
     "WHMCS",
     "plugin",
-    "Dev Container",
+    "Fee Recovery",
     "VS Code"
   ],
   "author": "Bruno Ferreira <srbrunoferreira@outlook.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/srbrunoferreira/docker-php-dev-container/issues"
+    "url": "https://github.com/LinkNacional/fee-recovery-for-givewp/issues"
   },
-  "homepage": "https://github.com/srbrunoferreira/docker-php-dev-container#readme",
+  "homepage": "https://github.com/LinkNacional/fee-recovery-for-givewp#readme",
   "devDependencies": {
     "eslint": "^8.34.0",
     "eslint-config-airbnb-base": "^15.0.0",

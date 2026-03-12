@@ -3,9 +3,9 @@ Contributors: linknacional
 Donate link: https://www.linknacional.com/wordpress/
 Tags: fee, donation, givewp, form, recover
 Requires at least: 5.0
-Requires PHP: 7.4
+Requires PHP: 8.0
 Tested up to: 6.8
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -69,6 +69,10 @@ Not in the free version.  We have this option and more in our Fee recovery PRO p
 5. Donation summary
 
 == Changelog ==
+= 1.3.1 =
+**12/03/2026**
+* Addition of icons and banners.
+
 = 1.3.0 =
 **23/05/2025**
 * Fix lagacy form and new form.
