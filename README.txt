@@ -3,7 +3,7 @@ Contributors: linknacional
 Donate link: https://www.linknacional.com/wordpress/
 Tags: fee, donation, givewp, form, recover
 Requires at least: 5.0
-Requires PHP: 7.4
+Requires PHP: 8.0
 Tested up to: 6.8
 Stable tag: 1.3.1
 License: GPLv3 or later
