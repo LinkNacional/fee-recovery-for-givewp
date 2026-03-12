@@ -1,3 +1,6 @@
+# 1.3.1 - 12/03/2026
+* Addition of icons and banners.
+
 # 1.3.0 - 23/05/2025
 * Fix lagacy form and new form.
 

@@ -69,6 +69,10 @@ Not in the free version.  We have this option and more in our Fee recovery PRO p
 5. Donation summary
 
 == Changelog ==
+= 1.3.1 =
+**12/03/2026**
+* Addition of icons and banners.
+
 = 1.3.0 =
 **23/05/2025**
 * Fix lagacy form and new form.
