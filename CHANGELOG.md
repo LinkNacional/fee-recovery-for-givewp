@@ -1,3 +1,6 @@
+# 1.3.2 - 14/04/2026
+* Change banners.
+
 # 1.3.1 - 12/03/2026
 * Addition of icons and banners.
 
